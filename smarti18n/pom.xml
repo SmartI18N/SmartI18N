@@ -6,7 +6,15 @@
 
     <groupId>org.smarti18n</groupId>
     <artifactId>smarti18n</artifactId>
+    <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
 
+    <modules>
+        <module>smarti18n-messages</module>
+        <module>smarti18n-editor</module>
+
+        <module>smarti18n-api-spring</module>
+        <module>smarti18n-com</module>
+    </modules>
 
 </project>
