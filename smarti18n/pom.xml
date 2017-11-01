@@ -21,6 +21,7 @@
 
         <module>smarti18n-api-spring</module>
         <module>smarti18n-com</module>
+        <module>smarti18n-api</module>
     </modules>
 
     <repositories>
