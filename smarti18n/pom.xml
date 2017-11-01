@@ -16,22 +16,142 @@
     <version>0.1-SNAPSHOT</version>
 
     <modules>
+        <module>smarti18n-api</module>
+        <module>smarti18n-api-spring</module>
+
         <module>smarti18n-messages</module>
+
         <module>smarti18n-editor</module>
 
-        <module>smarti18n-api-spring</module>
         <module>smarti18n-com</module>
-        <module>smarti18n-api</module>
     </modules>
+
+    <properties>
+        <java-version>1.8</java-version>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+
+        <org.springframework.boot.version>2.0.0.M5</org.springframework.boot.version>
+
+        <com.spotify.docker-maven-plugin.version>1.0.0</com.spotify.docker-maven-plugin.version>
+        <com.spotify.docker-maven-plugin.serverId>pytRegistry</com.spotify.docker-maven-plugin.serverId>
+        <com.spotify.docker-maven-plugin.registry>registry.planyourtrip.travel
+        </com.spotify.docker-maven-plugin.registry>
+
+    </properties>
 
     <repositories>
         <repository>
-            <id>spring-milestones</id>
+            <id>spring-milestone</id>
             <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <url>http://repo.spring.io/libs-milestone</url>
         </repository>
     </repositories>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${com.spotify.docker-maven-plugin.version}</version>
+                    <configuration>
+                        <imageName>${com.spotify.docker-maven-plugin.registry}/${project.artifactId}</imageName>
+                        <baseImage>java</baseImage>
+                        <entryPoint>["java", "-jar", "/${project.build.finalName}.war"]</entryPoint>
+
+                        <serverId>${com.spotify.docker-maven-plugin.serverId}</serverId>
+                        <registryUrl>https://${com.spotify.docker-maven-plugin.registry}</registryUrl>
+                        <forceTags>true</forceTags>
+
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.war</include>
+                            </resource>
+                        </resources>
+
+                        <imageTags>
+                            <imageTag>${timestamp}</imageTag>
+                            <imageTag>latest</imageTag>
+                        </imageTags>
+                    </configuration>
+                </plugin>
+
+                <!--<plugin>-->
+                    <!--<groupId>org.springframework.boot</groupId>-->
+                    <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+                    <!--<version>${org.springframework.boot.version}</version>-->
+                    <!--<executions>-->
+                        <!--<execution>-->
+                            <!--<goals>-->
+                                <!--<goal>repackage</goal>-->
+                            <!--</goals>-->
+                        <!--</execution>-->
+                    <!--</executions>-->
+                <!--</plugin>-->
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+    <profiles>
+        <profile>
+            <id>build-all-docker-images</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <phase>post-integration-test</phase>
+                                    <goals>
+                                        <goal>build</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
