@@ -25,6 +25,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.smarti18n</groupId>
+            <artifactId>smarti18n-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
             <version>${com.vaadin.spring.version}</version>

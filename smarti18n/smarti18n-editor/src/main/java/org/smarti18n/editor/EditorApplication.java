@@ -14,7 +14,6 @@ import com.vaadin.ui.UI;
 import org.smarti18n.editor.views.MessagesOverviewView;
 import org.smarti18n.editor.views.ProfileView;
 import org.smarti18n.editor.views.StartView;
-import org.smarti18n.editor.views.StatisticView;
 import org.vaadin.teemusa.sidemenu.SideMenu;
 
 /**
@@ -46,7 +45,6 @@ public class EditorApplication {
 
             sideMenu.addMenuItem("StartView", navigateTo(StartView.VIEW_NAME));
             sideMenu.addMenuItem("MessagesOverviewView", navigateTo(MessagesOverviewView.VIEW_NAME));
-            sideMenu.addMenuItem("StatisticView", navigateTo(StatisticView.VIEW_NAME));
             sideMenu.addMenuItem("ProfileView", navigateTo(ProfileView.VIEW_NAME));
 
             setContent(sideMenu);
