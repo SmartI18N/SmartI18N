@@ -46,13 +46,7 @@ public class MessagesOverviewView extends VerticalLayout implements View {
 
         grid.setColumns("key");
         grid.getColumn("key").setExpandRatio(1);
-        grid.addItemClickListener(new ItemClickListener<MessageTranslations>() {
-            @Override
-            public void itemClick(final Grid.ItemClick<MessageTranslations> itemClick) {
-                getUI().getNavigator().navigateTo();
-            }
-        });
-
+        grid.addItemClickListener(itemClick -> getUI().getNavigator().navigateTo(MessagesEditView.VIEW_NAME));
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
