@@ -1,6 +1,5 @@
 package org.smarti18n.api;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -14,6 +13,10 @@ public interface MessagesApi {
     );
 
     Collection<MessageTranslations> findAll();
+
+    MessageTranslations insert(
+            String key
+    );
 
     MessageTranslations save(
             String key,

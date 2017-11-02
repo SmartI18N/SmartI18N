@@ -1,18 +1,19 @@
 package org.smarti18n.messages.controller;
 
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import org.smarti18n.api.MessageSimple;
 import org.smarti18n.api.MessageTranslations;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.messages.entities.MessageEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class MessagesController implements MessagesApi {
@@ -57,6 +58,19 @@ public class MessagesController implements MessagesApi {
     }
 
     @Override
+    @GetMapping("/api/1/insert")
+    public MessageTranslations insert(
+            @RequestParam("key") final String key) {
+
+        final MessageEntity saved = this.messageRepository.insert(new MessageEntity(key));
+
+        return new MessageTranslations(
+                saved.getKey(),
+                saved.getTranslations()
+        );
+    }
+
+    @Override
     @GetMapping("/api/1/save")
     public MessageTranslations save(
             @RequestParam("key") final String key,
@@ -64,15 +78,18 @@ public class MessagesController implements MessagesApi {
             @RequestParam("language") final Locale language) {
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(key);
-        final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(key));
+        if (optional.isPresent()) {
+            final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(key));
 
-        messageEntity.putTranslation(language, translation);
+            messageEntity.putTranslation(language, translation);
 
-        final MessageEntity saved = this.messageRepository.save(messageEntity);
+            final MessageEntity saved = this.messageRepository.save(messageEntity);
 
-        return new MessageTranslations(
-                saved.getKey(),
-                saved.getTranslations()
-        );
+            return new MessageTranslations(
+                    saved.getKey(),
+                    saved.getTranslations()
+            );
+        }
+        throw new IllegalStateException("Message with key [" + key + "] doesn't exist.");
     }
 }
