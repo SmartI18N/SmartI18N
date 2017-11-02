@@ -34,7 +34,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
-        <org.springframework.boot.version>2.0.0.M5</org.springframework.boot.version>
+        <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
 
         <com.spotify.docker-maven-plugin.version>1.0.0</com.spotify.docker-maven-plugin.version>
         <com.spotify.docker-maven-plugin.serverId>pytRegistry</com.spotify.docker-maven-plugin.serverId>
@@ -102,18 +102,18 @@
                     </configuration>
                 </plugin>
 
-                <!--<plugin>-->
-                    <!--<groupId>org.springframework.boot</groupId>-->
-                    <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-                    <!--<version>${org.springframework.boot.version}</version>-->
-                    <!--<executions>-->
-                        <!--<execution>-->
-                            <!--<goals>-->
-                                <!--<goal>repackage</goal>-->
-                            <!--</goals>-->
-                        <!--</execution>-->
-                    <!--</executions>-->
-                <!--</plugin>-->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${org.springframework.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
