@@ -16,7 +16,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.MessageTranslations;
@@ -46,7 +45,10 @@ public class MessagesOverviewView extends VerticalLayout implements View {
 
         grid.setColumns("key");
         grid.getColumn("key").setExpandRatio(1);
-        grid.addItemClickListener(itemClick -> getUI().getNavigator().navigateTo(MessagesEditView.VIEW_NAME));
+        grid.addItemClickListener(itemClick -> {
+            final String key = itemClick.getItem().getKey();
+            getUI().getNavigator().navigateTo(MessagesEditView.VIEW_NAME + "/" + key);
+        });
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
@@ -57,6 +59,7 @@ public class MessagesOverviewView extends VerticalLayout implements View {
         }));
         grid.appendFooterRow().getCell("key").setComponent(createAddMessageField());
 
+        setCaption("Messages");
         addComponent(grid);
 
         setSizeFull();
@@ -64,10 +67,15 @@ public class MessagesOverviewView extends VerticalLayout implements View {
 
     private Component createAddMessageField() {
         final TextField field = new TextField();
+        field.setWidth("100%");
+        field.addStyleName(ValoTheme.TEXTFIELD_TINY);
+
+        final Button button = new Button("Add", (e -> messagesApi.insert(field.getValue())));
+        button.addStyleName(ValoTheme.BUTTON_TINY);
 
         final HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponent(field);
-        horizontalLayout.addComponent(new Button("Add", (e -> messagesApi.insert(field.getValue()))));
+        horizontalLayout.addComponent(button);
 
         horizontalLayout.setExpandRatio(field, 1);
 

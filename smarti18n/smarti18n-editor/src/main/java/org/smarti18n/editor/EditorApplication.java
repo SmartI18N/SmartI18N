@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
@@ -23,10 +27,16 @@ import org.vaadin.teemusa.sidemenu.SideMenu;
         scanBasePackages = "org.smarti18n.editor"
 )
 @EnableAutoConfiguration
+@Configuration
 public class EditorApplication {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(EditorApplication.class, args);
+    }
+
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplateBuilder().build();
     }
 
     @SpringUI

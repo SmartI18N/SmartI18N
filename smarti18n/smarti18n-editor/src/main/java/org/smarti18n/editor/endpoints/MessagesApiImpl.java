@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import org.smarti18n.api.MessageSimple;
@@ -13,6 +14,7 @@ import org.smarti18n.api.MessagesApi;
 /**
  * @author Marc Bellmann &lt;marc@smarti18n.com&gt;
  */
+@Service
 public class MessagesApiImpl implements MessagesApi {
 
     private static final String HOST = "https://messages.smarti18n.com";
