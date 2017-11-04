@@ -39,15 +39,12 @@ public class MessageImportView extends AbstractView implements View {
         setCaption(translate("smarti18n.editor.message-import.caption"));
 
         final PropertiesUploadReceiver uploadReceiver = new PropertiesUploadReceiver((locale, resourceBundle) -> {
-            resourceBundle.keySet()
-                    .forEach(key -> {
-                        messagesApi.save(key, resourceBundle.getString(key), locale);
-                    });
+            resourceBundle.keySet().forEach(key -> {
+                messagesApi.save(key, resourceBundle.getString(key), locale);
+            });
         });
 
-
-
-        final Upload upload = new Upload("Upload it here", uploadReceiver);
+        final Upload upload = new Upload("", uploadReceiver);
         upload.addSucceededListener(uploadReceiver);
 
         addComponent(upload);
@@ -81,7 +78,7 @@ public class MessageImportView extends AbstractView implements View {
 
             try (final InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()))) {
                 final PropertyResourceBundle resourceBundle = new PropertyResourceBundle(reader);
-                        consumer.accept(locale, resourceBundle);
+                consumer.accept(locale, resourceBundle);
                 stream.close();
             } catch (IOException e) {
                 throw new IllegalStateException(e);

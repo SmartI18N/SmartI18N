@@ -38,4 +38,8 @@ public class MessageTranslations implements Serializable {
     public void setTranslations(final Map<Locale, String> translations) {
         this.translations = translations;
     }
+
+    public void putTranslation(final Locale value) {
+        translations.putIfAbsent(value, "");
+    }
 }

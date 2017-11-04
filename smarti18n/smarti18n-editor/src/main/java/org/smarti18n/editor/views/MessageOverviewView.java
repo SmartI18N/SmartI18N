@@ -22,9 +22,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
+import org.springframework.util.StringUtils;
+
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -45,7 +52,7 @@ public class MessageOverviewView extends AbstractView implements View {
     }
 
     @PostConstruct
-    private void init() {
+    void init() {
         grid = new Grid<>(MessageTranslations.class);
 
         grid.setColumns("key");
@@ -62,7 +69,7 @@ public class MessageOverviewView extends AbstractView implements View {
         });
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
             messagesApi.remove(messageTranslations.getKey());
-            navigator().navigateTo(MessageOverviewView.VIEW_NAME);
+            enter(null);
         }));
 
         grid.addItemClickListener(itemClick -> {
@@ -92,7 +99,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
         final Button button = new IconButton(translate("smarti18n.editor.message-overview.add-message"), VaadinIcons.PLUS, (e -> {
             messagesApi.insert(field.getValue());
-            navigator().navigateTo(MessageOverviewView.VIEW_NAME);
+            enter(null);
         }));
         button.addStyleName(ValoTheme.BUTTON_TINY);
 
@@ -120,7 +127,12 @@ public class MessageOverviewView extends AbstractView implements View {
     }
 
     private Collection<MessageTranslations> getFilteredMessages(final String filter) {
-        return this.messagesApi.findAll();
+        final List<MessageTranslations> all = this.messagesApi.findAll().stream()
+                .filter(messageTranslations -> StringUtils.isEmpty(filter)  || messageTranslations.getKey().contains(filter))
+                .collect(Collectors.toList());
+
+        all.sort(Comparator.comparing(MessageTranslations::getKey));
+        return all;
     }
 
     private Navigator navigator() {

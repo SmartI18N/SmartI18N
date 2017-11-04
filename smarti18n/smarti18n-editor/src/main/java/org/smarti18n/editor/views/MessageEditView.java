@@ -6,6 +6,7 @@ import org.smarti18n.editor.vaadin.AbstractView;
 import org.smarti18n.editor.vaadin.I18N;
 import org.smarti18n.editor.vaadin.IconButton;
 
+import com.vaadin.event.selection.SingleSelectionListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -13,7 +14,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
@@ -40,8 +40,6 @@ public class MessageEditView extends AbstractView implements View {
 
     private final MessagesApi messagesApi;
 
-    private Layout layout;
-
     public MessageEditView(final I18N i18N, final MessagesApi messagesApi) {
         super(i18N);
         this.messagesApi = messagesApi;
@@ -49,9 +47,7 @@ public class MessageEditView extends AbstractView implements View {
 
     @PostConstruct
     private void init() {
-        this.layout = new VerticalLayout();
 
-        addComponent(layout);
     }
 
     @Override
@@ -61,20 +57,22 @@ public class MessageEditView extends AbstractView implements View {
         final Optional<MessageTranslations> first = this.messagesApi.findAll().stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
-        this.layout.removeAllComponents();
+        removeAllComponents();
 
         first.ifPresent(messageTranslations -> {
             setCaption(messageTranslations.getKey());
 
-            final Layout textAreas = new VerticalLayout();
+            final VerticalLayout textAreas = new VerticalLayout();
+            textAreas.setMargin(false);
 
             showTranslationArea(textAreas, messageTranslations);
 
-            final ComboBox<Locale> select = new ComboBox<>("", LOCALES);
-            final Button addButton = new IconButton(translate("smarti18n.editor.message-edit.add"), VaadinIcons.PLUS, clickEvent -> {
-                messageTranslations.getTranslations().put(select.getValue(), "");
+            final ComboBox<Locale> select = new ComboBox<>(translate("smarti18n.editor.message-edit.add"), LOCALES);
+            select.addSelectionListener((SingleSelectionListener<Locale>) event -> {
+                messageTranslations.putTranslation(select.getValue());
                 showTranslationArea(textAreas, messageTranslations);
             });
+
             final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.save"), VaadinIcons.LOCK, clickEvent -> {
                 for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
                     this.messagesApi.save(messageTranslations.getKey(), entry.getValue(), entry.getKey());
@@ -83,8 +81,9 @@ public class MessageEditView extends AbstractView implements View {
                 }
             });
 
-            layout.addComponent(textAreas);
-            layout.addComponent(new HorizontalLayout(select, addButton, saveButton));
+            addComponent(select);
+            addComponent(textAreas);
+            addComponent(saveButton);
         });
     }
 
