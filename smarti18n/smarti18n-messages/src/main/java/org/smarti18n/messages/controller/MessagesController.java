@@ -1,6 +1,5 @@
 package org.smarti18n.messages.controller;
 
-import org.smarti18n.api.MessageSimple;
 import org.smarti18n.api.MessageTranslations;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.messages.entities.MessageEntity;
@@ -24,28 +23,9 @@ public class MessagesController implements MessagesApi {
         this.messageRepository = messageRepository;
     }
 
-    @Override
-    @GetMapping(PATH_ROOT)
+    @GetMapping("/")
     public String root() {
         return "API 1: Registrierte Messages: " + this.messageRepository.count();
-    }
-
-    @Override
-    @GetMapping(PATH_FIND_ONE)
-    public MessageSimple findOne(
-            @RequestParam("key") final String key,
-            @RequestParam("language") final Locale language) {
-
-        final Optional<MessageEntity> optional = this.messageRepository.findById(key);
-        if (optional.isPresent()) {
-            final MessageEntity messageEntity = optional.get();
-            return new MessageSimple(
-                    messageEntity.getKey(),
-                    messageEntity.getTranslation(language),
-                    language
-            );
-        }
-        return null;
     }
 
     @Override

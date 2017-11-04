@@ -17,15 +17,16 @@
             <artifactId>smarti18n-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.smarti18n</groupId>
-            <artifactId>smarti18n-api-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
+        <!--org.springframework-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

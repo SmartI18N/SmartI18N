@@ -1,7 +1,7 @@
 package org.smarti18n.editor;
 
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.impl.MessagesApiImpl;
+import org.smarti18n.editor.api.MessagesApiImpl;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 import org.smarti18n.editor.vaadin.I18N;
 import org.smarti18n.editor.views.MessageImportView;
@@ -27,6 +27,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -44,12 +45,19 @@ public class EditorApplication {
 
     @Bean
     MessagesApi messagesApi(final Environment environment) {
-        return new MessagesApiImpl(environment, new RestTemplateBuilder().build());
+        return new MessagesApiImpl(environment, restTemplate());
     }
 
     @Bean
-    Smarti18nMessageSource messageSource(final MessagesApi messagesApi) {
-        return new Smarti18nMessageSource(messagesApi);
+    RestTemplate restTemplate() {
+        return new RestTemplateBuilder().build();
+    }
+
+    @Bean
+    Smarti18nMessageSource messageSource(final Environment environment) {
+        return new Smarti18nMessageSource(
+                environment.getProperty("smarti18n.host", MessagesApiImpl.DEFAULT_HOST)
+        );
     }
 
     @SpringUI

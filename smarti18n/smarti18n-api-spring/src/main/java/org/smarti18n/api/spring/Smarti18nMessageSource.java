@@ -1,13 +1,15 @@
 package org.smarti18n.api.spring;
 
 import org.smarti18n.api.MessageTranslations;
-import org.smarti18n.api.MessagesApi;
 
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -15,10 +17,13 @@ import java.util.Map;
 public class Smarti18nMessageSource extends AbstractMessageSource {
 
     private final Map<String, Map<Locale, String>> messages;
-    private final MessagesApi messagesApi;
+    private final RestTemplate restTemplate;
 
-    public Smarti18nMessageSource(final MessagesApi messagesApi) {
-        this.messagesApi = messagesApi;
+    private final String host;
+
+    public Smarti18nMessageSource(final String host) {
+        this.host = host;
+        this.restTemplate = new RestTemplate();
         this.messages = new HashMap<>();
 
         refreshMessageSource();
@@ -26,7 +31,7 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
     @Scheduled(cron = "0 * * * *")
     public void refreshMessageSource() {
-        final Collection<MessageTranslations> messageTranslations = this.messagesApi.findAll();
+        final Collection<MessageTranslations> messageTranslations = findAll();
         final Map<String, Map<Locale, String>> messages = new HashMap<>();
 
         for (MessageTranslations messageTranslation : messageTranslations) {
@@ -46,4 +51,16 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
         return new MessageFormat(message, locale);
     }
+
+    private Collection<MessageTranslations> findAll() {
+        final MessageTranslations[] translations = this.restTemplate.getForObject(host + "/api/1/findAll", MessageTranslations[].class);
+        if (translations == null) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(
+                translations
+        );
+    }
+
 }
