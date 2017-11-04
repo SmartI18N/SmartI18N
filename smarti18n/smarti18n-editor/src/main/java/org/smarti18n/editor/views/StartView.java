@@ -5,6 +5,8 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
+import org.smarti18n.editor.vaadin.I18N;
+
 import javax.annotation.PostConstruct;
 
 /**
@@ -16,9 +18,15 @@ public class StartView extends VerticalLayout implements View {
 
     public static final String VIEW_NAME = "";
 
+    private final I18N i18N;
+
+    public StartView(final I18N i18N) {
+        this.i18N = i18N;
+    }
+
     @PostConstruct
     private void init() {
-        setCaption("Welcome");
+        setCaption(this.i18N.getMessage("smarti18n.editor.start.caption"));
     }
 
     @Override

@@ -25,13 +25,13 @@ public class MessagesController implements MessagesApi {
     }
 
     @Override
-    @GetMapping("/api/1")
+    @GetMapping(PATH_ROOT)
     public String root() {
         return "API 1: Registrierte Messages: " + this.messageRepository.count();
     }
 
     @Override
-    @GetMapping("/api/1/findOne")
+    @GetMapping(PATH_FIND_ONE)
     public MessageSimple findOne(
             @RequestParam("key") final String key,
             @RequestParam("language") final Locale language) {
@@ -49,7 +49,7 @@ public class MessagesController implements MessagesApi {
     }
 
     @Override
-    @GetMapping("/api/1/findAll")
+    @GetMapping(PATH_FIND_ALL)
     public Collection<MessageTranslations> findAll() {
         return this.messageRepository.findAll().stream().map(messageEntity -> new MessageTranslations(
                 messageEntity.getKey(),
@@ -58,7 +58,7 @@ public class MessagesController implements MessagesApi {
     }
 
     @Override
-    @GetMapping("/api/1/insert")
+    @GetMapping(PATH_INSERT)
     public MessageTranslations insert(
             @RequestParam("key") final String key) {
 
@@ -71,7 +71,7 @@ public class MessagesController implements MessagesApi {
     }
 
     @Override
-    @GetMapping("/api/1/save")
+    @GetMapping(PATH_SAVE)
     public MessageTranslations save(
             @RequestParam("key") final String key,
             @RequestParam("translation") final String translation,
@@ -91,5 +91,11 @@ public class MessagesController implements MessagesApi {
             );
         }
         throw new IllegalStateException("Message with key [" + key + "] doesn't exist.");
+    }
+
+    @Override
+    @GetMapping(PATH_REMOVE)
+    public void remove(final String key) {
+        this.messageRepository.deleteById(key);
     }
 }
