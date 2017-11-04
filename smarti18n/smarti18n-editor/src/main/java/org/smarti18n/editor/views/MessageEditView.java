@@ -1,10 +1,10 @@
 package org.smarti18n.editor.views;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.I18N;
+import org.smarti18n.editor.vaadin.IconButton;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -19,18 +19,18 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
 import javax.annotation.PostConstruct;
-
-import org.smarti18n.api.MessageTranslations;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.IconButton;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
 @SpringView(name = MessageEditView.VIEW_NAME)
-public class MessageEditView extends VerticalLayout implements View {
+public class MessageEditView extends AbstractView implements View {
 
     static final String VIEW_NAME = "message/edit";
 
@@ -38,14 +38,12 @@ public class MessageEditView extends VerticalLayout implements View {
             Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN
     );
 
-    private final I18N i18N;
-
     private final MessagesApi messagesApi;
 
     private Layout layout;
 
     public MessageEditView(final I18N i18N, final MessagesApi messagesApi) {
-        this.i18N = i18N;
+        super(i18N);
         this.messagesApi = messagesApi;
     }
 
@@ -73,14 +71,14 @@ public class MessageEditView extends VerticalLayout implements View {
             showTranslationArea(textAreas, messageTranslations);
 
             final ComboBox<Locale> select = new ComboBox<>("", LOCALES);
-            final Button addButton = new IconButton(this.i18N.getMessage("smarti18n.editor.message-edit.add"), VaadinIcons.PLUS, clickEvent -> {
+            final Button addButton = new IconButton(translate("smarti18n.editor.message-edit.add"), VaadinIcons.PLUS, clickEvent -> {
                 messageTranslations.getTranslations().put(select.getValue(), "");
                 showTranslationArea(textAreas, messageTranslations);
             });
-            final Button saveButton = new IconButton(this.i18N.getMessage("smarti18n.editor.message-edit.save"), VaadinIcons.LOCK, clickEvent -> {
+            final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.save"), VaadinIcons.LOCK, clickEvent -> {
                 for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
                     this.messagesApi.save(messageTranslations.getKey(), entry.getValue(), entry.getKey());
-                    this.i18N.refreshMessageSource();
+                    refreshMessageSource();
                     viewChangeEvent.getNavigator().navigateTo(MessageOverviewView.VIEW_NAME);
                 }
             });

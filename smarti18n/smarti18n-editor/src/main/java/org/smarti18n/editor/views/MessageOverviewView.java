@@ -1,5 +1,11 @@
 package org.smarti18n.editor.views;
 
+import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.I18N;
+import org.smarti18n.editor.vaadin.IconButton;
+
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
@@ -12,33 +18,29 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import org.smarti18n.api.MessageTranslations;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.IconButton;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
 @SpringView(name = MessageOverviewView.VIEW_NAME)
-public class MessageOverviewView extends VerticalLayout implements View {
+public class MessageOverviewView extends AbstractView implements View {
 
     public static final String VIEW_NAME = "message/overview";
 
-    private final I18N i18n;
     private final MessagesApi messagesApi;
 
     private Grid<MessageTranslations> grid;
 
-    public MessageOverviewView(final I18N i18n, final MessagesApi messagesApi) {
-        this.i18n = i18n;
+    public MessageOverviewView(final I18N i18N, final MessagesApi messagesApi) {
+        super(i18N);
         this.messagesApi = messagesApi;
     }
 
@@ -48,6 +50,16 @@ public class MessageOverviewView extends VerticalLayout implements View {
 
         grid.setColumns("key");
         grid.getColumn("key").setExpandRatio(1);
+        grid.addComponentColumn(messageTranslations -> {
+            final StringBuilder builder = new StringBuilder();
+            for (final Locale locale : messageTranslations.getTranslations().keySet()) {
+                if (builder.length() != 0) {
+                    builder.append(", ");
+                }
+                builder.append(locale.getLanguage());
+            }
+            return new Label(builder.toString());
+        });
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
             messagesApi.remove(messageTranslations.getKey());
             navigator().navigateTo(MessageOverviewView.VIEW_NAME);
@@ -67,7 +79,7 @@ public class MessageOverviewView extends VerticalLayout implements View {
         }));
         grid.appendFooterRow().getCell("key").setComponent(createAddMessageField());
 
-        setCaption(this.i18n.getMessage("smarti18n.editor.message-overview.caption"));
+        setCaption(translate("smarti18n.editor.message-overview.caption"));
         addComponent(grid);
 
         setSizeFull();
@@ -78,7 +90,7 @@ public class MessageOverviewView extends VerticalLayout implements View {
         field.setWidth("100%");
         field.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
-        final Button button = new IconButton(this.i18n.getMessage("smarti18n.editor.message-overview.add-message"), VaadinIcons.PLUS, (e -> {
+        final Button button = new IconButton(translate("smarti18n.editor.message-overview.add-message"), VaadinIcons.PLUS, (e -> {
             messagesApi.insert(field.getValue());
             navigator().navigateTo(MessageOverviewView.VIEW_NAME);
         }));

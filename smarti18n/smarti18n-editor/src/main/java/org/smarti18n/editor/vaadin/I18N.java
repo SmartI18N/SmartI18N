@@ -1,7 +1,9 @@
 package org.smarti18n.editor.vaadin;
 
-import com.vaadin.server.VaadinSession;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
+
+import com.vaadin.server.VaadinSession;
+
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 

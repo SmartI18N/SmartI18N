@@ -1,18 +1,17 @@
 package org.smarti18n.api.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
+import org.smarti18n.api.MessageSimple;
+import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessagesApi;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import org.smarti18n.api.MessageSimple;
-import org.smarti18n.api.MessageTranslations;
-import org.smarti18n.api.MessagesApi;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
 
 /**
  * @author Marc Bellmann &lt;marc@smarti18n.com&gt;
@@ -60,6 +59,11 @@ public class MessagesApiImpl implements MessagesApi {
     @Override
     public MessageTranslations save(final String key, final String translation, final Locale language) {
         return this.restTemplate.getForObject(host + PATH_SAVE + "?key=" + key + "&translation=" + translation + "&language=" + language, MessageTranslations.class);
+    }
+
+    @Override
+    public MessageTranslations copy(final String sourceKey, final String targetKey) {
+        return this.restTemplate.getForObject(host + PATH_COPY + "?sourceKey=" + sourceKey + "&targetKey=" + targetKey, MessageTranslations.class);
     }
 
     @Override

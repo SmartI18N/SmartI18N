@@ -1,19 +1,19 @@
 package org.smarti18n.messages.controller;
 
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.smarti18n.api.MessageSimple;
 import org.smarti18n.api.MessageTranslations;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.messages.entities.MessageEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class MessagesController implements MessagesApi {
@@ -78,10 +78,28 @@ public class MessagesController implements MessagesApi {
             @RequestParam("language") final Locale language) {
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(key);
-        if (optional.isPresent()) {
-            final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(key));
+        final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(key));
 
-            messageEntity.putTranslation(language, translation);
+        messageEntity.putTranslation(language, translation);
+
+        final MessageEntity saved = this.messageRepository.save(messageEntity);
+
+        return new MessageTranslations(
+                saved.getKey(),
+                saved.getTranslations()
+        );
+    }
+
+    @Override
+    @GetMapping(PATH_COPY)
+    public MessageTranslations copy(
+            @RequestParam("key") final String sourceKey,
+            @RequestParam("key") final String targetKey) {
+
+        final Optional<MessageEntity> optional = this.messageRepository.findById(sourceKey);
+        if (optional.isPresent()) {
+            final MessageEntity messageEntity = optional.get();
+            messageEntity.setKey(targetKey);
 
             final MessageEntity saved = this.messageRepository.save(messageEntity);
 
@@ -90,7 +108,7 @@ public class MessagesController implements MessagesApi {
                     saved.getTranslations()
             );
         }
-        throw new IllegalStateException("Message with key [" + key + "] doesn't exist.");
+        return null;
     }
 
     @Override

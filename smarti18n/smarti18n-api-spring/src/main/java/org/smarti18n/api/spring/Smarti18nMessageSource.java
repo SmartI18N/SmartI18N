@@ -2,6 +2,7 @@ package org.smarti18n.api.spring;
 
 import org.smarti18n.api.MessageTranslations;
 import org.smarti18n.api.MessagesApi;
+
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -10,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class Smarti18nMessageSource extends AbstractMessageSource {
 
