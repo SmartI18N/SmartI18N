@@ -5,25 +5,25 @@ import java.util.Locale;
 
 public interface MessagesApi {
 
-    String PATH_FIND_ALL = "/api/1/findAll";
-    String PATH_INSERT = "/api/1/insert";
-    String PATH_SAVE = "/api/1/save";
-    String PATH_COPY = "/api/1/copy";
-    String PATH_REMOVE = "/api/1/remove";
+    String PATH_MESSAGES_FIND_ALL = "/api/1/messages/findAll";
+    String PATH_MESSAGES_INSERT = "/api/1/messages/insert";
+    String PATH_MESSAGES_SAVE = "/api/1/messages/save";
+    String PATH_MESSAGES_COPY = "/api/1/messages/copy";
+    String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
 
-    Collection<MessageTranslations> findAll();
+    Collection<MessageImpl> findAll();
 
-    MessageTranslations insert(
+    MessageImpl insert(
             String key
     );
 
-    MessageTranslations save(
+    MessageImpl save(
             String key,
             String translation,
             Locale language
     );
 
-    MessageTranslations copy(
+    MessageImpl copy(
             String sourceKey,
             String targetKey
     );

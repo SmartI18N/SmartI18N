@@ -1,7 +1,7 @@
 package org.smarti18n.editor;
 
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.api.MessagesApiImpl;
+import org.smarti18n.api.impl.MessagesApiImpl;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 import org.smarti18n.editor.vaadin.I18N;
 import org.smarti18n.editor.views.MessageImportView;

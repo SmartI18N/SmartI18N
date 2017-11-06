@@ -1,6 +1,6 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.AbstractView;
 import org.smarti18n.editor.vaadin.I18N;
@@ -25,12 +25,10 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +42,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
     private final MessagesApi messagesApi;
 
-    private Grid<MessageTranslations> grid;
+    private Grid<MessageImpl> grid;
 
     public MessageOverviewView(final I18N i18N, final MessagesApi messagesApi) {
         super(i18N);
@@ -53,7 +51,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
     @PostConstruct
     void init() {
-        grid = new Grid<>(MessageTranslations.class);
+        grid = new Grid<>(MessageImpl.class);
 
         grid.setColumns("key");
         grid.getColumn("key").setExpandRatio(1);
@@ -126,12 +124,12 @@ public class MessageOverviewView extends AbstractView implements View {
         grid.setItems(getFilteredMessages(null));
     }
 
-    private Collection<MessageTranslations> getFilteredMessages(final String filter) {
-        final List<MessageTranslations> all = this.messagesApi.findAll().stream()
+    private Collection<MessageImpl> getFilteredMessages(final String filter) {
+        final List<MessageImpl> all = this.messagesApi.findAll().stream()
                 .filter(messageTranslations -> StringUtils.isEmpty(filter)  || messageTranslations.getKey().contains(filter))
                 .collect(Collectors.toList());
 
-        all.sort(Comparator.comparing(MessageTranslations::getKey));
+        all.sort(Comparator.comparing(MessageImpl::getKey));
         return all;
     }
 

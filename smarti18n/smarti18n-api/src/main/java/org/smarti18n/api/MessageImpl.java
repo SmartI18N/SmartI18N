@@ -5,36 +5,42 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class MessageTranslations implements Serializable {
+public class MessageImpl implements Message {
 
     private String key;
     private Map<Locale, String> translations;
 
-    public MessageTranslations() {
+    public MessageImpl() {
     }
 
-    public MessageTranslations(final String key) {
-        this.key = key;
-        this.translations = new HashMap<>();
+    public MessageImpl(final Message message) {
+        this.key = message.getKey();
+        this.translations = new HashMap<>(
+                message.getTranslations()
+        );
     }
 
-    public MessageTranslations(final String key, final Map<Locale, String> translations) {
+    public MessageImpl(final String key, final Map<Locale, String> translations) {
         this.key = key;
         this.translations = translations;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
 
+    @Override
     public void setKey(final String key) {
         this.key = key;
     }
 
+    @Override
     public Map<Locale, String> getTranslations() {
         return translations;
     }
 
+    @Override
     public void setTranslations(final Map<Locale, String> translations) {
         this.translations = translations;
     }

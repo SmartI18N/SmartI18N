@@ -1,6 +1,6 @@
 package org.smarti18n.messages.controller;
 
-import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.messages.entities.MessageEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
@@ -23,36 +23,28 @@ public class MessagesController implements MessagesApi {
         this.messageRepository = messageRepository;
     }
 
-    @GetMapping("/")
-    public String root() {
-        return "API 1: Registrierte Messages: " + this.messageRepository.count();
-    }
-
     @Override
-    @GetMapping(PATH_FIND_ALL)
-    public Collection<MessageTranslations> findAll() {
-        return this.messageRepository.findAll().stream().map(messageEntity -> new MessageTranslations(
+    @GetMapping(PATH_MESSAGES_FIND_ALL)
+    public Collection<MessageImpl> findAll() {
+        return this.messageRepository.findAll().stream().map(messageEntity -> new MessageImpl(
                 messageEntity.getKey(),
                 messageEntity.getTranslations()
         )).collect(Collectors.toList());
     }
 
     @Override
-    @GetMapping(PATH_INSERT)
-    public MessageTranslations insert(
+    @GetMapping(PATH_MESSAGES_INSERT)
+    public MessageImpl insert(
             @RequestParam("key") final String key) {
 
-        final MessageEntity saved = this.messageRepository.insert(new MessageEntity(key));
-
-        return new MessageTranslations(
-                saved.getKey(),
-                saved.getTranslations()
+        return new MessageImpl(
+                this.messageRepository.insert(new MessageEntity(key))
         );
     }
 
     @Override
-    @GetMapping(PATH_SAVE)
-    public MessageTranslations save(
+    @GetMapping(PATH_MESSAGES_SAVE)
+    public MessageImpl save(
             @RequestParam("key") final String key,
             @RequestParam("translation") final String translation,
             @RequestParam("language") final Locale language) {
@@ -64,15 +56,15 @@ public class MessagesController implements MessagesApi {
 
         final MessageEntity saved = this.messageRepository.save(messageEntity);
 
-        return new MessageTranslations(
+        return new MessageImpl(
                 saved.getKey(),
                 saved.getTranslations()
         );
     }
 
     @Override
-    @GetMapping(PATH_COPY)
-    public MessageTranslations copy(
+    @GetMapping(PATH_MESSAGES_COPY)
+    public MessageImpl copy(
             @RequestParam("key") final String sourceKey,
             @RequestParam("key") final String targetKey) {
 
@@ -83,7 +75,7 @@ public class MessagesController implements MessagesApi {
 
             final MessageEntity saved = this.messageRepository.save(messageEntity);
 
-            return new MessageTranslations(
+            return new MessageImpl(
                     saved.getKey(),
                     saved.getTranslations()
             );
@@ -92,7 +84,7 @@ public class MessagesController implements MessagesApi {
     }
 
     @Override
-    @GetMapping(PATH_REMOVE)
+    @GetMapping(PATH_MESSAGES_REMOVE)
     public void remove(final String key) {
         this.messageRepository.deleteById(key);
     }

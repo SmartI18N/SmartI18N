@@ -1,6 +1,6 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.AbstractView;
 import org.smarti18n.editor.vaadin.I18N;
@@ -54,7 +54,7 @@ public class MessageEditView extends AbstractView implements View {
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final String key = viewChangeEvent.getParameters();
 
-        final Optional<MessageTranslations> first = this.messagesApi.findAll().stream()
+        final Optional<MessageImpl> first = this.messagesApi.findAll().stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
         removeAllComponents();
@@ -87,9 +87,9 @@ public class MessageEditView extends AbstractView implements View {
         });
     }
 
-    private void showTranslationArea(final Layout textAreas, final MessageTranslations messageTranslations) {
+    private void showTranslationArea(final Layout textAreas, final MessageImpl messageImpl) {
         textAreas.removeAllComponents();
-        for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
+        for (Map.Entry<Locale, String> entry : messageImpl.getTranslations().entrySet()) {
             final TextArea textArea = new TextArea();
             textArea.setCaption(String.valueOf(entry.getKey()));
             textArea.setValue(entry.getValue());

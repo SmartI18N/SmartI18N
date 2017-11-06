@@ -1,6 +1,7 @@
 package org.smarti18n.api.spring;
 
-import org.smarti18n.api.MessageTranslations;
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.api.MessagesApi;
 
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,10 +32,10 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
     @Scheduled(cron = "0 * * * *")
     public void refreshMessageSource() {
-        final Collection<MessageTranslations> messageTranslations = findAll();
+        final Collection<MessageImpl> messageTranslations = findAll();
         final Map<String, Map<Locale, String>> messages = new HashMap<>();
 
-        for (MessageTranslations messageTranslation : messageTranslations) {
+        for (MessageImpl messageTranslation : messageTranslations) {
             messages.put(messageTranslation.getKey(), messageTranslation.getTranslations());
         }
 
@@ -52,8 +53,8 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
         return new MessageFormat(message, locale);
     }
 
-    private Collection<MessageTranslations> findAll() {
-        final MessageTranslations[] translations = this.restTemplate.getForObject(host + "/api/1/findAll", MessageTranslations[].class);
+    private Collection<MessageImpl> findAll() {
+        final MessageImpl[] translations = this.restTemplate.getForObject(host + MessagesApi.PATH_MESSAGES_FIND_ALL, MessageImpl[].class);
         if (translations == null) {
             return Collections.emptyList();
         }
