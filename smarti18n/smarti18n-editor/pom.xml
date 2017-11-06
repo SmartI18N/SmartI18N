@@ -61,6 +61,12 @@
             <artifactId>sidemenu</artifactId>
             <version>2.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>material</artifactId>
+            <version>1.1.4</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -84,6 +90,24 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${com.vaadin.version}</version>
+                <executions>
+                    <!-- You are free to mark this as permanently ignored in Eclipse -->
+                    <execution>
+                        <configuration>
+                            <!-- if you don't specify any modules, the plugin will find them -->
+                        </configuration>
+                        <goals>
+                            <goal>resources</goal>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

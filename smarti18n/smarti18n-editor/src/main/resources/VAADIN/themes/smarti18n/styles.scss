@@ -1,0 +1,34 @@
+//$mat-background-color: #303030;
+
+$primary: #ffb74d;
+$secondary: #00838f;
+
+$mat-custom-color: #00bcd4;
+
+$v-unit-size: 45px;
+
+$v-focus-color: $primary;
+
+@import "../material/material.scss";
+
+.smarti18n {
+  @include material;
+
+  .valo-menu {
+    .valo-menu-title {
+      background: $secondary;
+      color: white;
+
+      img {
+        display: none;
+      }
+
+    }
+  }
+
+
+  .v-caption {
+    font-size: 2em;
+  }
+
+}

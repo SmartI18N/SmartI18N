@@ -61,7 +61,7 @@ public class EditorApplication {
     }
 
     @SpringUI
-    @Theme("valo")
+    @Theme("smarti18n")
     public static class EditorUI extends UI {
 
         private final I18N i18N;
@@ -79,6 +79,8 @@ public class EditorApplication {
             sideMenu.setMenuCaption(this.i18N.getMessage("smarti18n.editor.title"));
 
             sideMenu.setUserName("Marc Bellmann");
+            sideMenu.setUserMenuVisible(false);
+            sideMenu.setIcon(null);
 
             sideMenu.addMenuItem(this.i18N.getMessage("smarti18n.editor.menu.start"), VaadinIcons.HOME, navigateTo(StartView.VIEW_NAME));
             sideMenu.addMenuItem(this.i18N.getMessage("smarti18n.editor.menu.message-overview"), VaadinIcons.LIST, navigateTo(MessageOverviewView.VIEW_NAME));
