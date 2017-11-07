@@ -14,9 +14,9 @@ import org.junit.Test;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.impl.ApiException;
-import org.smarti18n.api.impl.MessagesApiImpl;
-import org.smarti18n.api.impl.ProjectsApiImpl;
+import org.smarti18n.api.ApiException;
+import org.smarti18n.api.MessagesApiImpl;
+import org.smarti18n.api.ProjectsApiImpl;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;

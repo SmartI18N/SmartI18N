@@ -1,15 +1,14 @@
-package org.smarti18n.api.impl;
+package org.smarti18n.api;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.api.MessagesApi;
 
 /**
  * @author Marc Bellmann &lt;marc@smarti18n.com&gt;
@@ -19,14 +18,14 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 
     public MessagesApiImpl(final Environment environment, final RestTemplate restTemplate) {
         super(
-                environment.getProperty("", DEFAULT_HOST),
                 restTemplate,
+                environment.getProperty("", DEFAULT_HOST),
                 environment.getProperty("", DEFAULT_PROJECT_ID),
                 environment.getProperty("", DEFAULT_PROJECT_ID));
     }
 
     public MessagesApiImpl(final RestTemplate restTemplate, final int port, final String projectSecret) {
-        super("http://localhost:" + port, restTemplate, "test", projectSecret);
+        super(restTemplate, "http://localhost:" + port, "test", projectSecret);
     }
 
     @Override
@@ -34,6 +33,11 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
         return Arrays.asList(
                 get(MessagesApi.PATH_MESSAGES_FIND_ALL, MessageImpl[].class)
         );
+    }
+
+    @Override
+    public Map<String, Map<Locale, String>> findForSpringMessageSource() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

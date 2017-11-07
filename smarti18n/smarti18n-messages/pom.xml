@@ -26,12 +26,6 @@
             <artifactId>smarti18n-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.smarti18n</groupId>
-            <artifactId>smarti18n-api-impl</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
 
         <!--org.springframework.boot-->
         <dependency>

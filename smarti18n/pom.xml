@@ -17,7 +17,6 @@
 
     <modules>
         <module>smarti18n-api</module>
-        <module>smarti18n-api-impl</module>
         <module>smarti18n-api-spring</module>
 
         <module>smarti18n-messages</module>

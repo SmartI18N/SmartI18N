@@ -12,12 +12,6 @@
     <artifactId>smarti18n-api-spring</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>org.smarti18n</groupId>
-            <artifactId>smarti18n-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!--org.springframework-->
         <dependency>
             <groupId>org.springframework</groupId>

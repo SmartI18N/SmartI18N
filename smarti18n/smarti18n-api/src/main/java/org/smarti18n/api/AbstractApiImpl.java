@@ -1,4 +1,4 @@
-package org.smarti18n.api.impl;
+package org.smarti18n.api;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -6,12 +6,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import org.smarti18n.api.MessagesApi;
-
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-public abstract class AbstractApiImpl {
+abstract class AbstractApiImpl {
 
     public static final String DEFAULT_HOST = "https://messages.smarti18n.com";
     static final String DEFAULT_PROJECT_ID = "default";
@@ -22,8 +20,8 @@ public abstract class AbstractApiImpl {
     private final String projectSecret;
 
     AbstractApiImpl(
-            final String host,
             final RestTemplate restTemplate,
+            final String host,
             final String projectId,
             final String projectSecret) {
 

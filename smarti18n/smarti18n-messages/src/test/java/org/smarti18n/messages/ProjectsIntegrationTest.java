@@ -13,8 +13,8 @@ import org.junit.Test;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.impl.ApiException;
-import org.smarti18n.api.impl.ProjectsApiImpl;
+import org.smarti18n.api.ApiException;
+import org.smarti18n.api.ProjectsApiImpl;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;

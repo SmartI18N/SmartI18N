@@ -1,4 +1,4 @@
-package org.smarti18n.api.impl;
+package org.smarti18n.api;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,22 +6,17 @@ import java.util.List;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectImpl;
-import org.smarti18n.api.ProjectsApi;
-
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
     public ProjectsApiImpl(final Environment environment, final RestTemplate restTemplate) {
         super(
-                environment.getProperty("", DEFAULT_HOST),
-                restTemplate,
+                restTemplate, environment.getProperty("", DEFAULT_HOST),
                 environment.getProperty("", DEFAULT_PROJECT_ID),
                 environment.getProperty("", DEFAULT_PROJECT_ID));
     }
 
     public ProjectsApiImpl(final RestTemplate restTemplate, final int port) {
-        super("http://localhost:" + port, restTemplate, null, null);
+        super(restTemplate, "http://localhost:" + port, null, null);
     }
 
     @Override

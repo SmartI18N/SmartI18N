@@ -1,7 +1,9 @@
 package org.smarti18n.messages.controller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,6 +46,21 @@ public class MessagesController implements MessagesApi {
                 messageEntity.getKey(),
                 messageEntity.getTranslations()
         )).collect(Collectors.toList());
+    }
+
+    @Override
+    @GetMapping(PATH_MESSAGES_FIND_SPRING)
+    public Map<String, Map<Locale, String>> findForSpringMessageSource() {
+        final ProjectEntity project = getProject();
+
+        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
+        final Map<String, Map<Locale, String>> map = new HashMap<>();
+
+        for (final MessageEntity message : messages) {
+            map.put(message.getKey(), new HashMap<>(message.getTranslations()));
+        }
+
+        return map;
     }
 
     @Override
