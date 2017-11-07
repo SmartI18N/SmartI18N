@@ -16,26 +16,34 @@ public interface MessagesApi {
     String PATH_MESSAGES_COPY = "/api/1/messages/copy";
     String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
 
-    Collection<MessageImpl> findAll();
+    Collection<MessageImpl> findAll(final String projectId, final String projectSecret);
 
-    Map<String, Map<Locale, String>> findForSpringMessageSource();
+    Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId, final String projectSecret);
 
     MessageImpl insert(
+            String projectId,
+            String projectSecret,
             String key
     );
 
     MessageImpl update(
+            String projectId,
+            String projectSecret,
             String key,
             String translation,
             Locale language
     );
 
     MessageImpl copy(
+            String projectId,
+            String projectSecret,
             String sourceKey,
             String targetKey
     );
 
     void remove(
+            String projectId,
+            String projectSecret,
             String key
     );
 }

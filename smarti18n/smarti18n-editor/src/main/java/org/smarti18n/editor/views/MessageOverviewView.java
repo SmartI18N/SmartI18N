@@ -66,7 +66,7 @@ public class MessageOverviewView extends AbstractView implements View {
             return new Label(builder.toString());
         });
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
-            messagesApi.remove(messageTranslations.getKey());
+            messagesApi.remove(projectId, projectSecret, messageTranslations.getKey());
             enter(null);
         }));
 
@@ -96,7 +96,7 @@ public class MessageOverviewView extends AbstractView implements View {
         field.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
         final Button button = new IconButton(translate("smarti18n.editor.message-overview.add-message"), VaadinIcons.PLUS, (e -> {
-            messagesApi.insert(field.getValue());
+            messagesApi.insert(projectId, projectSecret, field.getValue());
             enter(null);
         }));
         button.addStyleName(ValoTheme.BUTTON_TINY);
@@ -125,7 +125,7 @@ public class MessageOverviewView extends AbstractView implements View {
     }
 
     private Collection<MessageImpl> getFilteredMessages(final String filter) {
-        final List<MessageImpl> all = this.messagesApi.findAll().stream()
+        final List<MessageImpl> all = this.messagesApi.findAll(projectId, projectSecret).stream()
                 .filter(messageTranslations -> StringUtils.isEmpty(filter)  || messageTranslations.getKey().contains(filter))
                 .collect(Collectors.toList());
 

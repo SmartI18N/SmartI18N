@@ -34,13 +34,18 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     private MessagesApi messagesApi;
 
+    private String projectId;
+    private String projectSecret;
+
     @Before
     public void setUp() throws Exception {
         final ProjectsApiImpl projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
         projectsApi.insert(PROJECT_ID);
-        final String secret = projectsApi.generateSecret(PROJECT_ID);
 
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, secret);
+        this.projectId = PROJECT_ID;
+        this.projectSecret = projectsApi.generateSecret(PROJECT_ID);
+
+        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
     }
 
     @Test
@@ -56,28 +61,28 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     public void existInsertMessages() throws Exception {
         assertNoMessagesFound();
 
-        this.messagesApi.insert(MESSAGE_KEY);
-        this.messagesApi.insert(MESSAGE_KEY);
+        this.messagesApi.insert(projectId, projectSecret, MESSAGE_KEY);
+        this.messagesApi.insert(projectId, projectSecret, MESSAGE_KEY);
     }
 
     @Test(expected = ApiException.class)
     public void unknownCopySource() throws Exception {
         assertNoMessagesFound();
 
-        this.messagesApi.copy(MESSAGE_KEY, MESSAGE_KEY);
+        this.messagesApi.copy(projectId, projectSecret, MESSAGE_KEY, MESSAGE_KEY);
     }
 
     @Test(expected = ApiException.class)
     public void existCopyMessages() throws Exception {
         assertNoMessagesFound();
 
-        this.messagesApi.insert(MESSAGE_KEY);
-        this.messagesApi.copy(MESSAGE_KEY, MESSAGE_KEY);
+        this.messagesApi.insert(projectId, projectSecret, MESSAGE_KEY);
+        this.messagesApi.copy(projectId, projectSecret, MESSAGE_KEY, MESSAGE_KEY);
     }
 
     @Test(expected = RestClientException.class)
     public void wrongSecret() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "irgendwas").findAll();
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port).findAll(projectId, projectSecret);
     }
 
 //
@@ -85,40 +90,40 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 //
 
     private void assertMessageDelete() {
-        this.messagesApi.remove(SECOND_MESSAGE_KEY);
+        this.messagesApi.remove(projectId, projectSecret, SECOND_MESSAGE_KEY);
 
-        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        final Collection<MessageImpl> messages = this.messagesApi.findAll(projectId, projectSecret);
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageCopy() {
-        this.messagesApi.copy(MESSAGE_KEY, SECOND_MESSAGE_KEY);
+        this.messagesApi.copy(projectId, projectSecret, MESSAGE_KEY, SECOND_MESSAGE_KEY);
 
-        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        final Collection<MessageImpl> messages = this.messagesApi.findAll(projectId, projectSecret);
         assertThat(messages, hasSize(2));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
         assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageUpdate() {
-        this.messagesApi.update(MESSAGE_KEY, TRANSLATION, LANGUAGE);
+        this.messagesApi.update(projectId, projectSecret, MESSAGE_KEY, TRANSLATION, LANGUAGE);
 
-        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        final Collection<MessageImpl> messages = this.messagesApi.findAll(projectId, projectSecret);
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageInsert() {
-        this.messagesApi.insert(MESSAGE_KEY);
+        this.messagesApi.insert(projectId, projectSecret, MESSAGE_KEY);
 
-        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        final Collection<MessageImpl> messages = this.messagesApi.findAll(projectId, projectSecret);
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY)));
     }
 
     private void assertNoMessagesFound() {
-        assertThat(this.messagesApi.findAll(), is(empty()));
+        assertThat(this.messagesApi.findAll(projectId, projectSecret), is(empty()));
     }
 
 //

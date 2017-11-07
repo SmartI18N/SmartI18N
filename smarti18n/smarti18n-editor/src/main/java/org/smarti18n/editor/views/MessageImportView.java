@@ -40,7 +40,7 @@ public class MessageImportView extends AbstractView implements View {
 
         final PropertiesUploadReceiver uploadReceiver = new PropertiesUploadReceiver((locale, resourceBundle) -> {
             resourceBundle.keySet().forEach(key -> {
-                messagesApi.update(key, resourceBundle.getString(key), locale);
+                messagesApi.update(projectId, projectSecret, key, resourceBundle.getString(key), locale);
             });
         });
 

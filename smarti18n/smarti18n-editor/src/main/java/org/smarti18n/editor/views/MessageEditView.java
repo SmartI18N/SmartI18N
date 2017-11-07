@@ -54,7 +54,7 @@ public class MessageEditView extends AbstractView implements View {
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final String key = viewChangeEvent.getParameters();
 
-        final Optional<MessageImpl> first = this.messagesApi.findAll().stream()
+        final Optional<MessageImpl> first = this.messagesApi.findAll(projectId, projectSecret).stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
         removeAllComponents();
@@ -75,7 +75,7 @@ public class MessageEditView extends AbstractView implements View {
 
             final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.update"), VaadinIcons.LOCK, clickEvent -> {
                 for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
-                    this.messagesApi.update(messageTranslations.getKey(), entry.getValue(), entry.getKey());
+                    this.messagesApi.update(projectId, projectSecret, messageTranslations.getKey(), entry.getValue(), entry.getKey());
                     refreshMessageSource();
                     viewChangeEvent.getNavigator().navigateTo(MessageOverviewView.VIEW_NAME);
                 }

@@ -1,10 +1,10 @@
 package org.smarti18n.api;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -12,54 +12,49 @@ import org.springframework.web.client.RestTemplate;
 abstract class AbstractApiImpl {
 
     public static final String DEFAULT_HOST = "https://messages.smarti18n.com";
-    static final String DEFAULT_PROJECT_ID = "default";
 
     private final String host;
     private final RestTemplate restTemplate;
-    private final String projectId;
-    private final String projectSecret;
 
     AbstractApiImpl(
             final RestTemplate restTemplate,
-            final String host,
-            final String projectId,
-            final String projectSecret) {
+            final String host) {
 
         this.host = host;
         this.restTemplate = restTemplate;
-        this.projectId = projectId;
-        this.projectSecret = projectSecret;
     }
-
 
     <OUT, IN> OUT post(final String path, final IN project, final Class<OUT> responseType) {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
                 this.host + path,
                 HttpMethod.POST,
-                new HttpEntity<>(project, getHttpHeaders()),
+                new HttpEntity<>(project),
                 responseType
         );
 
         return handleResponse(exchange);
     }
 
-    <OUT> OUT get(final String path, Class<OUT> responseType) {
-
+    <OUT> OUT get(final UriComponentsBuilder uri, Class<OUT> responseType) {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
-                this.host + path,
+                uri.build().encode().toUri(),
                 HttpMethod.GET,
-                new HttpEntity<>(getHttpHeaders()),
+                null,
                 responseType
         );
 
         return handleResponse(exchange);
     }
 
-    private HttpHeaders getHttpHeaders() {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.add(MessagesApi.PROJECT_ID_HEADER, projectId);
-        headers.add(MessagesApi.PROJECT_SECRET_HEADER, projectSecret);
-        return headers;
+    UriComponentsBuilder uri(final String path) {
+        return UriComponentsBuilder.fromHttpUrl(this.host)
+                .path(path);
+    }
+
+    UriComponentsBuilder uri(final String path, final String projectId, final String projectSecret) {
+        return uri(path)
+                .queryParam("projectId", projectId)
+                .queryParam("projectSecret", projectSecret);
     }
 
     private <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,6 +80,7 @@ public class ProjectsController implements ProjectsApi {
 
     @Override
     @GetMapping(PATH_PROJECTS_GENERATE_SECRET)
+    @Transactional
     public String generateSecret(
             @RequestParam("projectId") final String projectId) {
 
