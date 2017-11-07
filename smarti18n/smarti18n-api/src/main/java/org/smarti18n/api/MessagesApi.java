@@ -5,6 +5,9 @@ import java.util.Locale;
 
 public interface MessagesApi {
 
+    String PROJECT_ID_HEADER = "PROJECT_ID";
+    String PROJECT_SECRET_HEADER = "PROJECT_SECRET";
+
     String PATH_MESSAGES_FIND_ALL = "/api/1/messages/findAll";
     String PATH_MESSAGES_INSERT = "/api/1/messages/insert";
     String PATH_MESSAGES_UPDATE = "/api/1/messages/update";

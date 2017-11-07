@@ -12,14 +12,16 @@ import org.smarti18n.api.ProjectsApi;
 
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
-    public final static String DEFAULT_HOST = "https://messages.smarti18n.com";
-
     public ProjectsApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(environment.getProperty("", DEFAULT_HOST), restTemplate);
+        super(
+                environment.getProperty("", DEFAULT_HOST),
+                restTemplate,
+                environment.getProperty("", DEFAULT_PROJECT_ID),
+                environment.getProperty("", DEFAULT_PROJECT_ID));
     }
 
     public ProjectsApiImpl(final RestTemplate restTemplate, final int port) {
-        super("http://localhost:" + port, restTemplate);
+        super("http://localhost:" + port, restTemplate, null, null);
     }
 
     @Override
@@ -37,5 +39,10 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
     @Override
     public Project update(final Project project) {
         return post(ProjectsApi.PATH_PROJECTS_UPDATE, project, ProjectImpl.class);
+    }
+
+    @Override
+    public String generateSecret(final String projectId) {
+        return get(ProjectsApi.PATH_PROJECTS_GENERATE_SECRET + "?projectId=" + projectId, String.class);
     }
 }

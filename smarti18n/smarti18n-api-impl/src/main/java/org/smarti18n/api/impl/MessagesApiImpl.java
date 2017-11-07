@@ -18,11 +18,15 @@ import org.smarti18n.api.MessagesApi;
 public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 
     public MessagesApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(environment.getProperty("", DEFAULT_HOST), restTemplate);
+        super(
+                environment.getProperty("", DEFAULT_HOST),
+                restTemplate,
+                environment.getProperty("", DEFAULT_PROJECT_ID),
+                environment.getProperty("", DEFAULT_PROJECT_ID));
     }
 
-    public MessagesApiImpl(final RestTemplate restTemplate, final int port) {
-        super("http://localhost:" + port, restTemplate);
+    public MessagesApiImpl(final RestTemplate restTemplate, final int port, final String projectSecret) {
+        super("http://localhost:" + port, restTemplate, "test", projectSecret);
     }
 
     @Override

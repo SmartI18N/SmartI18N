@@ -42,6 +42,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         assertNoProjectsFound();
         assertCreateNewProject();
         assertUpdateProject();
+        assertGenerateSecret();
     }
 
     @Test(expected = ApiException.class)
@@ -62,6 +63,25 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         project.setDescription(PROJECT_DESCRIPTION);
 
         this.projectsApi.update(project);
+    }
+
+    @Test(expected = ApiException.class)
+    public void unknownGenerateSecret() throws Exception {
+        assertNoProjectsFound();
+
+        this.projectsApi.generateSecret(PROJECT_ID);
+    }
+
+//
+//    ASSERTS
+//
+
+    private void assertGenerateSecret() {
+        final String secret = this.projectsApi.generateSecret(PROJECT_ID);
+
+        final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
+        assertThat(projects, hasSize(1));
+        assertThat(projects, hasItem(projectWith(PROJECT_ID, secret)));
     }
 
     private void assertUpdateProject() {
@@ -88,6 +108,10 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
     private void assertNoProjectsFound() {
         assertThat(this.projectsApi.findAll(), is(empty()));
     }
+
+//
+//    MATCHERS
+//
 
     private Matcher<Project> projectWith(final String projectId) {
         return new TypeSafeMatcher<Project>() {
@@ -117,4 +141,19 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
             }
         };
     }
+
+    private Matcher<Project> projectWith(final String projectId, final String secret) {
+        return new TypeSafeMatcher<Project>() {
+            @Override
+            protected boolean matchesSafely(final Project item) {
+                return item.getId().equals(projectId) && item.getSecrets().contains(secret);
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendValue(projectId).appendValue(secret);
+            }
+        };
+    }
+
 }

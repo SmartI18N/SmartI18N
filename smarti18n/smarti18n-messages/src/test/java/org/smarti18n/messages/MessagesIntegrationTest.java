@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.web.client.RestClientException;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -15,6 +16,7 @@ import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.impl.ApiException;
 import org.smarti18n.api.impl.MessagesApiImpl;
+import org.smarti18n.api.impl.ProjectsApiImpl;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -28,19 +30,24 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private static final String TRANSLATION = "ÜBERSETZUNG";
     private static final Locale LANGUAGE = Locale.GERMAN;
     private static final String SECOND_MESSAGE_KEY = "message.second-key";
+    private static final String PROJECT_ID = "test";
 
     private MessagesApi messagesApi;
 
     @Before
     public void setUp() throws Exception {
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
+        final ProjectsApiImpl projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
+        projectsApi.insert(PROJECT_ID);
+        final String secret = projectsApi.generateSecret(PROJECT_ID);
+
+        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, secret);
     }
 
     @Test
     public void standardWorkflowMessages() throws Exception {
         assertNoMessagesFound();
         assertMessageInsert();
-        assertMessageSave();
+        assertMessageUpdate();
         assertMessageCopy();
         assertMessageDelete();
     }
@@ -68,9 +75,14 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         this.messagesApi.copy(MESSAGE_KEY, MESSAGE_KEY);
     }
 
+    @Test(expected = RestClientException.class)
+    public void wrongSecret() {
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "irgendwas").findAll();
+    }
 
-
-
+//
+//    ASSERTS
+//
 
     private void assertMessageDelete() {
         this.messagesApi.remove(SECOND_MESSAGE_KEY);
@@ -89,7 +101,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
-    private void assertMessageSave() {
+    private void assertMessageUpdate() {
         this.messagesApi.update(MESSAGE_KEY, TRANSLATION, LANGUAGE);
 
         final Collection<MessageImpl> messages = this.messagesApi.findAll();
@@ -108,6 +120,10 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private void assertNoMessagesFound() {
         assertThat(this.messagesApi.findAll(), is(empty()));
     }
+
+//
+//    MATCHERS
+//
 
     private Matcher<Message> messageWith(final String messageKey) {
         return new TypeSafeMatcher<Message>() {

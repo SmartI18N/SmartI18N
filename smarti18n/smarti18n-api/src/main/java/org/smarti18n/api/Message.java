@@ -1,10 +1,10 @@
 package org.smarti18n.api;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = MessageImpl.class)
 public interface Message extends Serializable {

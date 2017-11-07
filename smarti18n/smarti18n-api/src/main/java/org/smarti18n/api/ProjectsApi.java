@@ -7,6 +7,7 @@ public interface ProjectsApi {
     String PATH_PROJECTS_FIND_ALL = "/api/1/projects/findAll";
     String PATH_PROJECTS_INSERT = "/api/1/projects/insert";
     String PATH_PROJECTS_UPDATE = "/api/1/projects/update";
+    String PATH_PROJECTS_GENERATE_SECRET = "/api/1/projects/generateSecret";
 
     List<? extends Project> findAll();
 
@@ -16,5 +17,9 @@ public interface ProjectsApi {
 
     Project update(
             Project project
+    );
+
+    String generateSecret(
+            String projectId
     );
 }

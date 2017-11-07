@@ -1,12 +1,13 @@
 package org.smarti18n.messages.entities;
 
-import org.smarti18n.api.Project;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Locale;
-import java.util.Set;
+import org.smarti18n.api.Project;
 
 @Document
 public class ProjectEntity implements Project {
@@ -18,8 +19,11 @@ public class ProjectEntity implements Project {
     private String description;
 
     private Set<Locale> locales;
+    private Set<String> secrets;
 
     ProjectEntity() {
+        this.locales = new HashSet<>();
+        this.secrets = new HashSet<>();
     }
 
     public ProjectEntity(final String id) {
@@ -64,5 +68,19 @@ public class ProjectEntity implements Project {
     @Override
     public void setLocales(final Set<Locale> locales) {
         this.locales = locales;
+    }
+
+    @Override
+    public Set<String> getSecrets() {
+        return secrets;
+    }
+
+    @Override
+    public void setSecrets(final Set<String> secrets) {
+        this.secrets = secrets;
+    }
+
+    public boolean containsSecret(final String secret) {
+        return secrets.contains(secret);
     }
 }

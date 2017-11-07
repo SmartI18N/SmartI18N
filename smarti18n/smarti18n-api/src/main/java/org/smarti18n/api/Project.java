@@ -1,9 +1,9 @@
 package org.smarti18n.api;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import java.util.Locale;
 import java.util.Set;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = ProjectImpl.class)
 public interface Project {
@@ -23,4 +23,8 @@ public interface Project {
     Set<Locale> getLocales();
 
     void setLocales(Set<Locale> locales);
+
+    Set<String> getSecrets();
+
+    void setSecrets(Set<String> secrets);
 }

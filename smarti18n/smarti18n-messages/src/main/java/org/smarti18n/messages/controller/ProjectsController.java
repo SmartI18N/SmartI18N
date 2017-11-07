@@ -1,5 +1,7 @@
 package org.smarti18n.messages.controller;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.crypto.KeyGenerator;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
@@ -21,8 +24,12 @@ public class ProjectsController implements ProjectsApi {
 
     private final ProjectRepository projectRepository;
 
-    public ProjectsController(final ProjectRepository projectRepository) {
+    private final KeyGenerator keyGenerator;
+
+    public ProjectsController(final ProjectRepository projectRepository) throws NoSuchAlgorithmException {
         this.projectRepository = projectRepository;
+        this.keyGenerator = KeyGenerator.getInstance("AES");
+        this.keyGenerator.init(256);
     }
 
     @Override
@@ -38,7 +45,7 @@ public class ProjectsController implements ProjectsApi {
 
         if (this.projectRepository.findById(projectId).isPresent()) {
             throw new IllegalStateException("Project with id [" + projectId + "] already exist.");
-        };
+        }
 
         final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(projectId));
 
@@ -70,4 +77,26 @@ public class ProjectsController implements ProjectsApi {
         );
     }
 
+    @Override
+    @GetMapping(PATH_PROJECTS_GENERATE_SECRET)
+    public String generateSecret(
+            @RequestParam("projectId") final String projectId) {
+
+        final Optional<ProjectEntity> optional = this.projectRepository.findById(projectId);
+        if (!optional.isPresent()) {
+            throw new IllegalStateException("Project with id [" + projectId + "] doesn't exist.");
+        }
+
+        final ProjectEntity projectEntity = optional.get();
+
+        final String secret = Base64.getEncoder().encodeToString(
+                this.keyGenerator.generateKey().getEncoded()
+        );
+
+        projectEntity.getSecrets().add(secret);
+
+        this.projectRepository.save(projectEntity);
+
+        return secret;
+    }
 }
