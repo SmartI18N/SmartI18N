@@ -1,10 +1,12 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.IconButton;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+import org.springframework.util.StringUtils;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
@@ -21,15 +23,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
-
-import org.springframework.util.StringUtils;
-
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.I18N;
+import org.smarti18n.editor.vaadin.IconButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -46,6 +45,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
     public MessageOverviewView(final I18N i18N, final MessagesApi messagesApi) {
         super(i18N);
+
         this.messagesApi = messagesApi;
     }
 
