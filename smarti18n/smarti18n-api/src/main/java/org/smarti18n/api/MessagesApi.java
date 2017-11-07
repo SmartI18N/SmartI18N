@@ -7,7 +7,7 @@ public interface MessagesApi {
 
     String PATH_MESSAGES_FIND_ALL = "/api/1/messages/findAll";
     String PATH_MESSAGES_INSERT = "/api/1/messages/insert";
-    String PATH_MESSAGES_SAVE = "/api/1/messages/save";
+    String PATH_MESSAGES_UPDATE = "/api/1/messages/update";
     String PATH_MESSAGES_COPY = "/api/1/messages/copy";
     String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
 
@@ -17,7 +17,7 @@ public interface MessagesApi {
             String key
     );
 
-    MessageImpl save(
+    MessageImpl update(
             String key,
             String translation,
             Locale language

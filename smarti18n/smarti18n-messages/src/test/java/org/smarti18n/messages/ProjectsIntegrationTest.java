@@ -1,0 +1,120 @@
+package org.smarti18n.messages;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
+import org.junit.Test;
+import org.smarti18n.api.Project;
+import org.smarti18n.api.ProjectImpl;
+import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.api.impl.ApiException;
+import org.smarti18n.api.impl.ProjectsApiImpl;
+
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+public class ProjectsIntegrationTest extends AbstractIntegrationTest {
+
+    private static final String PROJECT_ID = "PROJECT_ID";
+    private static final String PROJECT_NAME = "PROJECT_NAME";
+    private static final String PROJECT_DESCRIPTION = "PROJECT_DESCRIPTION";
+    private static final String NEW_PROJECT_NAME = "NEW_PROJECT_NAME";
+    private static final String NEW_PROJECT_DESCRIPTION = "NEW_PROJECT_DESCRIPTION";
+
+    private ProjectsApi projectsApi;
+
+    @Before
+    public void setUp() throws Exception {
+        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
+    }
+
+    @Test
+    public void standardWorkflowProjects() throws Exception {
+        assertNoProjectsFound();
+        assertCreateNewProject();
+        assertUpdateProject();
+    }
+
+    @Test(expected = ApiException.class)
+    public void existInsertProject() throws Exception {
+        assertNoProjectsFound();
+
+        this.projectsApi.insert(PROJECT_ID);
+        this.projectsApi.insert(PROJECT_ID);
+    }
+
+    @Test(expected = ApiException.class)
+    public void unknownSaveProject() throws Exception {
+        assertNoProjectsFound();
+
+        final Project project = new ProjectImpl();
+        project.setId(PROJECT_NAME);
+        project.setName(PROJECT_NAME);
+        project.setDescription(PROJECT_DESCRIPTION);
+
+        this.projectsApi.update(project);
+    }
+
+    private void assertUpdateProject() {
+        final Project project = this.projectsApi.findAll().iterator().next();
+
+        project.setName(NEW_PROJECT_NAME);
+        project.setDescription(NEW_PROJECT_DESCRIPTION);
+
+        this.projectsApi.update(project);
+
+        final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
+        assertThat(projects, hasSize(1));
+        assertThat(projects, hasItem(projectWith(PROJECT_ID, NEW_PROJECT_NAME, NEW_PROJECT_DESCRIPTION)));
+    }
+
+    private void assertCreateNewProject() {
+        this.projectsApi.insert(PROJECT_ID);
+
+        final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
+        assertThat(projects, hasSize(1));
+        assertThat(projects, hasItem(projectWith(PROJECT_ID)));
+    }
+
+    private void assertNoProjectsFound() {
+        assertThat(this.projectsApi.findAll(), is(empty()));
+    }
+
+    private Matcher<Project> projectWith(final String projectId) {
+        return new TypeSafeMatcher<Project>() {
+            @Override
+            protected boolean matchesSafely(final Project item) {
+                return item.getId().equals(projectId);
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+
+            }
+        };
+    }
+
+    private Matcher<Project> projectWith(final String projectId, final String projectName, final String projectDescription) {
+        return new TypeSafeMatcher<Project>() {
+            @Override
+            protected boolean matchesSafely(final Project project) {
+                return project.getId().equals(projectId) && project.getName().equals(projectName)
+                        && project.getDescription().equals(projectDescription);
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendValue(projectId).appendValue(projectName).appendValue(projectDescription);
+            }
+        };
+    }
+}

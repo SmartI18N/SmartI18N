@@ -73,9 +73,9 @@ public class MessageEditView extends AbstractView implements View {
                 showTranslationArea(textAreas, messageTranslations);
             });
 
-            final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.save"), VaadinIcons.LOCK, clickEvent -> {
+            final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.update"), VaadinIcons.LOCK, clickEvent -> {
                 for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
-                    this.messagesApi.save(messageTranslations.getKey(), entry.getValue(), entry.getKey());
+                    this.messagesApi.update(messageTranslations.getKey(), entry.getValue(), entry.getKey());
                     refreshMessageSource();
                     viewChangeEvent.getNavigator().navigateTo(MessageOverviewView.VIEW_NAME);
                 }

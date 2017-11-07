@@ -1,15 +1,20 @@
 package org.smarti18n.api;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ProjectsApi {
 
     String PATH_PROJECTS_FIND_ALL = "/api/1/projects/findAll";
-    String PATH_PROJECTS_SAVE = "/api/1/projects/save";
+    String PATH_PROJECTS_INSERT = "/api/1/projects/insert";
+    String PATH_PROJECTS_UPDATE = "/api/1/projects/update";
 
-    Collection<? extends Project> findAll();
+    List<? extends Project> findAll();
 
-    Project save(
+    Project insert(
+            String projectId
+    );
+
+    Project update(
             Project project
     );
 }

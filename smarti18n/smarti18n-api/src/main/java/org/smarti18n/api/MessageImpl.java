@@ -1,6 +1,5 @@
 package org.smarti18n.api;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -47,5 +46,29 @@ public class MessageImpl implements Message {
 
     public void putTranslation(final Locale value) {
         translations.putIfAbsent(value, "");
+    }
+
+    @Override
+    public String toString() {
+        return key;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MessageImpl)) {
+            return false;
+        }
+
+        final MessageImpl message = (MessageImpl) o;
+
+        return key.equals(message.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return key.hashCode();
     }
 }

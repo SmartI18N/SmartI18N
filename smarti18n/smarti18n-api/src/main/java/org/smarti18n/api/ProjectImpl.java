@@ -1,7 +1,5 @@
 package org.smarti18n.api;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -20,9 +18,7 @@ public class ProjectImpl implements Project {
         this.id = project.getId();
         this.name = project.getName();
         this.description = project.getDescription();
-        this.locales = new HashSet<>(
-                project.getLocales()
-        );
+        this.locales = project.getLocales() == null ? new HashSet<>() : new HashSet<>(project.getLocales());
     }
 
 
@@ -43,7 +39,7 @@ public class ProjectImpl implements Project {
 
     @Override
     public void setName(final String name) {
-        this.name= name;
+        this.name = name;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class ProjectImpl implements Project {
 
     @Override
     public void setDescription(final String description) {
-        this.description= description;
+        this.description = description;
     }
 
     @Override
@@ -64,5 +60,29 @@ public class ProjectImpl implements Project {
     @Override
     public void setLocales(final Set<Locale> locales) {
         this.locales = locales;
+    }
+
+    @Override
+    public String toString() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProjectImpl)) {
+            return false;
+        }
+
+        final ProjectImpl project = (ProjectImpl) o;
+
+        return id.equals(project.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

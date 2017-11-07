@@ -1,78 +1,143 @@
 package org.smarti18n.messages;
 
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectImpl;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.impl.MessagesApiImpl;
-import org.smarti18n.api.impl.ProjectsApiImpl;
+import java.util.Collection;
+import java.util.Locale;
+
+import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.smarti18n.api.Message;
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api.impl.ApiException;
+import org.smarti18n.api.impl.MessagesApiImpl;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = "test")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class MessagesIntegrationTest {
+public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
-    public static final String PROJECT_ID = "test";
-    @LocalServerPort
-    protected int port;
-
-    @Autowired
-    protected TestRestTemplate restTemplate;
+    private static final String MESSAGE_KEY = "message.key";
+    private static final String TRANSLATION = "ÜBERSETZUNG";
+    private static final Locale LANGUAGE = Locale.GERMAN;
+    private static final String SECOND_MESSAGE_KEY = "message.second-key";
 
     private MessagesApi messagesApi;
-
-    private ProjectsApi projectsApi;
 
     @Before
     public void setUp() throws Exception {
         this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
-        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
     }
 
     @Test
-    public void testProjects() throws Exception {
-        assertThat(this.projectsApi.findAll(), is(empty()));
-
-        final Project project = new ProjectImpl();
-        project.setId(PROJECT_ID);
-
-        this.projectsApi.save(project);
-
-        assertThat(this.projectsApi.findAll().iterator().next(), is(projectMatcher(PROJECT_ID)));
+    public void standardWorkflowMessages() throws Exception {
+        assertNoMessagesFound();
+        assertMessageInsert();
+        assertMessageSave();
+        assertMessageCopy();
+        assertMessageDelete();
     }
 
-    private Matcher<Project> projectMatcher(final String projectId) {
-        return new TypeSafeMatcher<Project>() {
+    @Test(expected = ApiException.class)
+    public void existInsertMessages() throws Exception {
+        assertNoMessagesFound();
+
+        this.messagesApi.insert(MESSAGE_KEY);
+        this.messagesApi.insert(MESSAGE_KEY);
+    }
+
+    @Test(expected = ApiException.class)
+    public void unknownCopySource() throws Exception {
+        assertNoMessagesFound();
+
+        this.messagesApi.copy(MESSAGE_KEY, MESSAGE_KEY);
+    }
+
+    @Test(expected = ApiException.class)
+    public void existCopyMessages() throws Exception {
+        assertNoMessagesFound();
+
+        this.messagesApi.insert(MESSAGE_KEY);
+        this.messagesApi.copy(MESSAGE_KEY, MESSAGE_KEY);
+    }
+
+
+
+
+
+    private void assertMessageDelete() {
+        this.messagesApi.remove(SECOND_MESSAGE_KEY);
+
+        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        assertThat(messages, hasSize(1));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+    }
+
+    private void assertMessageCopy() {
+        this.messagesApi.copy(MESSAGE_KEY, SECOND_MESSAGE_KEY);
+
+        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        assertThat(messages, hasSize(2));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+        assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+    }
+
+    private void assertMessageSave() {
+        this.messagesApi.update(MESSAGE_KEY, TRANSLATION, LANGUAGE);
+
+        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        assertThat(messages, hasSize(1));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+    }
+
+    private void assertMessageInsert() {
+        this.messagesApi.insert(MESSAGE_KEY);
+
+        final Collection<MessageImpl> messages = this.messagesApi.findAll();
+        assertThat(messages, hasSize(1));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY)));
+    }
+
+    private void assertNoMessagesFound() {
+        assertThat(this.messagesApi.findAll(), is(empty()));
+    }
+
+    private Matcher<Message> messageWith(final String messageKey) {
+        return new TypeSafeMatcher<Message>() {
             @Override
-            protected boolean matchesSafely(final Project project) {
-                return project.getId().equals(projectId);
+            protected boolean matchesSafely(final Message item) {
+                return item.getKey().equals(messageKey);
             }
 
             @Override
             public void describeTo(final Description description) {
-                description.appendValue(projectId);
+                description.appendValue(messageKey);
+            }
+
+        };
+    }
+
+    private Matcher<Message> messageWith(final String messageKey, final Locale language, final String translation) {
+        return new TypeSafeMatcher<Message>() {
+            @Override
+            protected boolean matchesSafely(final Message item) {
+                return item.getKey().equals(messageKey)
+                        && item.getTranslations().containsKey(language)
+                        && item.getTranslations().get(language).equals(translation);
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendValue(messageKey).appendValue(language).appendValue(translation);
             }
         };
     }
+
 }
