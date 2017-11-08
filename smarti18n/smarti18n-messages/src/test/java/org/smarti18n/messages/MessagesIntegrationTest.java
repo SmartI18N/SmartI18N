@@ -2,6 +2,7 @@ package org.smarti18n.messages;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
@@ -11,10 +12,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.smarti18n.api.ApiException;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.ApiException;
 import org.smarti18n.api.MessagesApiImpl;
 import org.smarti18n.api.ProjectsApiImpl;
 
@@ -22,6 +23,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class MessagesIntegrationTest extends AbstractIntegrationTest {
@@ -55,6 +57,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertMessageUpdate();
         assertMessageCopy();
         assertMessageDelete();
+        assertSpringMessageSource();
     }
 
     @Test(expected = ApiException.class)
@@ -81,13 +84,26 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test(expected = RestClientException.class)
-    public void wrongSecret() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port).findAll(projectId, projectSecret);
+    public void wrongProjectId() {
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port).findAll("irgendwas", projectSecret);
+    }
+
+    @Test(expected = RestClientException.class)
+    public void wrongProjectSecret() {
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port).findAll(projectId, "irgendwas");
     }
 
 //
 //    ASSERTS
 //
+
+    private void assertSpringMessageSource() {
+        final Map<String, Map<String, String>> messages = (Map) this.messagesApi.findForSpringMessageSource(projectId, projectSecret);
+
+        assertThat(messages.get(MESSAGE_KEY), is(notNullValue()));
+        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE.toLanguageTag()), is(notNullValue()));
+        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE.toLanguageTag()), is(TRANSLATION));
+    }
 
     private void assertMessageDelete() {
         this.messagesApi.remove(projectId, projectSecret, SECOND_MESSAGE_KEY);

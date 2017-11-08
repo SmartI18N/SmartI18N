@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,7 +35,9 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 
     @Override
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId, final String projectSecret) {
-        throw new UnsupportedOperationException();
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_SPRING, projectId, projectSecret);
+
+        return get(uri, Map.class);
     }
 
     @Override

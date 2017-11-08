@@ -30,7 +30,7 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
     @Override
     public Project update(final Project project) {
-        return post(ProjectsApi.PATH_PROJECTS_UPDATE, project, ProjectImpl.class);
+        return post(uri(ProjectsApi.PATH_PROJECTS_UPDATE), project, ProjectImpl.class);
     }
 
     @Override

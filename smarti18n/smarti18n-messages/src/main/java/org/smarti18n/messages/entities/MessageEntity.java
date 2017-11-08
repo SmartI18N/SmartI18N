@@ -38,10 +38,6 @@ public class MessageEntity implements Message {
         this.id.key = key;
     }
 
-    public ProjectEntity getProject() {
-        return id.getProject();
-    }
-
     @Override
     public Map<Locale, String> getTranslations() {
         return translations;

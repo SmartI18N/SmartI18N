@@ -1,20 +1,15 @@
-package org.smarti18n.api;
+package org.smarti18n.messages.service;
 
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
-public interface MessagesApi {
+import org.smarti18n.api.MessageImpl;
 
-    String PROJECT_ID_HEADER = "PROJECT_ID";
-    String PROJECT_SECRET_HEADER = "PROJECT_SECRET";
-
-    String PATH_MESSAGES_FIND_ALL = "/api/1/messages/findAll";
-    String PATH_MESSAGES_FIND_SPRING = "/api/1/messages/findForSpringMessageSource";
-    String PATH_MESSAGES_INSERT = "/api/1/messages/insert";
-    String PATH_MESSAGES_UPDATE = "/api/1/messages/update";
-    String PATH_MESSAGES_COPY = "/api/1/messages/copy";
-    String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
+/**
+ * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ */
+public interface MessagesService {
 
     Collection<MessageImpl> findAll(
             String projectId,
@@ -52,4 +47,5 @@ public interface MessagesApi {
             String projectSecret,
             String key
     );
+
 }

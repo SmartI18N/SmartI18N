@@ -24,9 +24,9 @@ abstract class AbstractApiImpl {
         this.restTemplate = restTemplate;
     }
 
-    <OUT, IN> OUT post(final String path, final IN project, final Class<OUT> responseType) {
+    <OUT, IN> OUT post(final UriComponentsBuilder uri, final IN project, final Class<OUT> responseType) {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
-                this.host + path,
+                uri.build().encode().toUri(),
                 HttpMethod.POST,
                 new HttpEntity<>(project),
                 responseType
