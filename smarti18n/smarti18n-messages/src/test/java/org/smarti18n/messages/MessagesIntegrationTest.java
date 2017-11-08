@@ -98,11 +98,11 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 //
 
     private void assertSpringMessageSource() {
-        final Map<String, Map<String, String>> messages = (Map) this.messagesApi.findForSpringMessageSource(projectId, projectSecret);
+        final Map<String, Map<Locale, String>> messages = this.messagesApi.findForSpringMessageSource(projectId, projectSecret);
 
         assertThat(messages.get(MESSAGE_KEY), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE.toLanguageTag()), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE.toLanguageTag()), is(TRANSLATION));
+        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(notNullValue()));
+        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(TRANSLATION));
     }
 
     private void assertMessageDelete() {

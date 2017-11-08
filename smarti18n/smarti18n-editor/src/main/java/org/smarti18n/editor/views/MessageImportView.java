@@ -1,16 +1,5 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.I18N;
-
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Upload;
-
-import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,6 +9,16 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
+
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Upload;
+import javax.annotation.PostConstruct;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.I18N;
 
 @UIScope
 @SpringView(name = MessageImportView.VIEW_NAME)
@@ -40,7 +39,7 @@ public class MessageImportView extends AbstractView implements View {
 
         final PropertiesUploadReceiver uploadReceiver = new PropertiesUploadReceiver((locale, resourceBundle) -> {
             resourceBundle.keySet().forEach(key -> {
-                messagesApi.update(projectId, projectSecret, key, resourceBundle.getString(key), locale);
+                messagesApi.update("default", "default", key, resourceBundle.getString(key), locale);
             });
         });
 

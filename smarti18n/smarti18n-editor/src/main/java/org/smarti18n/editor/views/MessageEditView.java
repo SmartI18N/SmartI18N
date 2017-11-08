@@ -1,10 +1,10 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.IconButton;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 import com.vaadin.event.selection.SingleSelectionListener;
 import com.vaadin.icons.VaadinIcons;
@@ -17,13 +17,12 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
-
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.I18N;
+import org.smarti18n.editor.vaadin.IconButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -54,7 +53,7 @@ public class MessageEditView extends AbstractView implements View {
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final String key = viewChangeEvent.getParameters();
 
-        final Optional<MessageImpl> first = this.messagesApi.findAll(projectId, projectSecret).stream()
+        final Optional<MessageImpl> first = this.messagesApi.findAll("default", "default").stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
         removeAllComponents();
@@ -75,7 +74,7 @@ public class MessageEditView extends AbstractView implements View {
 
             final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.update"), VaadinIcons.LOCK, clickEvent -> {
                 for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
-                    this.messagesApi.update(projectId, projectSecret, messageTranslations.getKey(), entry.getValue(), entry.getKey());
+                    this.messagesApi.update("default", "default", messageTranslations.getKey(), entry.getValue(), entry.getKey());
                     refreshMessageSource();
                     viewChangeEvent.getNavigator().navigateTo(MessageOverviewView.VIEW_NAME);
                 }

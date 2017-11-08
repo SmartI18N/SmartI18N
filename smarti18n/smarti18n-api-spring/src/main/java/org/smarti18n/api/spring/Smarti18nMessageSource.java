@@ -1,15 +1,20 @@
 package org.smarti18n.api.spring;
 
-import org.springframework.context.support.AbstractMessageSource;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.client.RestTemplate;
-
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.context.support.AbstractMessageSource;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
 public class Smarti18nMessageSource extends AbstractMessageSource {
+
+    private static final String PATH_MESSAGES_SOURCE = "/api/1/messages/findForSpringMessageSource";
 
     private final Map<String, Map<Locale, String>> messages;
     private final RestTemplate restTemplate;
@@ -17,7 +22,7 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
     private final String host;
 
     public Smarti18nMessageSource(final String host) {
-        this.host = host;
+        this.host = "https://messages.smarti18n.com";
         this.restTemplate = new RestTemplate();
         this.messages = new HashMap<>();
 
@@ -41,7 +46,16 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
     }
 
     private Map<String, Map<Locale, String>> loadForSpringMessageSource() {
-        return this.restTemplate.getForObject("", Map.class);
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE)
+                .queryParam("projectId", "default").queryParam("projectSecret", "default");
+
+        return this.restTemplate.exchange(
+                builder.build().encode().toUri(),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, Map<Locale, String>>>() {
+                }
+        ).getBody();
     }
 
 }
