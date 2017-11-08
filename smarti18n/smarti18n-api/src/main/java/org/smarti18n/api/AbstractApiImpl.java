@@ -1,6 +1,5 @@
 package org.smarti18n.api;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -25,23 +24,23 @@ abstract class AbstractApiImpl {
         this.restTemplate = restTemplate;
     }
 
-    <OUT, IN> OUT post(final UriComponentsBuilder uri, final IN project) {
+    <OUT, IN> OUT post(final UriComponentsBuilder uri, final IN project, final Class<OUT> responseType) {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
                 uri.build().encode().toUri(),
                 HttpMethod.POST,
                 new HttpEntity<>(project),
-                new ParameterizedTypeReference<OUT>() {}
+                responseType
         );
 
         return handleResponse(exchange);
     }
 
-    <OUT> OUT get(final UriComponentsBuilder uri) {
+    <OUT> OUT get(final UriComponentsBuilder uri, Class<OUT> responseType) {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
                 uri.build().encode().toUri(),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<OUT>() {}
+                responseType
         );
 
         return handleResponse(exchange);

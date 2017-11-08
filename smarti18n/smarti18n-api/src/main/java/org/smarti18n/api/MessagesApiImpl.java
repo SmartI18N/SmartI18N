@@ -29,7 +29,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_ALL, projectId, projectSecret);
 
         return Arrays.asList(
-                get(uri)
+                get(uri, MessageImpl[].class)
         );
     }
 
@@ -37,7 +37,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId, final String projectSecret) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_SPRING, projectId, projectSecret);
 
-        return get(uri);
+        return get(uri, Map.class);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_INSERT, projectId, projectSecret)
                 .queryParam("key", key);
 
-        return get(uri);
+        return get(uri, MessageImpl.class);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
                 .queryParam("translation", translation)
                 .queryParam("language", language);
 
-        return get(uri);
+        return get(uri, MessageImpl.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
                 .queryParam("sourceKey", sourceKey)
                 .queryParam("targetKey", targetKey);
 
-        return get(uri);
+        return get(uri, MessageImpl.class);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_REMOVE, projectId, projectSecret)
                 .queryParam("key", key);
 
-        get(uri);
+        get(uri, Void.class);
     }
 
 }

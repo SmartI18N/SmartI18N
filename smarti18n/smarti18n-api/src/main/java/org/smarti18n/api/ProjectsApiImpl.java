@@ -19,22 +19,22 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
     @Override
     public List<? extends Project> findAll() {
         return Arrays.asList(
-                get(uri(ProjectsApi.PATH_PROJECTS_FIND_ALL))
+                get(uri(ProjectsApi.PATH_PROJECTS_FIND_ALL), ProjectImpl[].class)
         );
     }
 
     @Override
     public Project insert(final String projectId) {
-        return get(uri(ProjectsApi.PATH_PROJECTS_INSERT).queryParam("projectId", projectId));
+        return get(uri(ProjectsApi.PATH_PROJECTS_INSERT).queryParam("projectId", projectId), ProjectImpl.class);
     }
 
     @Override
     public Project update(final Project project) {
-        return post(uri(ProjectsApi.PATH_PROJECTS_UPDATE), project);
+        return post(uri(ProjectsApi.PATH_PROJECTS_UPDATE), project, ProjectImpl.class);
     }
 
     @Override
     public String generateSecret(final String projectId) {
-        return get(uri(ProjectsApi.PATH_PROJECTS_GENERATE_SECRET).queryParam("projectId", projectId));
+        return get(uri(ProjectsApi.PATH_PROJECTS_GENERATE_SECRET).queryParam("projectId", projectId), String.class);
     }
 }
