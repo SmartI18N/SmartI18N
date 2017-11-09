@@ -6,9 +6,6 @@ import java.util.Map;
 
 public interface MessagesApi {
 
-    String PROJECT_ID_HEADER = "PROJECT_ID";
-    String PROJECT_SECRET_HEADER = "PROJECT_SECRET";
-
     String PATH_MESSAGES_FIND_ALL = "/api/1/messages/findAll";
     String PATH_MESSAGES_FIND_SPRING = "/api/1/messages/findForSpringMessageSource";
     String PATH_MESSAGES_INSERT = "/api/1/messages/insert";
@@ -17,8 +14,7 @@ public interface MessagesApi {
     String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
 
     Collection<? extends Message> findAll(
-            String projectId,
-            String projectSecret
+            String projectId
     );
 
     Map<String, Map<Locale, String>> findForSpringMessageSource(
@@ -28,13 +24,11 @@ public interface MessagesApi {
 
     MessageImpl insert(
             String projectId,
-            String projectSecret,
             String key
     );
 
     MessageImpl update(
             String projectId,
-            String projectSecret,
             String key,
             String translation,
             Locale language
@@ -42,14 +36,12 @@ public interface MessagesApi {
 
     MessageImpl copy(
             String projectId,
-            String projectSecret,
             String sourceKey,
             String targetKey
     );
 
     void remove(
             String projectId,
-            String projectSecret,
             String key
     );
 }

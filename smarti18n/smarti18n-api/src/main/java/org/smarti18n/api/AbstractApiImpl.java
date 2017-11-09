@@ -51,10 +51,9 @@ abstract class AbstractApiImpl {
                 .path(path);
     }
 
-    UriComponentsBuilder uri(final String path, final String projectId, final String projectSecret) {
+    UriComponentsBuilder uri(final String path, final String projectId) {
         return uri(path)
-                .queryParam("projectId", projectId)
-                .queryParam("projectSecret", projectSecret);
+                .queryParam("projectId", projectId);
     }
 
     private <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {

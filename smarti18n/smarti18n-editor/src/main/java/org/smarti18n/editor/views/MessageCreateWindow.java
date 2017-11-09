@@ -25,7 +25,7 @@ class MessageCreateWindow extends AbstractSmartI18nWindow {
         final Button buttonSave = new Button(
                 I18N.getMessage("common.save"),
                 clickEvent -> {
-                    messagesApi.insert(projectId, "default", textFieldKey.getValue());
+                    messagesApi.insert(projectId, textFieldKey.getValue());
                     close();
                     Page.getCurrent().reload();
                 }

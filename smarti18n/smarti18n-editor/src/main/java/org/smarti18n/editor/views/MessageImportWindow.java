@@ -1,7 +1,5 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.Message;
-import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.I18N;
 import org.smarti18n.editor.vaadin.LanguageComboBox;
@@ -11,9 +9,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Upload;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class MessageImportWindow extends AbstractSmartI18nWindow {
@@ -39,7 +35,7 @@ class MessageImportWindow extends AbstractSmartI18nWindow {
         final Button importButton = new Button(
                 I18N.getMessage("smarti18n.editor.message-import.caption"),
                 event -> messages.forEach(
-                        (key, value) -> messagesApi.update(projectId, "default", key, value, languageComboBox.getValue())
+                        (key, value) -> messagesApi.update(projectId, key, value, languageComboBox.getValue())
                 )
         );
 

@@ -1,21 +1,21 @@
 package org.smarti18n.messages.service;
 
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.messages.entities.MessageEntity;
+import org.smarti18n.messages.entities.ProjectEntity;
+import org.smarti18n.messages.repositories.MessageRepository;
+import org.smarti18n.messages.repositories.ProjectRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.messages.entities.MessageEntity;
-import org.smarti18n.messages.entities.ProjectEntity;
-import org.smarti18n.messages.repositories.MessageRepository;
-import org.smarti18n.messages.repositories.ProjectRepository;
 
 @Service
 public class MessagesServiceImpl implements MessagesService {
@@ -31,10 +31,9 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Collection<MessageImpl> findAll(
-            final String projectId,
-            final String projectSecret) {
+            final String projectId) {
 
-        final ProjectEntity project = validateAndGetProject(projectId, projectSecret);
+        final ProjectEntity project = getProject(projectId);
 
         return this.messageRepository.findByIdProject(project).stream().map(messageEntity -> new MessageImpl(
                 messageEntity.getKey(),
@@ -64,10 +63,9 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     public MessageImpl insert(
             final String projectId,
-            final String projectSecret,
             final String key) {
 
-        final ProjectEntity project = validateAndGetProject(projectId, projectSecret);
+        final ProjectEntity project = getProject(projectId);
 
         if (this.messageRepository.findById(new MessageEntity.MessageId(key, project)).isPresent()) {
             throw new IllegalStateException("Message with key [" + key + "] already exist.");
@@ -82,12 +80,11 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     public MessageImpl update(
             final String projectId,
-            final String projectSecret,
             final String key,
             final String translation,
             final Locale language) {
 
-        final ProjectEntity project = validateAndGetProject(projectId, projectSecret);
+        final ProjectEntity project = getProject(projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(key, project));
         final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(key, project));
@@ -106,11 +103,10 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     public MessageImpl copy(
             final String projectId,
-            final String projectSecret,
             final String sourceKey,
             final String targetKey) {
 
-        final ProjectEntity project = validateAndGetProject(projectId, projectSecret);
+        final ProjectEntity project = getProject(projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(sourceKey, project));
 
@@ -138,14 +134,24 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     public void remove(
             final String projectId,
-            final String projectSecret,
             final String key) {
 
-        final ProjectEntity project = validateAndGetProject(projectId, projectSecret);
+        final ProjectEntity project = getProject(projectId);
 
         this.messageRepository.deleteById(new MessageEntity.MessageId(key, project));
     }
 
+    private ProjectEntity getProject(final String projectId) {
+        Assert.notNull(projectId, "projectId");
+
+        final Optional<ProjectEntity> optional = this.projectRepository.findById(projectId);
+
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+
+        throw new IllegalStateException("Project with ID [" + projectId + "] doesn't exist.");
+    }
     private ProjectEntity validateAndGetProject(final String projectId, final String projectSecret) {
         Assert.notNull(projectId, "projectId");
         Assert.notNull(projectSecret, "projectSecret");

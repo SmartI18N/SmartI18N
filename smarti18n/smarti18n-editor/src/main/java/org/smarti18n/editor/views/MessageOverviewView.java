@@ -59,7 +59,7 @@ public class MessageOverviewView extends AbstractView implements View {
                 .setCaption(translate("smarti18n.editor.message-overview.languages"));
 
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
-            messagesApi.remove(projectId(), "default", messageTranslations.getKey());
+            messagesApi.remove(projectId(), messageTranslations.getKey());
             Page.getCurrent().reload();
         }));
 
@@ -104,7 +104,7 @@ public class MessageOverviewView extends AbstractView implements View {
         this.projectContext.setProjectId(viewChangeEvent.getParameters());
 
         grid.setItems(
-                new ArrayList<>(this.messagesApi.findAll(projectId(), "default"))
+                new ArrayList<>(this.messagesApi.findAll(projectId()))
         );
     }
 

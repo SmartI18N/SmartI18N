@@ -10,11 +10,9 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 class MessageExportWindow extends AbstractSmartI18nWindow {
@@ -30,7 +28,7 @@ class MessageExportWindow extends AbstractSmartI18nWindow {
         formLayout.addComponent(languageComboBox);
 
         final StreamResource streamResource = new StreamResource(
-                new PropertiesExportStreamSource(() -> messagesApi.findAll(projectId, "default").stream()
+                new PropertiesExportStreamSource(() -> messagesApi.findAll(projectId).stream()
                         .sorted(Comparator.comparing(Message::getKey))
                         .collect(Collectors.toList()),
                         languageComboBox.getValue()

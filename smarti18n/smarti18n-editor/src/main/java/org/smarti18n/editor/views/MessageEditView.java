@@ -73,7 +73,7 @@ public class MessageEditView extends AbstractView implements View {
             binder.writeBeanIfValid(message);
 
             message.getTranslations().forEach(
-                    (locale, translation) -> messagesApi.update(this.projectContext.getProjectId(), "default", message.getKey(), translation, locale)
+                    (locale, translation) -> messagesApi.update(this.projectContext.getProjectId(), message.getKey(), translation, locale)
             );
 
             navigator().navigateTo(MessageOverviewView.VIEW_NAME);
@@ -96,7 +96,7 @@ public class MessageEditView extends AbstractView implements View {
         final String key = parameters[1];
 
         // TODO
-        final Optional<? extends Message> first = this.messagesApi.findAll(this.projectContext.getProjectId(), "default").stream()
+        final Optional<? extends Message> first = this.messagesApi.findAll(this.projectContext.getProjectId()).stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
         this.binder.readBean(first.get());

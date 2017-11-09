@@ -1,4 +1,4 @@
-package org.smarti18n.messages.controller;
+package org.smarti18n.messages.endpoints;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.messages.service.ProjectsService;
 
 @RestController
-public class ProjectsController implements ProjectsApi {
+public class ProjectsEndpoint implements ProjectsApi {
 
     private final ProjectsService projectsService;
 
-    public ProjectsController(final ProjectsService projectsService) {
+    public ProjectsEndpoint(final ProjectsService projectsService) {
         this.projectsService = projectsService;
     }
 

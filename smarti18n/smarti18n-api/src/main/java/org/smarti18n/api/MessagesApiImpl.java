@@ -25,8 +25,8 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public Collection<MessageImpl> findAll(final String projectId, final String projectSecret) {
-        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_ALL, projectId, projectSecret);
+    public Collection<MessageImpl> findAll(final String projectId) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_ALL, projectId);
 
         return Arrays.asList(
                 get(uri, MessageImpl[].class)
@@ -35,22 +35,23 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 
     @Override
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId, final String projectSecret) {
-        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_SPRING, projectId, projectSecret);
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_SPRING, projectId)
+                .queryParam("projectSecret", projectSecret);
 
         return get(uri, Map.class);
     }
 
     @Override
-    public MessageImpl insert(final String projectId, final String projectSecret, final String key) {
-        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_INSERT, projectId, projectSecret)
+    public MessageImpl insert(final String projectId, final String key) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_INSERT, projectId)
                 .queryParam("key", key);
 
         return get(uri, MessageImpl.class);
     }
 
     @Override
-    public MessageImpl update(final String projectId, final String projectSecret, final String key, final String translation, final Locale language) {
-        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_UPDATE, projectId, projectSecret)
+    public MessageImpl update(final String projectId, final String key, final String translation, final Locale language) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_UPDATE, projectId)
                 .queryParam("key", key)
                 .queryParam("translation", translation)
                 .queryParam("language", language);
@@ -59,8 +60,8 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public MessageImpl copy(final String projectId, final String projectSecret, final String sourceKey, final String targetKey) {
-        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_COPY, projectId, projectSecret)
+    public MessageImpl copy(final String projectId, final String sourceKey, final String targetKey) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_COPY, projectId)
                 .queryParam("sourceKey", sourceKey)
                 .queryParam("targetKey", targetKey);
 
@@ -68,8 +69,8 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public void remove(final String projectId, final String projectSecret, final String key) {
-        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_REMOVE, projectId, projectSecret)
+    public void remove(final String projectId, final String key) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_REMOVE, projectId)
                 .queryParam("key", key);
 
         get(uri, Void.class);

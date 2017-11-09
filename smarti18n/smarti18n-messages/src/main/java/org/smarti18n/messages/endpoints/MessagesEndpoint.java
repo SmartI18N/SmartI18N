@@ -1,4 +1,4 @@
-package org.smarti18n.messages.controller;
+package org.smarti18n.messages.endpoints;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -13,21 +13,20 @@ import org.smarti18n.api.MessagesApi;
 import org.smarti18n.messages.service.MessagesService;
 
 @RestController
-public class MessagesController implements MessagesApi {
+public class MessagesEndpoint implements MessagesApi {
 
     private final MessagesService messagesService;
 
-    public MessagesController(final MessagesService messagesService) {
+    public MessagesEndpoint(final MessagesService messagesService) {
         this.messagesService = messagesService;
     }
 
     @Override
     @GetMapping(PATH_MESSAGES_FIND_ALL)
     public Collection<MessageImpl> findAll(
-            @RequestParam("projectId") final String projectId,
-            @RequestParam("projectSecret") final String projectSecret) {
+            @RequestParam("projectId") final String projectId) {
 
-        return messagesService.findAll(projectId, projectSecret);
+        return messagesService.findAll(projectId);
     }
 
     @Override
@@ -43,42 +42,38 @@ public class MessagesController implements MessagesApi {
     @GetMapping(PATH_MESSAGES_INSERT)
     public MessageImpl insert(
             @RequestParam("projectId") final String projectId,
-            @RequestParam("projectSecret") final String projectSecret,
             @RequestParam("key") final String key) {
 
-        return messagesService.insert(projectId, projectSecret, key);
+        return messagesService.insert(projectId, key);
     }
 
     @Override
     @GetMapping(PATH_MESSAGES_UPDATE)
     public MessageImpl update(
             @RequestParam("projectId") final String projectId,
-            @RequestParam("projectSecret") final String projectSecret,
             @RequestParam("key") final String key,
             @RequestParam("translation") final String translation,
             @RequestParam("language") final Locale language) {
 
-        return messagesService.update(projectId, projectSecret, key, translation, language);
+        return messagesService.update(projectId, key, translation, language);
     }
 
     @Override
     @GetMapping(PATH_MESSAGES_COPY)
     public MessageImpl copy(
             @RequestParam("projectId") final String projectId,
-            @RequestParam("projectSecret") final String projectSecret,
             @RequestParam("sourceKey") final String sourceKey,
             @RequestParam("targetKey") final String targetKey) {
 
-        return messagesService.copy(projectId, projectSecret, sourceKey, targetKey);
+        return messagesService.copy(projectId, sourceKey, targetKey);
     }
 
     @Override
     @GetMapping(PATH_MESSAGES_REMOVE)
     public void remove(
             @RequestParam("projectId") final String projectId,
-            @RequestParam("projectSecret") final String projectSecret,
             @RequestParam("key") final String key) {
 
-        messagesService.remove(projectId, projectSecret, key);
+        messagesService.remove(projectId, key);
     }
 }

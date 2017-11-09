@@ -1,4 +1,4 @@
-package org.smarti18n.messages.controller;
+package org.smarti18n.messages.endpoints;
 
 import java.util.Collections;
 

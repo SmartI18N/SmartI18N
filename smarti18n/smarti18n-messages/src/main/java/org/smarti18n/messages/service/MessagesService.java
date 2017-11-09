@@ -12,8 +12,7 @@ import org.smarti18n.api.MessageImpl;
 public interface MessagesService {
 
     Collection<MessageImpl> findAll(
-            String projectId,
-            String projectSecret
+            String projectId
     );
 
     Map<String, Map<Locale, String>> findForSpringMessageSource(
@@ -23,13 +22,11 @@ public interface MessagesService {
 
     MessageImpl insert(
             String projectId,
-            String projectSecret,
             String key
     );
 
     MessageImpl update(
             String projectId,
-            String projectSecret,
             String key,
             String translation,
             Locale language
@@ -37,14 +34,12 @@ public interface MessagesService {
 
     MessageImpl copy(
             String projectId,
-            String projectSecret,
             String sourceKey,
             String targetKey
     );
 
     void remove(
             String projectId,
-            String projectSecret,
             String key
     );
 
