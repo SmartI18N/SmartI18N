@@ -10,6 +10,7 @@ public class MessageImpl implements Message {
     private Map<Locale, String> translations;
 
     public MessageImpl() {
+        this.translations = new HashMap<>();
     }
 
     public MessageImpl(final Message message) {

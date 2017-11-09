@@ -4,6 +4,7 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.I18N;
 import org.smarti18n.editor.vaadin.IconButton;
+import org.smarti18n.editor.vaadin.LanguageComboBox;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
@@ -23,10 +24,9 @@ class MessageExportWindow extends AbstractSmartI18nWindow {
 
         final FormLayout formLayout = new FormLayout();
 
-        final ComboBox<Locale> languageComboBox = new ComboBox<>("Lang"
+        final LanguageComboBox languageComboBox = new LanguageComboBox("Lang"
 //                I18N.getMessage("smarti18n.editor.message-export.language")
         );
-        languageComboBox.setItems(Locale.GERMAN, Locale.ENGLISH, Locale.ITALIAN);
         formLayout.addComponent(languageComboBox);
 
         final StreamResource streamResource = new StreamResource(
