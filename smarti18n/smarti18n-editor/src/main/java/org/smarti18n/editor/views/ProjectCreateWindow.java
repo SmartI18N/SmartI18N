@@ -10,7 +10,7 @@ import org.smarti18n.editor.vaadin.I18N;
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-class ProjectCreateWindow extends AbstractCreateWindow {
+class ProjectCreateWindow extends AbstractSmartI18nWindow {
 
     ProjectCreateWindow(final ProjectsApi projectsApi) {
         super(I18N.getMessage("smarti18n.editor.project-create.caption"));

@@ -10,9 +10,9 @@ import org.smarti18n.editor.vaadin.I18N;
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-class MessageCreateWindow extends AbstractCreateWindow {
+class MessageCreateWindow extends AbstractSmartI18nWindow {
 
-    MessageCreateWindow(final MessagesApi messagesApi) {
+    MessageCreateWindow(final MessagesApi messagesApi, final String projectId) {
         super(I18N.getMessage("smarti18n.editor.message-create.caption"));
 
         final FormLayout formLayout = new FormLayout();
@@ -25,7 +25,7 @@ class MessageCreateWindow extends AbstractCreateWindow {
         final Button buttonSave = new Button(
                 I18N.getMessage("common.save"),
                 clickEvent -> {
-                    messagesApi.insert("default", "default", textFieldKey.getValue());
+                    messagesApi.insert(projectId, "default", textFieldKey.getValue());
                     close();
                     Page.getCurrent().reload();
                 }

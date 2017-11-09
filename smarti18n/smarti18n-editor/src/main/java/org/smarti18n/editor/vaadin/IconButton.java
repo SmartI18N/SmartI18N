@@ -17,4 +17,10 @@ public class IconButton extends Button {
         addStyleNames(ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_TINY);
         addClickListener(listener);
     }
+
+    public IconButton(final String caption, final VaadinIcons icon) {
+        super(caption);
+
+        setIcon(icon);
+    }
 }

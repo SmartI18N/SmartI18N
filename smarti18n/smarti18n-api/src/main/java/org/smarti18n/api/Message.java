@@ -21,6 +21,14 @@ public interface Message extends Serializable {
 
     void setTranslations(Map<Locale, String> translations);
 
+    default String getTranslation(Locale language) {
+        final Map<Locale, String> translations = getTranslations();
+        if (translations == null) {
+            return null;
+        }
+        return translations.getOrDefault(language, "");
+    }
+
     default Set<Locale> getLanguages() {
         return getTranslations().entrySet().stream()
                 .filter(localeStringEntry -> !StringUtils.isEmpty(localeStringEntry.getValue()))
