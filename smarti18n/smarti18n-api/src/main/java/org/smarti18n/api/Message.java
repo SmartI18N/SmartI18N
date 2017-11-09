@@ -3,6 +3,10 @@ package org.smarti18n.api;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -16,4 +20,22 @@ public interface Message extends Serializable {
     Map<Locale, String> getTranslations();
 
     void setTranslations(Map<Locale, String> translations);
+
+    default Set<Locale> getLanguages() {
+        return getTranslations().entrySet().stream()
+                .filter(localeStringEntry -> !StringUtils.isEmpty(localeStringEntry.getValue()))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+    }
+
+    default String getLanguagesAsString() {
+        final StringBuilder builder = new StringBuilder();
+        getLanguages().forEach(locale -> {
+            if (builder.length() != 0) {
+                builder.append(", ");
+            }
+            builder.append(locale.getLanguage());
+        });
+        return builder.toString();
+    }
 }

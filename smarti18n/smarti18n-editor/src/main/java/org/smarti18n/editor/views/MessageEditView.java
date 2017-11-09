@@ -1,8 +1,6 @@
 package org.smarti18n.editor.views;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +23,7 @@ import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.ProjectContext;
 import org.smarti18n.editor.vaadin.AbstractView;
 
 /**
@@ -34,20 +33,18 @@ import org.smarti18n.editor.vaadin.AbstractView;
 @SpringView(name = MessageEditView.VIEW_NAME)
 public class MessageEditView extends AbstractView implements View {
 
-    static final String VIEW_NAME = "message/edit";
-
-    private static final List<Locale> LOCALES = Arrays.asList(
-            Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN
-    );
+    static final String VIEW_NAME = "messages/edit";
 
     private final MessagesApi messagesApi;
 
     private final Binder<Message> binder;
+    private final ProjectContext projectContext;
 
     public MessageEditView(final MessagesApi messagesApi) {
         this.messagesApi = messagesApi;
 
         this.binder = new Binder<>(Message.class);
+        this.projectContext = new ProjectContext();
     }
 
     @PostConstruct
@@ -76,7 +73,7 @@ public class MessageEditView extends AbstractView implements View {
             binder.writeBeanIfValid(message);
 
             message.getTranslations().forEach(
-                    (locale, translation) -> messagesApi.update("default", "default", message.getKey(), translation, locale)
+                    (locale, translation) -> messagesApi.update(this.projectContext.getProjectId(), "default", message.getKey(), translation, locale)
             );
 
             navigator().navigateTo(MessageOverviewView.VIEW_NAME);
@@ -94,10 +91,12 @@ public class MessageEditView extends AbstractView implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        final String key = viewChangeEvent.getParameters();
+        final String[] parameters = viewChangeEvent.getParameters().split("/");
+        projectContext.setProjectId(parameters[0]);
+        final String key = parameters[1];
 
         // TODO
-        final Optional<MessageImpl> first = this.messagesApi.findAll("default", "default").stream()
+        final Optional<? extends Message> first = this.messagesApi.findAll(this.projectContext.getProjectId(), "default").stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
         this.binder.readBean(first.get());

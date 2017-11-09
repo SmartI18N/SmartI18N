@@ -67,14 +67,12 @@ public class EditorApplication {
     @Theme("smarti18n")
     public static class EditorUI extends UI {
 
-        private final I18N i18N;
         private final SpringViewProvider viewProvider;
 
         private final ProjectsApi projectsApi;
 
 
-        public EditorUI(final I18N i18N, final SpringViewProvider viewProvider, final ProjectsApi projectsApi) {
-            this.i18N = i18N;
+        public EditorUI(final SpringViewProvider viewProvider, final ProjectsApi projectsApi) {
             this.viewProvider = viewProvider;
             this.projectsApi = projectsApi;
         }
@@ -82,23 +80,20 @@ public class EditorApplication {
         @Override
         protected void init(final VaadinRequest vaadinRequest) {
             final SideMenu sideMenu = new SideMenu();
-            sideMenu.setMenuCaption(this.i18N.getMessage("smarti18n.editor.title"));
+            sideMenu.setMenuCaption(I18N.getMessage("smarti18n.editor.title"));
 
             sideMenu.setUserName("Marc Bellmann");
             sideMenu.setUserMenuVisible(false);
             sideMenu.setIcon(null);
 
-            sideMenu.addNavigation(this.i18N.getMessage("smarti18n.editor.menu.start"), VaadinIcons.HOME, StartView.VIEW_NAME);
-            sideMenu.addNavigation(this.i18N.getMessage("smarti18n.editor.menu.projects"), VaadinIcons.PAINT_ROLL, ProjectOverviewView.VIEW_NAME);
-//            sideMenu.addNavigation(this.i18N.getMessage("smarti18n.editor.menu.profile"), VaadinIcons.TOOLS, ProfileView.VIEW_NAME);
+            sideMenu.addNavigation(I18N.getMessage("smarti18n.editor.menu.start"), VaadinIcons.HOME, StartView.VIEW_NAME);
+            sideMenu.addNavigation(I18N.getMessage("smarti18n.editor.menu.projects"), VaadinIcons.PAINT_ROLL, ProjectOverviewView.VIEW_NAME);
 
             projectsApi.findAll().forEach(project -> sideMenu.addNavigation(
-                    project.getDisplayName() + " / " + this.i18N.getMessage("smarti18n.editor.menu.messages"),
+                    project.getDisplayName(),
                     VaadinIcons.LIST,
-                    MessageOverviewView.VIEW_NAME
+                    MessageOverviewView.VIEW_NAME + "/" + project.getId()
             ));
-
-//            sideMenu.addNavigation(this.i18N.getMessage("smarti18n.editor.menu.statistic"), VaadinIcons.BAR_CHART, StatisticView.VIEW_NAME);
 
             setContent(sideMenu);
 

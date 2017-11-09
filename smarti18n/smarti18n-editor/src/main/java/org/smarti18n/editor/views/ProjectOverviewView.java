@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -49,7 +50,7 @@ public class ProjectOverviewView extends AbstractView implements View {
 
         grid.addComponentColumn(project -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
             this.projectApi.remove(project.getId());
-            enter(null);
+            Page.getCurrent().reload();
         }));
 
         grid.addItemClickListener(itemClick -> {

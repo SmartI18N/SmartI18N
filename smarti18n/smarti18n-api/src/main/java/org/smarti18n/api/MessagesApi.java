@@ -16,7 +16,7 @@ public interface MessagesApi {
     String PATH_MESSAGES_COPY = "/api/1/messages/copy";
     String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
 
-    Collection<MessageImpl> findAll(
+    Collection<? extends Message> findAll(
             String projectId,
             String projectSecret
     );

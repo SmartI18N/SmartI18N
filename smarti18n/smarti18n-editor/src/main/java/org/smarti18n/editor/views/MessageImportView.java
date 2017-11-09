@@ -23,7 +23,7 @@ import org.smarti18n.editor.vaadin.AbstractView;
 @SpringView(name = MessageImportView.VIEW_NAME)
 public class MessageImportView extends AbstractView implements View {
 
-    public static final String VIEW_NAME = "message/import";
+    public static final String VIEW_NAME = "messages/import";
 
     private final MessagesApi messagesApi;
 
