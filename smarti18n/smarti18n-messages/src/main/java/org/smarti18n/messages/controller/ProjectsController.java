@@ -52,7 +52,7 @@ public class ProjectsController implements ProjectsApi {
     }
 
     @Override
-    @GetMapping(PATH_PROJECTS_INSERT)
+    @GetMapping(PATH_PROJECTS_REMOVE)
     public void remove(
             @RequestParam("projectId") final String projectId) {
 

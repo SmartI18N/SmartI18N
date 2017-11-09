@@ -1,8 +1,10 @@
 package org.smarti18n.messages;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
@@ -107,7 +109,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private void assertMessageDelete() {
         this.messagesApi.remove(projectId, projectSecret, SECOND_MESSAGE_KEY);
 
-        final Collection<? extends Message> messages = this.messagesApi.findAll(projectId, projectSecret);
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId, projectSecret));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
@@ -115,7 +117,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private void assertMessageCopy() {
         this.messagesApi.copy(projectId, projectSecret, MESSAGE_KEY, SECOND_MESSAGE_KEY);
 
-        final Collection<? extends Message> messages = this.messagesApi.findAll(projectId, projectSecret);
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId, projectSecret));
         assertThat(messages, hasSize(2));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
         assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
@@ -124,7 +126,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private void assertMessageUpdate() {
         this.messagesApi.update(projectId, projectSecret, MESSAGE_KEY, TRANSLATION, LANGUAGE);
 
-        final Collection<? extends Message> messages = this.messagesApi.findAll(projectId, projectSecret);
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId, projectSecret));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
@@ -132,7 +134,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private void assertMessageInsert() {
         this.messagesApi.insert(projectId, projectSecret, MESSAGE_KEY);
 
-        final Collection<? extends Message> messages = this.messagesApi.findAll(projectId, projectSecret);
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId, projectSecret));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY)));
     }
