@@ -2,6 +2,7 @@ package org.smarti18n.editor.views;
 
 import java.util.Optional;
 
+import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
@@ -30,15 +31,12 @@ public class ProjectEditView extends AbstractView implements View {
 
     private final ProjectsApi projectsApi;
 
-    private TextField textFieldId;
-    private TextField textFieldName;
-    private TextArea textAreaDescription;
-
-    private Button buttonSave;
-    private Button buttonCancle;
+    private final Binder<Project> binder;
 
     protected ProjectEditView(final ProjectsApi projectsApi) {
         this.projectsApi = projectsApi;
+
+        this.binder = new Binder<>(Project.class);
     }
 
     @PostConstruct
@@ -46,33 +44,52 @@ public class ProjectEditView extends AbstractView implements View {
         setCaption(translate("smarti18n.editor.project-edit.caption"));
         setSizeFull();
 
-        this.buttonSave = new Button(translate("common.save"));
-        this.buttonCancle = new Button(translate("common.cancle"));
+        addComponent(createButtonBar());
+
+        final Layout layout = new FormLayout();
+        layout.setSizeFull();
+
+        final TextField textFieldId = new TextField(translate("smarti18n.editor.project-edit.id"));
+        textFieldId.setReadOnly(true);
+        textFieldId.setSizeFull();
+        layout.addComponent(textFieldId);
+
+        final TextField textFieldName = new TextField(translate("smarti18n.editor.project-edit.name"));
+        textFieldName.setSizeFull();
+        layout.addComponent(textFieldName);
+
+        final TextArea textAreaDescription = new TextArea(translate("smarti18n.editor.project-edit.description"));
+        textAreaDescription.setSizeFull();
+        layout.addComponent(textAreaDescription);
+
+        this.binder.forMemberField(textFieldId).bind("id");
+        this.binder.forMemberField(textFieldName).bind("name");
+        this.binder.forMemberField(textAreaDescription).bind("description");
+        this.binder.bindInstanceFields(this);
+
+        addComponent(layout);
+        setExpandRatio(layout, 1);
+    }
+
+    private HorizontalLayout createButtonBar() {
+
+        final Button buttonSave = new Button(translate("common.save"));
+        buttonSave.addClickListener(clickEvent -> {
+            final Project project = new ProjectImpl();
+            binder.writeBeanIfValid(project);
+            projectsApi.update(project);
+
+            navigator().navigateTo(ProjectOverviewView.VIEW_NAME);
+        });
+
+        final Button buttonCancle = new Button(translate("common.cancle"));
+        buttonCancle.addClickListener(clickEvent -> navigator().navigateTo(ProjectOverviewView.VIEW_NAME));
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
         buttonLayout.addComponents(buttonSave, buttonCancle);
 
-        addComponent(buttonLayout);
-
-        final Layout layout = new FormLayout();
-        layout.setSizeFull();
-
-        this.textFieldId = new TextField(translate("smarti18n.editor.project-edit.id"));
-        this.textFieldId.setReadOnly(true);
-        this.textFieldId.setSizeFull();
-        layout.addComponent(this.textFieldId);
-
-        this.textFieldName = new TextField(translate("smarti18n.editor.project-edit.name"));
-        this.textFieldName.setSizeFull();
-        layout.addComponent(this.textFieldName);
-
-        this.textAreaDescription = new TextArea(translate("smarti18n.editor.project-edit.description"));
-        this.textAreaDescription.setSizeFull();
-        layout.addComponent(this.textAreaDescription);
-
-        addComponent(layout);
-        setExpandRatio(layout, 1);
+        return buttonLayout;
     }
 
     @Override
@@ -83,13 +100,6 @@ public class ProjectEditView extends AbstractView implements View {
         final Optional<? extends Project> first = this.projectsApi.findAll().stream()
                 .filter(project -> project.getId().equals(projectId)).findFirst();
 
-        final ProjectImpl bean = new ProjectImpl(first.get());
-
-        this.textFieldId.setValue(bean.getId());
-        this.textFieldName.setValue(bean.getName());
-        this.textAreaDescription.setValue(bean.getDescription());
-
-        this.buttonSave.addClickListener(clickEvent -> projectsApi.update(bean));
-        this.buttonCancle.addClickListener(clickEvent -> navigator().navigateTo(ProjectOverviewView.VIEW_NAME));
+        this.binder.readBean(first.get());
     }
 }
