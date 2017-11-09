@@ -1,5 +1,6 @@
 package org.smarti18n.editor.views;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import com.vaadin.icons.VaadinIcons;
@@ -43,7 +44,7 @@ public class MessageOverviewView extends AbstractView implements View {
     void init() {
         setCaption(translate("smarti18n.editor.message-overview.caption"));
 
-        addComponent(new Button(translate("smarti18n.editor.project-overview.add-new-project"), clickEvent -> {
+        addComponent(new Button(translate("smarti18n.editor.message-overview.add-new-message"), clickEvent -> {
             this.getUI().addWindow(new MessageCreateWindow(this.messagesApi));
         }));
 
@@ -51,11 +52,11 @@ public class MessageOverviewView extends AbstractView implements View {
         grid.setColumns("key", "languagesAsString");
 
         grid.getColumn("key")
-                .setCaption(translate("smarti18n.editor.project-overview.key"))
+                .setCaption(translate("smarti18n.editor.message-overview.key"))
                 .setExpandRatio(1);
 
         grid.getColumn("languagesAsString")
-                .setCaption(translate("smarti18n.editor.project-overview.languages"));
+                .setCaption(translate("smarti18n.editor.message-overview.languages"));
 
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
             messagesApi.remove(projectId(), "default", messageTranslations.getKey());
@@ -82,7 +83,7 @@ public class MessageOverviewView extends AbstractView implements View {
         this.projectContext.setProjectId(viewChangeEvent.getParameters());
 
         grid.setItems(
-                this.messagesApi.findAll(projectId(), "default").stream().collect(Collectors.toList())
+                new ArrayList<>(this.messagesApi.findAll(projectId(), "default"))
         );
     }
 
