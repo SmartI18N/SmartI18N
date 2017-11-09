@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
@@ -133,7 +132,4 @@ public class MessageOverviewView extends AbstractView implements View {
         return all;
     }
 
-    private Navigator navigator() {
-        return this.getUI().getNavigator();
-    }
 }

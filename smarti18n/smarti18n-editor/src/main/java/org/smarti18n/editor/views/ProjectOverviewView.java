@@ -43,6 +43,11 @@ public class ProjectOverviewView extends AbstractView implements View {
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.setSizeFull();
 
+        grid.addItemClickListener(itemClick -> {
+            final String key = itemClick.getItem().getId();
+            navigator().navigateTo(ProjectEditView.VIEW_NAME + "/" + key);
+        });
+
         addComponent(grid);
 
         setSizeFull();

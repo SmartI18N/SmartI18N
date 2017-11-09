@@ -53,6 +53,7 @@ public class MessageEditView extends AbstractView implements View {
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final String key = viewChangeEvent.getParameters();
 
+        // TODO
         final Optional<MessageImpl> first = this.messagesApi.findAll("default", "default").stream()
                 .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
 
