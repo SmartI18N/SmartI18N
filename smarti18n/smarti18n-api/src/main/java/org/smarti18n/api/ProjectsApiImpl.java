@@ -37,4 +37,9 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
     public String generateSecret(final String projectId) {
         return get(uri(ProjectsApi.PATH_PROJECTS_GENERATE_SECRET).queryParam("projectId", projectId), String.class);
     }
+
+    @Override
+    public void remove(final String projectId) {
+        get(uri(ProjectsApi.PATH_PROJECTS_REMOVE).queryParam("projectId", projectId), Void.class);
+    }
 }

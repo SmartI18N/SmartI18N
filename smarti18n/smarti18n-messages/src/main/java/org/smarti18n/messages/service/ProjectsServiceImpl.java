@@ -90,4 +90,8 @@ public class ProjectsServiceImpl implements ProjectsService {
         return secret;
     }
 
+    @Override
+    public void remove(final String projectId) {
+        this.projectRepository.deleteById(projectId);
+    }
 }

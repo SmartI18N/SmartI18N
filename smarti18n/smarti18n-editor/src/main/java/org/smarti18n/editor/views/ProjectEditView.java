@@ -6,7 +6,10 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -15,7 +18,6 @@ import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.I18N;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -32,9 +34,10 @@ public class ProjectEditView extends AbstractView implements View {
     private TextField textFieldName;
     private TextArea textAreaDescription;
 
+    private Button buttonSave;
+    private Button buttonCancle;
 
-    protected ProjectEditView(final I18N i18N, final ProjectsApi projectsApi) {
-        super(i18N);
+    protected ProjectEditView(final ProjectsApi projectsApi) {
         this.projectsApi = projectsApi;
     }
 
@@ -42,6 +45,15 @@ public class ProjectEditView extends AbstractView implements View {
     private void init() {
         setCaption(translate("smarti18n.editor.project-edit.caption"));
         setSizeFull();
+
+        this.buttonSave = new Button(translate("common.save"));
+        this.buttonCancle = new Button(translate("common.cancle"));
+
+        final HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+        buttonLayout.addComponents(buttonSave, buttonCancle);
+
+        addComponent(buttonLayout);
 
         final Layout layout = new FormLayout();
         layout.setSizeFull();
@@ -60,6 +72,7 @@ public class ProjectEditView extends AbstractView implements View {
         layout.addComponent(this.textAreaDescription);
 
         addComponent(layout);
+        setExpandRatio(layout, 1);
     }
 
     @Override
@@ -75,5 +88,8 @@ public class ProjectEditView extends AbstractView implements View {
         this.textFieldId.setValue(bean.getId());
         this.textFieldName.setValue(bean.getName());
         this.textAreaDescription.setValue(bean.getDescription());
+
+        this.buttonSave.addClickListener(clickEvent -> projectsApi.update(bean));
+        this.buttonCancle.addClickListener(clickEvent -> navigator().navigateTo(ProjectOverviewView.VIEW_NAME));
     }
 }

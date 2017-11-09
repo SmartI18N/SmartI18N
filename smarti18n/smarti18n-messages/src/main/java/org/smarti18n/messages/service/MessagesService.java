@@ -7,7 +7,7 @@ import java.util.Map;
 import org.smarti18n.api.MessageImpl;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public interface MessagesService {
 

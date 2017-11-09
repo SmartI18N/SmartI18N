@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.KeyGenerator;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @Service
 public class ProjectKeyGenerator {

@@ -93,7 +93,7 @@ public class EditorApplication {
 //            sideMenu.addNavigation(this.i18N.getMessage("smarti18n.editor.menu.profile"), VaadinIcons.TOOLS, ProfileView.VIEW_NAME);
 
             projectsApi.findAll().forEach(project -> sideMenu.addNavigation(
-                    project.getName() + " / " + this.i18N.getMessage("smarti18n.editor.menu.messages"),
+                    project.getDisplayName() + " / " + this.i18N.getMessage("smarti18n.editor.menu.messages"),
                     VaadinIcons.LIST,
                     MessageOverviewView.VIEW_NAME
             ));
@@ -104,10 +104,6 @@ public class EditorApplication {
 
             final Navigator navigator = new Navigator(this, sideMenu);
             navigator.addProvider(viewProvider);
-        }
-
-        private SideMenu.MenuClickHandler navigateTo(final String viewName) {
-            return () -> getUI().getNavigator().navigateTo(viewName);
         }
 
     }

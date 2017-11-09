@@ -18,7 +18,6 @@ import com.vaadin.ui.Upload;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.I18N;
 
 @UIScope
 @SpringView(name = MessageImportView.VIEW_NAME)
@@ -28,8 +27,7 @@ public class MessageImportView extends AbstractView implements View {
 
     private final MessagesApi messagesApi;
 
-    public MessageImportView(final I18N i18N, final MessagesApi messagesApi) {
-        super(i18N);
+    public MessageImportView(final MessagesApi messagesApi) {
         this.messagesApi = messagesApi;
     }
 

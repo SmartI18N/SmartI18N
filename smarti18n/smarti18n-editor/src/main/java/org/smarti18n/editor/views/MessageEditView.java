@@ -39,8 +39,7 @@ public class MessageEditView extends AbstractView implements View {
 
     private final MessagesApi messagesApi;
 
-    public MessageEditView(final I18N i18N, final MessagesApi messagesApi) {
-        super(i18N);
+    public MessageEditView(final MessagesApi messagesApi) {
         this.messagesApi = messagesApi;
     }
 
@@ -76,7 +75,7 @@ public class MessageEditView extends AbstractView implements View {
             final Button saveButton = new IconButton(translate("smarti18n.editor.message-edit.update"), VaadinIcons.LOCK, clickEvent -> {
                 for (Map.Entry<Locale, String> entry : messageTranslations.getTranslations().entrySet()) {
                     this.messagesApi.update("default", "default", messageTranslations.getKey(), entry.getValue(), entry.getKey());
-                    refreshMessageSource();
+                    I18N.refreshMessageSource();
                     viewChangeEvent.getNavigator().navigateTo(MessageOverviewView.VIEW_NAME);
                 }
             });

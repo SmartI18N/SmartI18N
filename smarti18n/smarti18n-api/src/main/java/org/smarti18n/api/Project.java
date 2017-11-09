@@ -3,6 +3,8 @@ package org.smarti18n.api;
 import java.util.Locale;
 import java.util.Set;
 
+import org.springframework.util.StringUtils;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = ProjectImpl.class)
@@ -27,4 +29,13 @@ public interface Project {
     Set<String> getSecrets();
 
     void setSecrets(Set<String> secrets);
+
+    default String getDisplayName() {
+        if (StringUtils.isEmpty(getName())) {
+            return getId();
+        } else {
+            return getName();
+        }
+    }
+
 }

@@ -2,7 +2,6 @@ package org.smarti18n.messages.controller;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,10 +45,17 @@ public class ProjectsController implements ProjectsApi {
 
     @Override
     @GetMapping(PATH_PROJECTS_GENERATE_SECRET)
-    @Transactional
     public String generateSecret(
             @RequestParam("projectId") final String projectId) {
 
         return projectsService.generateSecret(projectId);
+    }
+
+    @Override
+    @GetMapping(PATH_PROJECTS_INSERT)
+    public void remove(
+            @RequestParam("projectId") final String projectId) {
+
+        this.projectsService.remove(projectId);
     }
 }
