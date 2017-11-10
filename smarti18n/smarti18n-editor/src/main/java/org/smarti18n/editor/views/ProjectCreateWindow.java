@@ -4,8 +4,8 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.SaveButton;
+import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.editor.components.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

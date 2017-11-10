@@ -8,9 +8,10 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Upload;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.IconButton;
-import org.smarti18n.editor.vaadin.LanguageComboBox;
+import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.editor.components.IconButton;
+import org.smarti18n.editor.components.LanguageComboBox;
+import org.smarti18n.editor.utils.PropertiesImportStreamReceiver;
 
 class MessageImportWindow extends AbstractSmartI18nWindow {
 

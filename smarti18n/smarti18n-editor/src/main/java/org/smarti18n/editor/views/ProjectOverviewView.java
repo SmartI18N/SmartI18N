@@ -14,8 +14,8 @@ import com.vaadin.ui.Grid;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.IconButton;
+import org.smarti18n.editor.components.AbstractView;
+import org.smarti18n.editor.components.IconButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

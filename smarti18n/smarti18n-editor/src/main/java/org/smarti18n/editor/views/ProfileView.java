@@ -5,7 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import javax.annotation.PostConstruct;
-import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.components.AbstractView;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

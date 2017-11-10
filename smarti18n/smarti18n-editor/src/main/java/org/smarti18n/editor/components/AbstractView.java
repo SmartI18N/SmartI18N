@@ -1,9 +1,10 @@
-package org.smarti18n.editor.vaadin;
+package org.smarti18n.editor.components;
 
 import java.util.Arrays;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.VerticalLayout;
+import org.smarti18n.editor.utils.I18N;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

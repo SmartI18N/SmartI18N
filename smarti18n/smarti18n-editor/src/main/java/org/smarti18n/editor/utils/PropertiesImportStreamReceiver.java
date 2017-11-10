@@ -1,6 +1,4 @@
-package org.smarti18n.editor.views;
-
-import com.vaadin.ui.Upload;
+package org.smarti18n.editor.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,12 +10,14 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
-class PropertiesImportStreamReceiver implements Upload.Receiver, Upload.SucceededListener {
+import com.vaadin.ui.Upload;
+
+public class PropertiesImportStreamReceiver implements Upload.Receiver, Upload.SucceededListener {
 
     private final BiConsumer<Locale, ResourceBundle> consumer;
     private final ByteArrayOutputStream stream;
 
-    PropertiesImportStreamReceiver(final BiConsumer<Locale, ResourceBundle> consumer) {
+    public PropertiesImportStreamReceiver(final BiConsumer<Locale, ResourceBundle> consumer) {
         this.consumer = consumer;
         this.stream = new ByteArrayOutputStream();
     }

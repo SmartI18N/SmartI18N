@@ -1,8 +1,4 @@
-package org.smarti18n.editor.views;
-
-import org.smarti18n.api.Message;
-
-import com.vaadin.server.StreamResource;
+package org.smarti18n.editor.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,12 +9,15 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.function.Supplier;
 
-class PropertiesExportStreamSource implements StreamResource.StreamSource {
+import com.vaadin.server.StreamResource;
+import org.smarti18n.api.Message;
+
+public class PropertiesExportStreamSource implements StreamResource.StreamSource {
 
     private final Supplier<Collection<? extends Message>> supplier;
     private final Locale language;
 
-    PropertiesExportStreamSource(final Supplier<Collection<? extends Message>> supplier, final Locale language) {
+    public PropertiesExportStreamSource(final Supplier<Collection<? extends Message>> supplier, final Locale language) {
         this.supplier = supplier;
         this.language = language;
     }

@@ -19,10 +19,10 @@ import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.CancelButton;
-import org.smarti18n.editor.vaadin.LabelSet;
-import org.smarti18n.editor.vaadin.SaveButton;
+import org.smarti18n.editor.components.AbstractView;
+import org.smarti18n.editor.components.CancelButton;
+import org.smarti18n.editor.components.LabelSet;
+import org.smarti18n.editor.components.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

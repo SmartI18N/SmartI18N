@@ -1,4 +1,4 @@
-package org.smarti18n.editor.vaadin;
+package org.smarti18n.editor.utils;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;

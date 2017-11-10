@@ -1,4 +1,4 @@
-package org.smarti18n.editor.vaadin;
+package org.smarti18n.editor.components;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Resource;

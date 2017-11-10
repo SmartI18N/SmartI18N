@@ -1,4 +1,4 @@
-package org.smarti18n.editor.vaadin;
+package org.smarti18n.editor.components;
 
 import java.util.HashMap;
 import java.util.Locale;

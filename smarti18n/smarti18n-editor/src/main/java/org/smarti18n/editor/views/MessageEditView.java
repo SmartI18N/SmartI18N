@@ -12,11 +12,11 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.ProjectContext;
-import org.smarti18n.editor.vaadin.AbstractView;
-import org.smarti18n.editor.vaadin.CancelButton;
-import org.smarti18n.editor.vaadin.HiddenField;
-import org.smarti18n.editor.vaadin.LanguageTextAreas;
-import org.smarti18n.editor.vaadin.SaveButton;
+import org.smarti18n.editor.components.AbstractView;
+import org.smarti18n.editor.components.CancelButton;
+import org.smarti18n.editor.components.HiddenField;
+import org.smarti18n.editor.components.LanguageTextAreas;
+import org.smarti18n.editor.components.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
