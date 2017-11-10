@@ -24,6 +24,11 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
     }
 
     @Override
+    public Project findOne(final String projectId) {
+        return get(uri(ProjectsApi.PATH_PROJECTS_FIND_ONE).queryParam("projectId", projectId), ProjectImpl.class);
+    }
+
+    @Override
     public Project insert(final String projectId) {
         return get(uri(ProjectsApi.PATH_PROJECTS_INSERT).queryParam("projectId", projectId), ProjectImpl.class);
     }

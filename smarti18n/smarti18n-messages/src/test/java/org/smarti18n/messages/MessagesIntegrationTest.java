@@ -55,6 +55,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertNoMessagesFound();
         assertMessageInsert();
         assertMessageUpdate();
+        assertMessageFind();
         assertMessageCopy();
         assertMessageDelete();
         assertSpringMessageSource();
@@ -120,6 +121,13 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertThat(messages, hasSize(2));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
         assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+    }
+
+    private void assertMessageFind() {
+        final Message message = this.messagesApi.findOne(projectId, MESSAGE_KEY);
+
+        assertThat(message, is(notNullValue()));
+        assertThat(message, is(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageUpdate() {

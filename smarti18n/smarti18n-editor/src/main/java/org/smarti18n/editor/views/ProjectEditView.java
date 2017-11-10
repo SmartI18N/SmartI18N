@@ -1,7 +1,5 @@
 package org.smarti18n.editor.views;
 
-import java.util.Optional;
-
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -96,10 +94,8 @@ public class ProjectEditView extends AbstractView implements View {
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final String projectId = viewChangeEvent.getParameters();
 
-        // TODO
-        final Optional<? extends Project> first = this.projectsApi.findAll().stream()
-                .filter(project -> project.getId().equals(projectId)).findFirst();
+        final Project project = this.projectsApi.findOne(projectId);
 
-        this.binder.readBean(first.get());
+        this.binder.readBean(project);
     }
 }

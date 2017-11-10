@@ -34,6 +34,14 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
+    public Message findOne(final String projectId, final String key) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_ONE, projectId)
+                .queryParam("key", key);
+
+        return get(uri, MessageImpl.class);
+    }
+
+    @Override
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId, final String projectSecret) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_SPRING, projectId)
                 .queryParam("projectSecret", projectSecret);

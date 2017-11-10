@@ -28,6 +28,14 @@ public class ProjectsEndpoint implements ProjectsApi {
     }
 
     @Override
+    @GetMapping(PATH_PROJECTS_FIND_ONE)
+    public Project findOne(
+            @RequestParam("projectId") final String projectId) {
+
+        return projectsService.findOne(projectId);
+    }
+
+    @Override
     @GetMapping(PATH_PROJECTS_INSERT)
     public Project insert(
             @RequestParam("projectId") final String projectId) {

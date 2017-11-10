@@ -30,6 +30,15 @@ public class MessagesEndpoint implements MessagesApi {
     }
 
     @Override
+    @GetMapping(PATH_MESSAGES_FIND_ONE)
+    public MessageImpl findOne(
+            @RequestParam("projectId") final String projectId,
+            @RequestParam("key") final String key) {
+
+        return messagesService.findOne(projectId, key);
+    }
+
+    @Override
     @GetMapping(PATH_MESSAGES_FIND_SPRING)
     public Map<String, Map<Locale, String>> findForSpringMessageSource(
             @RequestParam("projectId") final String projectId,

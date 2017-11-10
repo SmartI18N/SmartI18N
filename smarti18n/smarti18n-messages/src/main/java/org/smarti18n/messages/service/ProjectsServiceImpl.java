@@ -35,6 +35,12 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional
+    public Project findOne(final String projectId) {
+        return this.projectRepository.findById(projectId).orElse(null);
+    }
+
+    @Override
+    @Transactional
     public Project insert(final String projectId) {
 
         if (this.projectRepository.findById(projectId).isPresent()) {
@@ -42,6 +48,8 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
 
         final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(projectId));
+
+        generateSecret(projectId);
 
         return new ProjectImpl(
                 projectEntity

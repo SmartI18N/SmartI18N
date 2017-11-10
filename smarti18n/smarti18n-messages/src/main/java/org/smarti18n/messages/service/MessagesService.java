@@ -15,6 +15,11 @@ public interface MessagesService {
             String projectId
     );
 
+    MessageImpl findOne(
+            String projectId,
+            String key
+    );
+
     Map<String, Map<Locale, String>> findForSpringMessageSource(
             String projectId,
             String projectSecret
@@ -42,5 +47,4 @@ public interface MessagesService {
             String projectId,
             String key
     );
-
 }

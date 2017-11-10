@@ -1,21 +1,21 @@
 package org.smarti18n.messages.service;
 
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.messages.entities.MessageEntity;
-import org.smarti18n.messages.entities.ProjectEntity;
-import org.smarti18n.messages.repositories.MessageRepository;
-import org.smarti18n.messages.repositories.ProjectRepository;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.messages.entities.MessageEntity;
+import org.smarti18n.messages.entities.ProjectEntity;
+import org.smarti18n.messages.repositories.MessageRepository;
+import org.smarti18n.messages.repositories.ProjectRepository;
 
 @Service
 public class MessagesServiceImpl implements MessagesService {
@@ -39,6 +39,18 @@ public class MessagesServiceImpl implements MessagesService {
                 messageEntity.getKey(),
                 messageEntity.getTranslations()
         )).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public MessageImpl findOne(final String projectId, final String key) {
+        final ProjectEntity project = getProject(projectId);
+
+        final Optional<MessageEntity> messageEntity = this.messageRepository.findById(
+                new MessageEntity.MessageId(key, project)
+        );
+
+        return messageEntity.map(MessageImpl::new).orElse(null);
     }
 
     @Override

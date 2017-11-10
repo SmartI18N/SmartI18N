@@ -18,6 +18,8 @@ import org.smarti18n.api.ProjectsApiImpl;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class ProjectsIntegrationTest extends AbstractIntegrationTest {
@@ -40,6 +42,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         assertNoProjectsFound();
         assertCreateNewProject();
         assertUpdateProject();
+        assertMessageFind();
         assertGenerateSecret();
     }
 
@@ -83,8 +86,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
     }
 
     private void assertUpdateProject() {
-        final Project project = this.projectsApi.findAll().stream()
-                .filter(project1 -> PROJECT_ID.equals(project1.getId())).findFirst().get();
+        final Project project = this.projectsApi.findOne(PROJECT_ID);
 
         project.setName(NEW_PROJECT_NAME);
         project.setDescription(NEW_PROJECT_DESCRIPTION);
@@ -94,6 +96,13 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
         assertThat(projects, hasSize(2));
         assertThat(projects, hasItem(projectWith(PROJECT_ID, NEW_PROJECT_NAME, NEW_PROJECT_DESCRIPTION)));
+    }
+
+    private void assertMessageFind() {
+        final Project project = this.projectsApi.findOne(PROJECT_ID);
+
+        assertThat(project, is(notNullValue()));
+        assertThat(project, is(projectWith(PROJECT_ID)));
     }
 
     private void assertCreateNewProject() {

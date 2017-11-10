@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.smarti18n.api.Project;
 
-@Document
+@Document(collection = "projects")
 public class ProjectEntity implements Project {
 
     @Id

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.smarti18n.api.Message;
 
-@Document
+@Document(collection = "messages")
 public class MessageEntity implements Message {
 
     @Id

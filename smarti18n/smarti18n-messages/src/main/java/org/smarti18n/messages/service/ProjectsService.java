@@ -10,6 +10,8 @@ import org.smarti18n.api.Project;
 public interface ProjectsService {
     List<? extends Project> findAll();
 
+    Project findOne(String projectId);
+
     Project insert(String projectId);
 
     Project update(Project project);

@@ -95,11 +95,9 @@ public class MessageEditView extends AbstractView implements View {
         projectContext.setProjectId(parameters[0]);
         final String key = parameters[1];
 
-        // TODO
-        final Optional<? extends Message> first = this.messagesApi.findAll(this.projectContext.getProjectId()).stream()
-                .filter(messageTranslations -> messageTranslations.getKey().equals(key)).findFirst();
+        final Message message = this.messagesApi.findOne(this.projectContext.getProjectId(), key);
 
-        this.binder.readBean(first.get());
+        this.binder.readBean(message);
     }
 
     private static class LanguageTextAreas extends CustomField<Map<Locale, String>> {
