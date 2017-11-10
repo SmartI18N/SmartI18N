@@ -15,7 +15,7 @@ import com.vaadin.ui.HorizontalLayout;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.ProjectContext;
+import org.smarti18n.editor.utils.ProjectContext;
 import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.IconButton;
 

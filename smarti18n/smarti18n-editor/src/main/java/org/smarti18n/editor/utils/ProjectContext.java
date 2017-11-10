@@ -1,4 +1,4 @@
-package org.smarti18n.editor;
+package org.smarti18n.editor.utils;
 
 import org.springframework.util.StringUtils;
 

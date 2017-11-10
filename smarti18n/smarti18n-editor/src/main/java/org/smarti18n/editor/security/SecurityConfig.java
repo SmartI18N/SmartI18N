@@ -1,23 +1,33 @@
 package org.smarti18n.editor.security;
 
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@planyourtrip.travel&gt;
  */
 @Configuration
-//@EnableOAuth2Client
-@EnableOAuth2Sso
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
+
     @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        http.antMatcher("/**")
+    protected void configure(HttpSecurity http) throws Exception {
+        http
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic().disable()
+                .oauth2Login()
+                .clientRegistrationRepository(clientRegistrationRepository)
+                .authorizedClientService(new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository));
     }
 
 }
