@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.vaadin.server.VaadinSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smarti18n.api.spring.Smarti18nMessageSource;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -26,12 +25,6 @@ public class I18N {
 
     public static String getMessage(final String code, final String... args) {
         return messageSource.getMessage(code, args, VaadinSession.getCurrent().getLocale());
-    }
-
-    public static void refreshMessageSource() {
-        if (messageSource instanceof Smarti18nMessageSource) {
-            ((Smarti18nMessageSource) messageSource).refreshMessageSource();
-        }
     }
 
 }

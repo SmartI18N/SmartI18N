@@ -4,11 +4,12 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,25 +18,18 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
     private static final String PATH_MESSAGES_SOURCE = "/api/1/messages/findForSpringMessageSource";
 
     private final Map<String, Map<Locale, String>> messages;
-    private final RestTemplate restTemplate;
-
-    private final String host;
-    private final String projectId;
-    private final String projectSecret;
 
     public Smarti18nMessageSource(final String host, final String projectId, final String projectSecret) {
-        this.host = host;
-        this.projectId = projectId;
-        this.projectSecret = projectSecret;
-        this.restTemplate = new RestTemplate();
         this.messages = new HashMap<>();
 
-        refreshMessageSource();
-    }
+        final UpdateMessageSourceTask task = new UpdateMessageSourceTask(
+                host,
+                projectId,
+                projectSecret,
+                messages
+        );
 
-    @Scheduled(cron = "0 * * * *")
-    public void refreshMessageSource() {
-        this.messages.putAll(loadForSpringMessageSource());
+        new Timer(true).schedule(task, 0, 60 * 1000);
     }
 
     @Override
@@ -49,18 +43,46 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
         return new MessageFormat(message, locale);
     }
 
-    private Map<String, Map<Locale, String>> loadForSpringMessageSource() {
-        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE)
-                .queryParam("projectId", projectId)
-                .queryParam("projectSecret", projectSecret);
+    private static class UpdateMessageSourceTask extends TimerTask {
 
-        return this.restTemplate.exchange(
-                builder.build().encode().toUri(),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Map<String, Map<Locale, String>>>() {
-                }
-        ).getBody();
+        private final RestTemplate restTemplate;
+
+        private final String host;
+        private final String projectId;
+        private final String projectSecret;
+        private final Map<String, Map<Locale, String>> messages;
+
+        private UpdateMessageSourceTask(
+                final String host,
+                final String projectId,
+                final String projectSecret,
+                final Map<String, Map<Locale, String>> messages) {
+
+            this.restTemplate = new RestTemplate();
+
+            this.host = host;
+            this.projectId = projectId;
+            this.projectSecret = projectSecret;
+            this.messages = messages;
+        }
+
+
+        @Override
+        public void run() {
+            final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE)
+                    .queryParam("projectId", projectId)
+                    .queryParam("projectSecret", projectSecret);
+
+            final Map<String, Map<Locale, String>> messages = this.restTemplate.exchange(
+                    builder.build().encode().toUri(),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<Map<String, Map<Locale, String>>>() {
+                    }
+            ).getBody();
+
+            this.messages.putAll(messages);
+        }
     }
 
 }
