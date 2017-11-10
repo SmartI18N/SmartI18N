@@ -1,7 +1,12 @@
 package org.smarti18n.api;
 
+import java.util.Base64;
+import java.util.Collections;
+
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,23 +17,31 @@ import org.springframework.web.util.UriComponentsBuilder;
 abstract class AbstractApiImpl {
 
     public static final String DEFAULT_HOST = "https://messages.smarti18n.com";
+    static final String DEFAULT_USERNAME = "user";
+    static final String DEFAULT_PASSWORD = "user";
 
-    private final String host;
     private final RestTemplate restTemplate;
+    private final String host;
+    private final String username;
+    private final String password;
 
     AbstractApiImpl(
             final RestTemplate restTemplate,
-            final String host) {
+            final String host,
+            final String username,
+            final String password) {
 
-        this.host = host;
         this.restTemplate = restTemplate;
+        this.host = host;
+        this.username = username;
+        this.password = password;
     }
 
     <OUT, IN> OUT post(final UriComponentsBuilder uri, final IN project, final Class<OUT> responseType) {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
                 uri.build().encode().toUri(),
                 HttpMethod.POST,
-                new HttpEntity<>(project),
+                new HttpEntity<>(project, headers()),
                 responseType
         );
 
@@ -39,7 +52,7 @@ abstract class AbstractApiImpl {
         final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
                 uri.build().encode().toUri(),
                 HttpMethod.GET,
-                null,
+                new HttpEntity<>(headers()),
                 responseType
         );
 
@@ -62,5 +75,15 @@ abstract class AbstractApiImpl {
         }
 
         return exchange.getBody();
+    }
+
+    private HttpHeaders headers() {
+        final String plainCredentials = username + ":" + password;
+        final String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Basic " + base64Credentials);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        return headers;
     }
 }

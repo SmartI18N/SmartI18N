@@ -1,6 +1,8 @@
 package org.smarti18n.api.spring;
 
 import java.text.MessageFormat;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -9,7 +11,10 @@ import java.util.TimerTask;
 
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -76,12 +81,22 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
             final Map<String, Map<Locale, String>> messages = this.restTemplate.exchange(
                     builder.build().encode().toUri(),
                     HttpMethod.GET,
-                    null,
+                    new HttpEntity<>(headers()),
                     new ParameterizedTypeReference<Map<String, Map<Locale, String>>>() {
                     }
             ).getBody();
 
             this.messages.putAll(messages);
+        }
+
+        private static HttpHeaders headers() {
+            final String plainCredentials = "default:default";
+            final String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
+
+            final HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Basic " + base64Credentials);
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            return headers;
         }
     }
 
