@@ -20,9 +20,13 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
     private final RestTemplate restTemplate;
 
     private final String host;
+    private final String projectId;
+    private final String projectSecret;
 
-    public Smarti18nMessageSource(final String host) {
-        this.host = "https://messages.smarti18n.com";
+    public Smarti18nMessageSource(final String host, final String projectId, final String projectSecret) {
+        this.host = host;
+        this.projectId = projectId;
+        this.projectSecret = projectSecret;
         this.restTemplate = new RestTemplate();
         this.messages = new HashMap<>();
 
@@ -40,14 +44,15 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
             return new MessageFormat("?" + code + "?");
         }
 
-        final String message = this.messages.get(code).get(locale);
+        final String message = this.messages.get(code).get(new Locale(locale.getLanguage()));
 
         return new MessageFormat(message, locale);
     }
 
     private Map<String, Map<Locale, String>> loadForSpringMessageSource() {
         final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE)
-                .queryParam("projectId", "default").queryParam("projectSecret", "default");
+                .queryParam("projectId", projectId)
+                .queryParam("projectSecret", projectSecret);
 
         return this.restTemplate.exchange(
                 builder.build().encode().toUri(),

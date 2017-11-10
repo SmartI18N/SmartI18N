@@ -1,11 +1,12 @@
 package org.smarti18n.editor.views;
 
 import com.vaadin.server.Page;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.I18N;
+import org.smarti18n.editor.vaadin.IconButton;
+import org.smarti18n.editor.vaadin.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -22,14 +23,11 @@ class MessageCreateWindow extends AbstractSmartI18nWindow {
         textFieldKey.setSizeFull();
         formLayout.addComponent(textFieldKey);
 
-        final Button buttonSave = new Button(
-                I18N.getMessage("common.save"),
-                clickEvent -> {
-                    messagesApi.insert(projectId, textFieldKey.getValue());
-                    close();
-                    Page.getCurrent().reload();
-                }
-        );
+        final IconButton buttonSave = new SaveButton(clickEvent -> {
+            messagesApi.insert(projectId, textFieldKey.getValue());
+            close();
+            Page.getCurrent().reload();
+        });
 
         formLayout.addComponent(buttonSave);
 

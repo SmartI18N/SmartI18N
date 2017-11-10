@@ -1,16 +1,25 @@
 package org.smarti18n.editor.vaadin;
 
-import com.vaadin.navigator.Navigator;
+import java.util.Arrays;
+
 import com.vaadin.navigator.View;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
+ */
 public abstract class AbstractView extends VerticalLayout implements View {
 
-    protected String translate(final String code) {
-        return I18N.getMessage(code);
+    protected String translate(final String code, final String... args) {
+        return I18N.getMessage(code,args);
     }
 
-    protected Navigator navigator() {
-        return this.getUI().getNavigator();
+    protected void navigateTo(final String viewId, final String ... params) {
+        final StringBuilder navigationState = new StringBuilder(viewId);
+        Arrays.asList(params).forEach(
+                param -> navigationState.append("/").append(param)
+        );
+
+        this.getUI().getNavigator().navigateTo(navigationState.toString());
     }
 }

@@ -1,30 +1,22 @@
 package org.smarti18n.editor.views;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomField;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.TextArea;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.ProjectContext;
 import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.CancelButton;
+import org.smarti18n.editor.vaadin.HiddenField;
+import org.smarti18n.editor.vaadin.LanguageTextAreas;
+import org.smarti18n.editor.vaadin.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -67,24 +59,24 @@ public class MessageEditView extends AbstractView implements View {
 
     private HorizontalLayout createButtonBar() {
 
-        final Button buttonSave = new Button(translate("common.save"));
-        buttonSave.addClickListener(clickEvent -> {
+        final SaveButton buttonSave = new SaveButton(clickEvent -> {
             final Message message = new MessageImpl();
             binder.writeBeanIfValid(message);
 
             message.getTranslations().forEach(
-                    (locale, translation) -> messagesApi.update(this.projectContext.getProjectId(), message.getKey(), translation, locale)
+                    (locale, translation) -> messagesApi.update(this.projectContext.get(), message.getKey(), translation, locale)
             );
 
-            navigator().navigateTo(MessageOverviewView.VIEW_NAME);
+            navigateTo(MessageOverviewView.VIEW_NAME, projectContext.get());
         });
 
-        final Button buttonCancle = new Button(translate("common.cancle"));
-        buttonCancle.addClickListener(clickEvent -> navigator().navigateTo(MessageOverviewView.VIEW_NAME));
+        final CancelButton buttonCancel = new CancelButton(
+                clickEvent -> navigateTo(MessageOverviewView.VIEW_NAME, projectContext.get())
+        );
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-        buttonLayout.addComponents(buttonSave, buttonCancle);
+        buttonLayout.addComponents(buttonSave, buttonCancel);
 
         return buttonLayout;
     }
@@ -95,60 +87,9 @@ public class MessageEditView extends AbstractView implements View {
         projectContext.setProjectId(parameters[0]);
         final String key = parameters[1];
 
-        final Message message = this.messagesApi.findOne(this.projectContext.getProjectId(), key);
+        final Message message = this.messagesApi.findOne(this.projectContext.get(), key);
 
         this.binder.readBean(message);
     }
 
-    private static class LanguageTextAreas extends CustomField<Map<Locale, String>> {
-
-        private final Layout fields = new FormLayout();
-        private final Map<Locale, TextArea> textAreas = new HashMap<>();
-
-        @Override
-        protected Component initContent() {
-            return fields;
-        }
-
-        @Override
-        protected void doSetValue(final Map<Locale, String> value) {
-            this.textAreas.clear();
-            this.fields.removeAllComponents();
-
-            for (final Map.Entry<Locale, String> entry : value.entrySet()) {
-                final TextArea textArea = new TextArea(entry.getKey().getLanguage());
-                textArea.setSizeFull();
-                textArea.setValue(entry.getValue());
-
-                this.textAreas.put(entry.getKey(), textArea);
-                this.fields.addComponent(textArea);
-            }
-        }
-
-        @Override
-        public Map<Locale, String> getValue() {
-            return this.textAreas.entrySet().stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, p -> p.getValue().getValue()));
-        }
-    }
-
-    private static class HiddenField extends CustomField<String> {
-
-        private String value;
-
-        @Override
-        protected Component initContent() {
-            return null;
-        }
-
-        @Override
-        protected void doSetValue(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
-        }
-    }
 }

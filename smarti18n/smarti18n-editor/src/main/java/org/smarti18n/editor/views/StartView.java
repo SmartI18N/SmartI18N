@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Label;
 import javax.annotation.PostConstruct;
 import org.smarti18n.editor.vaadin.AbstractView;
 
@@ -27,7 +28,8 @@ public class StartView extends AbstractView implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        addComponent(new Label(translate("smarti18n.editor.start.which-language", getLocale().toString())));
+        addComponent(new Label(getLocale().toString()));
     }
 
 }

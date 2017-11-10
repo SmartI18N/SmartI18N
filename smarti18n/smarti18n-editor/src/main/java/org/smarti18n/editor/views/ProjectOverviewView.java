@@ -10,7 +10,6 @@ import com.vaadin.server.Page;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
@@ -39,9 +38,12 @@ public class ProjectOverviewView extends AbstractView implements View {
     void init() {
         setCaption(translate("smarti18n.editor.project-overview.caption"));
 
-        addComponent(new Button(translate("smarti18n.editor.project-overview.add-new-project"), clickEvent -> {
-            this.getUI().addWindow(new ProjectCreateWindow(this.projectApi));
-        }));
+        final IconButton iconButton = new IconButton(
+                translate("smarti18n.editor.project-overview.add-new-project"),
+                VaadinIcons.FILE_ADD,
+                clickEvent -> this.getUI().addWindow(new ProjectCreateWindow(this.projectApi))
+        );
+        addComponent(iconButton);
 
         grid = new Grid<>(Project.class);
 
@@ -53,10 +55,7 @@ public class ProjectOverviewView extends AbstractView implements View {
             Page.getCurrent().reload();
         }));
 
-        grid.addItemClickListener(itemClick -> {
-            final String key = itemClick.getItem().getId();
-            navigator().navigateTo(ProjectEditView.VIEW_NAME + "/" + key);
-        });
+        grid.addItemClickListener(itemClick -> navigateTo(ProjectEditView.VIEW_NAME, itemClick.getItem().getId()));
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);

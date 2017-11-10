@@ -1,19 +1,17 @@
 package org.smarti18n.editor.views;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
+import com.vaadin.ui.FormLayout;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.vaadin.I18N;
 import org.smarti18n.editor.vaadin.IconButton;
 import org.smarti18n.editor.vaadin.LanguageComboBox;
-
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.StreamResource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
-
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 class MessageExportWindow extends AbstractSmartI18nWindow {
 
@@ -39,7 +37,7 @@ class MessageExportWindow extends AbstractSmartI18nWindow {
                 streamResource
         );
 
-        final Button downloadButton = new IconButton("Download", VaadinIcons.DOWNLOAD);
+        final IconButton downloadButton = new IconButton("Download", VaadinIcons.DOWNLOAD);
         downloadButton.addClickListener(event -> streamResource.setFilename(
                 "smarti18n-" + projectId + "_" + languageComboBox.getValue().getLanguage() + ".properties"
         ));

@@ -1,10 +1,13 @@
 package org.smarti18n.editor.vaadin;
 
-import com.vaadin.ui.ComboBox;
-
 import java.util.Arrays;
 import java.util.Locale;
 
+import com.vaadin.ui.ComboBox;
+
+/**
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
+ */
 public class LanguageComboBox extends ComboBox<Locale> {
 
     public LanguageComboBox(final String caption) {

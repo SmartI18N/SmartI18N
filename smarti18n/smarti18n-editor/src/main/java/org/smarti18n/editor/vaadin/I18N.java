@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 
+/**
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
+ */
 @Service
 public class I18N {
 

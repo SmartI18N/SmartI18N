@@ -5,6 +5,9 @@ import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 
+/**
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
+ */
 public class IconButton extends Button {
 
     public IconButton(final String caption, final Resource icon, final ClickListener listener) {

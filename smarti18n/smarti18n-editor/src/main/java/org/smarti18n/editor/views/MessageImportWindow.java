@@ -1,16 +1,16 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.vaadin.I18N;
-import org.smarti18n.editor.vaadin.LanguageComboBox;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.vaadin.ui.Button;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Upload;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.editor.vaadin.I18N;
+import org.smarti18n.editor.vaadin.IconButton;
+import org.smarti18n.editor.vaadin.LanguageComboBox;
 
 class MessageImportWindow extends AbstractSmartI18nWindow {
 
@@ -32,8 +32,9 @@ class MessageImportWindow extends AbstractSmartI18nWindow {
         final Upload uploadButton = new Upload("", uploadReceiver);
         uploadButton.addSucceededListener(uploadReceiver);
 
-        final Button importButton = new Button(
-                I18N.getMessage("smarti18n.editor.message-import.caption"),
+        final IconButton importButton = new IconButton(
+                I18N.getMessage("smarti18n.editor.message-import.import"),
+                VaadinIcons.UPLOAD,
                 event -> messages.forEach(
                         (key, value) -> messagesApi.update(projectId, key, value, languageComboBox.getValue())
                 )

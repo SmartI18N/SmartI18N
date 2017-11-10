@@ -1,12 +1,15 @@
 package org.smarti18n.editor.views;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBoxGroup;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
@@ -17,6 +20,9 @@ import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.vaadin.AbstractView;
+import org.smarti18n.editor.vaadin.CancelButton;
+import org.smarti18n.editor.vaadin.LabelSet;
+import org.smarti18n.editor.vaadin.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -60,9 +66,22 @@ public class ProjectEditView extends AbstractView implements View {
         textAreaDescription.setSizeFull();
         layout.addComponent(textAreaDescription);
 
+        final CheckBoxGroup<Locale> checkBoxGroupLocales = new CheckBoxGroup<>(
+                translate("smarti18n.editor.project-edit.languages"),
+                Arrays.asList(Locale.GERMAN, Locale.ENGLISH, Locale.ITALIAN)
+        );
+        checkBoxGroupLocales.setSizeFull();
+        layout.addComponent(checkBoxGroupLocales);
+
+        final LabelSet labelSetSecrets = new LabelSet(translate("smarti18n.editor.project-edit.secrets"));
+        labelSetSecrets.setSizeFull();
+        layout.addComponent(labelSetSecrets);
+
         this.binder.forMemberField(textFieldId).bind("id");
         this.binder.forMemberField(textFieldName).bind("name");
         this.binder.forMemberField(textAreaDescription).bind("description");
+        this.binder.forMemberField(checkBoxGroupLocales).bind("locales");
+        this.binder.forMemberField(labelSetSecrets).bind("secrets");
         this.binder.bindInstanceFields(this);
 
         addComponent(layout);
@@ -71,21 +90,21 @@ public class ProjectEditView extends AbstractView implements View {
 
     private HorizontalLayout createButtonBar() {
 
-        final Button buttonSave = new Button(translate("common.save"));
-        buttonSave.addClickListener(clickEvent -> {
+        final SaveButton buttonSave = new SaveButton(clickEvent -> {
             final Project project = new ProjectImpl();
             binder.writeBeanIfValid(project);
             projectsApi.update(project);
 
-            navigator().navigateTo(ProjectOverviewView.VIEW_NAME);
+            navigateTo(ProjectOverviewView.VIEW_NAME);
         });
 
-        final Button buttonCancle = new Button(translate("common.cancle"));
-        buttonCancle.addClickListener(clickEvent -> navigator().navigateTo(ProjectOverviewView.VIEW_NAME));
+        final CancelButton buttonCancel = new CancelButton(
+                clickEvent -> navigateTo(ProjectOverviewView.VIEW_NAME)
+        );
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-        buttonLayout.addComponents(buttonSave, buttonCancle);
+        buttonLayout.addComponents(buttonSave, buttonCancel);
 
         return buttonLayout;
     }

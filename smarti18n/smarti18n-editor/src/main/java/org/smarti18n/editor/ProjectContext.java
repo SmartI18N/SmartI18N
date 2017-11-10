@@ -9,7 +9,7 @@ public class ProjectContext {
 
     private String projectId;
 
-    public String getProjectId() {
+    public String get() {
         return projectId;
     }
 

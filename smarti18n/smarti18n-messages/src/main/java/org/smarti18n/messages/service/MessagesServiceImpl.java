@@ -50,7 +50,13 @@ public class MessagesServiceImpl implements MessagesService {
                 new MessageEntity.MessageId(key, project)
         );
 
-        return messageEntity.map(MessageImpl::new).orElse(null);
+        if (messageEntity.isPresent()) {
+            final MessageImpl message = new MessageImpl(messageEntity.get());
+            project.getLocales().forEach(locale -> message.getTranslations().putIfAbsent(locale, ""));
+            return message;
+        }
+
+        return null;
     }
 
     @Override

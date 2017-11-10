@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Viewport;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -17,8 +18,8 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.MessagesApiImpl;
+import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 import org.smarti18n.editor.vaadin.I18N;
@@ -59,12 +60,15 @@ public class EditorApplication {
     @Bean
     Smarti18nMessageSource messageSource(final Environment environment) {
         return new Smarti18nMessageSource(
-                environment.getProperty("smarti18n.host", MessagesApiImpl.DEFAULT_HOST)
+                environment.getProperty("smarti18n.host", MessagesApiImpl.DEFAULT_HOST),
+                "smarti18n-editor",
+                "4XWNbZdb78O8fL518ltlnQn85kNNdBYRybQVm6XptEE="
         );
     }
 
     @SpringUI
     @Theme("smarti18n")
+    @Viewport("initial-scale=1, maximum-scale=1")
     public static class EditorUI extends UI {
 
         private final SpringViewProvider viewProvider;
@@ -75,6 +79,8 @@ public class EditorApplication {
         public EditorUI(final SpringViewProvider viewProvider, final ProjectsApi projectsApi) {
             this.viewProvider = viewProvider;
             this.projectsApi = projectsApi;
+
+            getPage().setTitle(I18N.getMessage("smarti18n.editor.title"));
         }
 
         @Override
