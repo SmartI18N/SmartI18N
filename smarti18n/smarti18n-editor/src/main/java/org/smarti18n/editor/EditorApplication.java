@@ -13,7 +13,10 @@ import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.MessagesApiImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ProjectsApiImpl;
+import org.smarti18n.api.UserApi;
+import org.smarti18n.api.UserApiImpl;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
+import org.smarti18n.editor.security.LoginListener;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -40,6 +43,11 @@ public class EditorApplication {
     }
 
     @Bean
+    UserApi userApi(final Environment environment) {
+        return new UserApiImpl(environment, restTemplate());
+    }
+
+    @Bean
     RestTemplate restTemplate() {
         return new RestTemplateBuilder().build();
     }
@@ -51,6 +59,11 @@ public class EditorApplication {
                 "smarti18n-editor",
                 "4XWNbZdb78O8fL518ltlnQn85kNNdBYRybQVm6XptEE="
         );
+    }
+
+    @Bean
+    LoginListener loginListener(final UserApi userApi) {
+        return new LoginListener(userApi);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 
 import org.smarti18n.api.MessagesApi;
 
@@ -27,9 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobalSecurity(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("default").password("default").roles(ROLE_APP).and()
-                .withUser("test").password("test").roles(ROLE_APP, ROLE_USER).and()
-                .withUser("user").password("user").roles(ROLE_APP, ROLE_USER);
+                .withUser(User.withDefaultPasswordEncoder().username("default").password("default").roles(ROLE_APP))
+                .withUser(User.withDefaultPasswordEncoder().username("test").password("test").roles(ROLE_APP, ROLE_USER))
+                .withUser(User.withDefaultPasswordEncoder().username("user").password("user").roles(ROLE_APP, ROLE_USER));
     }
 
     @Override

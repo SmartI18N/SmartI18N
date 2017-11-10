@@ -12,6 +12,10 @@
 */*.iml
 
 **/*/*.iml
+**/target
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+
+smarti18n/smarti18n-editor/src/main/resources/VAADIN/themes/smarti18n/styles.css
+smarti18n/smarti18n-editor/src/main/resources/application-default.properties

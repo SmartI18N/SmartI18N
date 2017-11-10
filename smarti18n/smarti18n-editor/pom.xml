@@ -42,12 +42,12 @@
             <version>${org.springframework.boot.version}</version>
         </dependency>
 
-        <!--org.springframework.security-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>5.0.0.RC1</version>
-        </dependency>
+        <!--&lt;!&ndash;org.springframework.security&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.security</groupId>-->
+            <!--<artifactId>spring-security-config</artifactId>-->
+            <!--<version>5.0.0.RC1</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
