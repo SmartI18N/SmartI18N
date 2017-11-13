@@ -2,7 +2,6 @@ package org.smarti18n.messages.service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -69,7 +68,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectEntity.setName(project.getName());
         projectEntity.setDescription(project.getDescription());
         projectEntity.setLocales(
-                project.getLocales() == null ? new HashSet<Locale>() : new HashSet<Locale>(project.getLocales())
+                project.getLocales() == null ? new HashSet<>() : new HashSet<>(project.getLocales())
         );
 
         return new ProjectImpl(

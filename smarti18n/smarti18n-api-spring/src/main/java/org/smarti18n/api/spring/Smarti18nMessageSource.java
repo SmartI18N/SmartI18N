@@ -74,9 +74,7 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
         @Override
         public void run() {
-            final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE)
-                    .queryParam("projectId", projectId)
-                    .queryParam("projectSecret", projectSecret);
+            final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE);
 
             final Map<String, Map<Locale, String>> messages = this.restTemplate.exchange(
                     builder.build().encode().toUri(),
@@ -89,8 +87,8 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
             this.messages.putAll(messages);
         }
 
-        private static HttpHeaders headers() {
-            final String plainCredentials = "default:default";
+        private HttpHeaders headers() {
+            final String plainCredentials = this.projectId + ":" + this.projectSecret;
             final String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
 
             final HttpHeaders headers = new HttpHeaders();

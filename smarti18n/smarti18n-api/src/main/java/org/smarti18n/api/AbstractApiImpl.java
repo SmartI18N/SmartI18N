@@ -3,6 +3,7 @@ package org.smarti18n.api;
 import java.util.Base64;
 import java.util.Collections;
 
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,13 +18,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 abstract class AbstractApiImpl {
 
     public static final String DEFAULT_HOST = "https://messages.smarti18n.com";
-    static final String DEFAULT_USERNAME = "user";
-    static final String DEFAULT_PASSWORD = "user";
+    private static final String DEFAULT_USERNAME = "default@smarti18n.com";
+    private static final String DEFAULT_PASSWORD = "default";
 
-    private final RestTemplate restTemplate;
+    final RestTemplate restTemplate;
+
     private final String host;
     private final String username;
     private final String password;
+
+    AbstractApiImpl(
+            final RestTemplate restTemplate,
+            final Environment environment) {
+
+        this.restTemplate = restTemplate;
+        this.host = environment.getProperty("smarti18n.messages.host", DEFAULT_HOST);
+        this.username = environment.getProperty("smarti18n.messages.username", DEFAULT_USERNAME);
+        this.password = environment.getProperty("smarti18n.messages.password", DEFAULT_PASSWORD);
+    }
 
     AbstractApiImpl(
             final RestTemplate restTemplate,
@@ -69,7 +81,7 @@ abstract class AbstractApiImpl {
                 .queryParam("projectId", projectId);
     }
 
-    private <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {
+    <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {
         if (exchange.getStatusCode().isError()) {
             throw new ApiException("SmartI18N Message API: " + exchange.getStatusCode().getReasonPhrase());
         }

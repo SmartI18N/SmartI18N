@@ -1,15 +1,18 @@
 package org.smarti18n.messages.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.ProjectsApi;
@@ -24,16 +27,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     static final String REALM = "SMARTI18N_MESSAGES";
 
-    private static final String ROLE_APP = "APP";
-    private static final String ROLE_USER = "USER";
-
     @Autowired
-    public void configureGlobalSecurity(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser(User.withDefaultPasswordEncoder().username("default").password("default").roles(ROLE_APP))
-                .withUser(User.withDefaultPasswordEncoder().username("test").password("test").roles(ROLE_APP, ROLE_USER))
-                .withUser(User.withDefaultPasswordEncoder().username("user").password("user").roles(ROLE_APP, ROLE_USER));
-    }
+    private UserOrProjectPrincipalService userOrProjectPrincipalService;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -43,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(
                         MessagesApi.PATH_MESSAGES_FIND_SPRING
-                ).hasRole(ROLE_APP)
+                ).hasAuthority(ProjectPrincipal.ROLE_PROJECT)
 
                 .antMatchers(
                         MessagesApi.PATH_MESSAGES_FIND_ALL,
@@ -58,7 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         ProjectsApi.PATH_PROJECTS_UPDATE,
                         ProjectsApi.PATH_PROJECTS_REMOVE,
                         UserApi.PATH_USERS_UPDATE
-                ).hasRole(ROLE_USER)
+                ).hasAuthority(UserPrincipal.ROLE_USER)
 
                 .antMatchers(
                         UserApi.PATH_USERS_FIND_ONE,
@@ -74,5 +69,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+
+        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(this.userOrProjectPrincipalService);
+        authProvider.setPasswordEncoder(encoder());
+        return authProvider;
+    }
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 }

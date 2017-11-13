@@ -21,8 +21,7 @@ public interface MessagesService {
     );
 
     Map<String, Map<Locale, String>> findForSpringMessageSource(
-            String projectId,
-            String projectSecret
+            String projectId
     );
 
     MessageImpl insert(

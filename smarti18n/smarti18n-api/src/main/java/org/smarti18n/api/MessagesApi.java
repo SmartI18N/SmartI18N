@@ -23,10 +23,7 @@ public interface MessagesApi {
             String key
     );
 
-    Map<String, Map<Locale, String>> findForSpringMessageSource(
-            String projectId,
-            String projectSecret
-    );
+    Map<String, Map<Locale, String>> findForSpringMessageSource();
 
     MessageImpl insert(
             String projectId,

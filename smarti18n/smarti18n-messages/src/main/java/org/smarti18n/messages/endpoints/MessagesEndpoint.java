@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
+import org.smarti18n.messages.security.ProjectPrincipal;
 import org.smarti18n.messages.service.MessagesService;
 
 @RestController
@@ -40,11 +42,11 @@ public class MessagesEndpoint implements MessagesApi {
 
     @Override
     @GetMapping(PATH_MESSAGES_FIND_SPRING)
-    public Map<String, Map<Locale, String>> findForSpringMessageSource(
-            @RequestParam("projectId") final String projectId,
-            @RequestParam("projectSecret") final String projectSecret) {
+    public Map<String, Map<Locale, String>> findForSpringMessageSource() {
 
-        return messagesService.findForSpringMessageSource(projectId, projectSecret);
+        final ProjectPrincipal principal = (ProjectPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return messagesService.findForSpringMessageSource(principal.getUsername());
     }
 
     @Override

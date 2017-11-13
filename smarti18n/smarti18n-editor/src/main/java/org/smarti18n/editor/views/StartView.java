@@ -1,5 +1,8 @@
 package org.smarti18n.editor.views;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
@@ -7,10 +10,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import javax.annotation.PostConstruct;
 import org.smarti18n.editor.components.AbstractView;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.smarti18n.editor.security.SimpleUserDetails;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -33,7 +33,7 @@ public class StartView extends AbstractView implements View {
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final DefaultOAuth2User principal = (DefaultOAuth2User) authentication.getPrincipal();
+        final SimpleUserDetails principal = (SimpleUserDetails) authentication.getPrincipal();
         final String username = principal.getName();
 
         addComponent(new Label(translate("smarti18n.editor.start.welcome", username)));

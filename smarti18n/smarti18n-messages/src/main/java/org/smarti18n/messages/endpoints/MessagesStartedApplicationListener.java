@@ -33,12 +33,12 @@ public class MessagesStartedApplicationListener implements ApplicationListener<A
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
-        if (!this.projectRepository.findById("default").isPresent()) {
+        if (!this.projectRepository.findById(DEFAULT_PROJECT_ID).isPresent()) {
             final ProjectEntity projectEntity = new ProjectEntity(DEFAULT_PROJECT_ID, DEFAULT_PROJECT_SECRET);
             projectEntity.setName("Default Project");
             projectEntity.setDescription("Default Project");
 
-            this.projectRepository.save(projectEntity);
+            this.projectRepository.insert(projectEntity);
         }
 
         if (!this.userRepository.findByMail(DEFAULT_USER_MAIL).isPresent()) {
@@ -46,7 +46,7 @@ public class MessagesStartedApplicationListener implements ApplicationListener<A
             userEntity.setVorname("Default");
             userEntity.setNachname("Default");
             userEntity.setCompany("Default");
-            this.userRepository.save(userEntity);
+            this.userRepository.insert(userEntity);
         }
     }
 }

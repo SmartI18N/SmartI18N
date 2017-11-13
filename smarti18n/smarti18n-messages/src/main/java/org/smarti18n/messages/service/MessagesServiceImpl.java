@@ -61,11 +61,9 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Map<String, Map<Locale, String>> findForSpringMessageSource(
-            final String projectId,
-            final String projectSecret) {
+    public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
 
-        final ProjectEntity project = validateAndGetProject(projectId, projectSecret);
+        final ProjectEntity project = getProject(projectId);
 
         final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
         final Map<String, Map<Locale, String>> map = new HashMap<>();
@@ -166,21 +164,6 @@ public class MessagesServiceImpl implements MessagesService {
 
         if (optional.isPresent()) {
             return optional.get();
-        }
-
-        throw new IllegalStateException("Project with ID [" + projectId + "] doesn't exist.");
-    }
-    private ProjectEntity validateAndGetProject(final String projectId, final String projectSecret) {
-        Assert.notNull(projectId, "projectId");
-        Assert.notNull(projectSecret, "projectSecret");
-
-        final Optional<ProjectEntity> optional = this.projectRepository.findById(projectId);
-        if (optional.isPresent()) {
-            final ProjectEntity projectEntity = optional.get();
-
-            if (projectEntity.getSecret().equals(projectSecret)) {
-                return projectEntity;
-            }
         }
 
         throw new IllegalStateException("Project with ID [" + projectId + "] doesn't exist.");

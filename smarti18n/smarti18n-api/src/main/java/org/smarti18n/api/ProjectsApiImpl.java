@@ -9,12 +9,7 @@ import org.springframework.web.client.RestTemplate;
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
     public ProjectsApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(
-                restTemplate,
-                environment.getProperty("", DEFAULT_HOST),
-                environment.getProperty("", DEFAULT_USERNAME),
-                environment.getProperty("", DEFAULT_PASSWORD)
-        );
+        super(restTemplate, environment);
     }
 
     public ProjectsApiImpl(final RestTemplate restTemplate, final int port) {

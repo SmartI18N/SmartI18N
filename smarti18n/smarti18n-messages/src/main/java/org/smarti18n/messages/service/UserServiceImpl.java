@@ -3,6 +3,7 @@ package org.smarti18n.messages.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.smarti18n.api.User;
 import org.smarti18n.messages.entities.UserEntity;
@@ -18,12 +19,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User findOne(final String mail) {
         return this.userRepository.findByMail(mail)
                 .orElse(null);
     }
 
     @Override
+    @Transactional
     public User register(final String mail, final String password) {
         this.userRepository.findByMail(mail).ifPresent(user -> {
             throw new IllegalStateException("User with Mail [" + mail + "] already exist!");
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User update(final User user) {
         final Optional<UserEntity> optional = this.userRepository.findByMail(user.getMail());
         if (!optional.isPresent()) {

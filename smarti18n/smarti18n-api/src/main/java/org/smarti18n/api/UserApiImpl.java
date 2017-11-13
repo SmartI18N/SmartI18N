@@ -6,12 +6,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserApiImpl extends AbstractApiImpl implements UserApi {
 
     public UserApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(
-                restTemplate,
-                environment.getProperty("", DEFAULT_HOST),
-                environment.getProperty("", DEFAULT_USERNAME),
-                environment.getProperty("", DEFAULT_PASSWORD)
-        );
+        super(restTemplate, environment);
     }
 
     public UserApiImpl(final RestTemplate restTemplate, final int port) {

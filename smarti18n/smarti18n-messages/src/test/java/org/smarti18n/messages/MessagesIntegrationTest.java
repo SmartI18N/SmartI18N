@@ -37,18 +37,12 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     private MessagesApi messagesApi;
 
-    private String projectId;
-    private String projectSecret;
-
     @Before
     public void setUp() throws Exception {
         final ProjectsApiImpl projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
         final Project project = projectsApi.insert(PROJECT_ID);
 
-        this.projectId = project.getId();
-        this.projectSecret = project.getSecret();
-
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
+        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, project.getSecret());
     }
 
     @Test
@@ -66,33 +60,33 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     public void existInsertMessages() throws Exception {
         assertNoMessagesFound();
 
-        this.messagesApi.insert(projectId, MESSAGE_KEY);
-        this.messagesApi.insert(projectId, MESSAGE_KEY);
+        this.messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
+        this.messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
     }
 
     @Test(expected = ApiException.class)
     public void unknownCopySource() throws Exception {
         assertNoMessagesFound();
 
-        this.messagesApi.copy(projectId, MESSAGE_KEY, MESSAGE_KEY);
+        this.messagesApi.copy(PROJECT_ID, MESSAGE_KEY, MESSAGE_KEY);
     }
 
     @Test(expected = ApiException.class)
     public void existCopyMessages() throws Exception {
         assertNoMessagesFound();
 
-        this.messagesApi.insert(projectId, MESSAGE_KEY);
-        this.messagesApi.copy(projectId, MESSAGE_KEY, MESSAGE_KEY);
+        this.messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
+        this.messagesApi.copy(PROJECT_ID, MESSAGE_KEY, MESSAGE_KEY);
     }
 
     @Test(expected = RestClientException.class)
     public void wrongProjectId() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port).findAll("irgendwas");
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "").findAll("irgendwas");
     }
 
-    @Test(expected = ApiException.class)
+    @Test(expected = RestClientException.class)
     public void wrongProjectSecret() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port).findForSpringMessageSource(projectId, "irgendwas");
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "irgendwas").findForSpringMessageSource();
     }
 
 //
@@ -100,55 +94,55 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 //
 
     private void assertSpringMessageSource() {
-        final Map<String, Map<String, String>> messages = (Map) this.messagesApi.findForSpringMessageSource(projectId, projectSecret);
+        final Map<String, Map<Locale, String>> messages = this.messagesApi.findForSpringMessageSource();
 
         assertThat(messages.get(MESSAGE_KEY), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE.toLanguageTag()), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE.toLanguageTag()), is(TRANSLATION));
+        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(notNullValue()));
+        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(TRANSLATION));
     }
 
     private void assertMessageDelete() {
-        this.messagesApi.remove(projectId, SECOND_MESSAGE_KEY);
+        this.messagesApi.remove(PROJECT_ID, SECOND_MESSAGE_KEY);
 
-        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId));
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageCopy() {
-        this.messagesApi.copy(projectId, MESSAGE_KEY, SECOND_MESSAGE_KEY);
+        this.messagesApi.copy(PROJECT_ID, MESSAGE_KEY, SECOND_MESSAGE_KEY);
 
-        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId));
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(2));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
         assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageFind() {
-        final Message message = this.messagesApi.findOne(projectId, MESSAGE_KEY);
+        final Message message = this.messagesApi.findOne(PROJECT_ID, MESSAGE_KEY);
 
         assertThat(message, is(notNullValue()));
         assertThat(message, is(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageUpdate() {
-        this.messagesApi.update(projectId, MESSAGE_KEY, TRANSLATION, LANGUAGE);
+        this.messagesApi.update(PROJECT_ID, MESSAGE_KEY, TRANSLATION, LANGUAGE);
 
-        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId));
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
     }
 
     private void assertMessageInsert() {
-        this.messagesApi.insert(projectId, MESSAGE_KEY);
+        this.messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
 
-        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(projectId));
+        final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY)));
     }
 
     private void assertNoMessagesFound() {
-        assertThat(this.messagesApi.findAll(projectId), is(empty()));
+        assertThat(this.messagesApi.findAll(PROJECT_ID), is(empty()));
     }
 
 //
