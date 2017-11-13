@@ -16,6 +16,7 @@ import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ApiException;
 import org.smarti18n.api.ProjectsApiImpl;
+import org.smarti18n.api.UserCredentials;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -35,7 +36,9 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
+        insertTestUser();
+
+        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
     }
 
     @Test

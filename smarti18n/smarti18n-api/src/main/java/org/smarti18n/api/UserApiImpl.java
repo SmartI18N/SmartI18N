@@ -5,12 +5,20 @@ import org.springframework.web.client.RestTemplate;
 
 public class UserApiImpl extends AbstractApiImpl implements UserApi {
 
-    public UserApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(restTemplate, environment);
+    public UserApiImpl(
+            final RestTemplate restTemplate,
+            final Environment environment,
+            final UserCredentialsSupplier userCredentialsSupplier) {
+
+        super(restTemplate, environment, userCredentialsSupplier);
     }
 
-    public UserApiImpl(final RestTemplate restTemplate, final int port) {
-        super(restTemplate, "http://localhost:" + port, "test", "test");
+    public UserApiImpl(
+            final RestTemplate restTemplate,
+            final int port,
+            final UserCredentialsSupplier userCredentialsSupplier) {
+
+        super(restTemplate, "http://localhost:" + port, userCredentialsSupplier);
     }
 
     @Override

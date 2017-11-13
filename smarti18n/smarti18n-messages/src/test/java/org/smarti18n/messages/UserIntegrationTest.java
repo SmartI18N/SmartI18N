@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
+import org.smarti18n.api.UserCredentials;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -30,7 +31,7 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
+        this.userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
     }
 
     @Test

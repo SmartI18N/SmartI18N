@@ -27,15 +27,24 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     private final String projectId;
     private final String projectSecret;
 
-    public MessagesApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(restTemplate, environment);
+    public MessagesApiImpl(
+            final RestTemplate restTemplate,
+            final Environment environment,
+            final UserCredentialsSupplier userCredentialsSupplier) {
+
+        super(restTemplate, environment, userCredentialsSupplier);
 
         this.projectId = "default";
         this.projectSecret = "default";
     }
 
-    public MessagesApiImpl(final RestTemplate restTemplate, final int port, final String projectSecret) {
-        super(restTemplate, "http://localhost:" + port, "test", "test");
+    public MessagesApiImpl(
+            final RestTemplate restTemplate,
+            final int port,
+            final UserCredentialsSupplier userCredentialsSupplier,
+            final String projectSecret) {
+
+        super(restTemplate, "http://localhost:" + port, userCredentialsSupplier);
         this.projectId = "test";
         this.projectSecret = projectSecret;
     }

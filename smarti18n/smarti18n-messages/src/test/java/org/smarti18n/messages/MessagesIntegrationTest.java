@@ -18,7 +18,7 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.MessagesApiImpl;
 import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectsApiImpl;
+import org.smarti18n.api.UserCredentials;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -39,10 +39,10 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        final ProjectsApiImpl projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
-        final Project project = projectsApi.insert(PROJECT_ID);
+        insertTestUser();
+        final Project project = insertTestProject(PROJECT_ID);
 
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, project.getSecret());
+        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST, project.getSecret());
     }
 
     @Test
@@ -81,12 +81,12 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Test(expected = RestClientException.class)
     public void wrongProjectId() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "").findAll("irgendwas");
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST, "").findAll("irgendwas");
     }
 
     @Test(expected = RestClientException.class)
     public void wrongProjectSecret() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "irgendwas").findForSpringMessageSource();
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST, "irgendwas").findForSpringMessageSource();
     }
 
 //

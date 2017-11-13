@@ -9,6 +9,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import org.junit.runner.RunWith;
+import org.smarti18n.api.Project;
+import org.smarti18n.api.ProjectsApiImpl;
+import org.smarti18n.api.User;
+import org.smarti18n.api.UserCredentials;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -24,5 +28,19 @@ public abstract class AbstractIntegrationTest {
 
     @Autowired
     protected TestRestTemplate restTemplate;
+
+    User insertTestUser() {
+//        final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
+//        return userApi.register(
+//                UserCredentials.TEST.getUsername(),
+//                UserCredentials.TEST.getPassword()
+//        );
+        return null;
+    }
+
+    Project insertTestProject(final String projectId) {
+        final ProjectsApiImpl projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
+        return projectsApi.insert(projectId);
+    }
 
 }

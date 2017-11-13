@@ -8,12 +8,20 @@ import org.springframework.web.client.RestTemplate;
 
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
-    public ProjectsApiImpl(final Environment environment, final RestTemplate restTemplate) {
-        super(restTemplate, environment);
+    public ProjectsApiImpl(
+            final RestTemplate restTemplate,
+            final Environment environment,
+            final UserCredentialsSupplier userCredentialsSupplier) {
+
+        super(restTemplate, environment, userCredentialsSupplier);
     }
 
-    public ProjectsApiImpl(final RestTemplate restTemplate, final int port) {
-        super(restTemplate, "http://localhost:" + port, "test", "test");
+    public ProjectsApiImpl(
+            final RestTemplate restTemplate,
+            final int port,
+            final UserCredentialsSupplier userCredentialsSupplier) {
+
+        super(restTemplate, "http://localhost:" + port, userCredentialsSupplier);
     }
 
     @Override
