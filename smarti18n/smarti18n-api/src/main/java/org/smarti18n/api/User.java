@@ -4,27 +4,28 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = UserImpl.class)
 public interface User {
+
     String getId();
 
     void setId(String id);
 
-    String getLogin();
+    String getMail();
 
-    void setLogin(String login);
+    void setMail(String mail);
 
-    String getEmail();
+    String getPassword();
 
-    void setEmail(String email);
+    void setPassword(String password);
 
-    String getName();
+    String getVorname();
 
-    void setName(String name);
+    void setVorname(String vorname);
+
+    String getNachname();
+
+    void setNachname(String nachname);
 
     String getCompany();
 
     void setCompany(String company);
-
-    String getType();
-
-    void setType(String type);
 }

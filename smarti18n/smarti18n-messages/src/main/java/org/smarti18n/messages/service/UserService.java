@@ -4,7 +4,15 @@ import org.smarti18n.api.User;
 
 public interface UserService {
 
-    void logGitHubLogin(
+    User findOne(
+            String mail
+    );
+
+    User register(
+            String mail,
+            final String password);
+
+    User update(
             User user
     );
 }

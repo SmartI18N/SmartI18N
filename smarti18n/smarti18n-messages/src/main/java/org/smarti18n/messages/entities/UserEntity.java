@@ -1,13 +1,26 @@
-package org.smarti18n.api;
+package org.smarti18n.messages.entities;
 
-public class UserImpl implements User {
+import org.springframework.data.annotation.Id;
 
+import org.smarti18n.api.User;
+
+/**
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
+ */
+public class UserEntity implements User {
+
+    @Id
     private String id;
     private String mail;
     private String password;
     private String vorname;
     private String nachname;
     private String company;
+
+    public UserEntity(final String mail, final String password) {
+        this.mail = mail;
+        this.password = password;
+    }
 
     @Override
     public String getId() {
@@ -68,5 +81,4 @@ public class UserImpl implements User {
     public void setCompany(final String company) {
         this.company = company;
     }
-
 }

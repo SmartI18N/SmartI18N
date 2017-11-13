@@ -19,7 +19,17 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
     }
 
     @Override
-    public void logGitHubLogin(final User user) {
-        post(uri(PATH_USERS_LOG_GITHUB_LOGIN), user, Void.class);
+    public User findOne(final String mail) {
+        return get(uri(PATH_USERS_FIND_ONE).queryParam("mail", mail), User.class);
+    }
+
+    @Override
+    public User register(final String mail, final String password) {
+        return get(uri(PATH_USERS_REGISTER).queryParam("mail", mail).queryParam("password", password), User.class);
+    }
+
+    @Override
+    public User update(final User user) {
+        return post(uri(PATH_USERS_UPDATE), user, User.class);
     }
 }

@@ -16,7 +16,6 @@ import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
-import org.smarti18n.editor.security.LoginListener;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -60,10 +59,4 @@ public class EditorApplication {
                 "4XWNbZdb78O8fL518ltlnQn85kNNdBYRybQVm6XptEE="
         );
     }
-
-    @Bean
-    LoginListener loginListener(final UserApi userApi) {
-        return new LoginListener(userApi);
-    }
-
 }
