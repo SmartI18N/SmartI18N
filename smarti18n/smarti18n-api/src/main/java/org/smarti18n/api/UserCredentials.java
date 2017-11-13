@@ -13,6 +13,12 @@ public class UserCredentials {
     private final String username;
     private final String password;
 
+    public UserCredentials() {
+//        TODo
+        this.username = "x";
+        this.password = "x";
+    }
+
     public UserCredentials(final String username, final String password) {
         this.username = username;
         this.password = password;
