@@ -26,9 +26,9 @@ public interface Project {
 
     void setLocales(Set<Locale> locales);
 
-    Set<String> getSecrets();
+    String getSecret();
 
-    void setSecrets(Set<String> secrets);
+    void setSecret(String secret);
 
     default String getDisplayName() {
         if (StringUtils.isEmpty(getName())) {
@@ -37,5 +37,4 @@ public interface Project {
             return getName();
         }
     }
-
 }

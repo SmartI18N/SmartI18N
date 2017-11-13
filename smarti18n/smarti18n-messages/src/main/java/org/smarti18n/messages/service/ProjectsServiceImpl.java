@@ -46,10 +46,9 @@ public class ProjectsServiceImpl implements ProjectsService {
         if (this.projectRepository.findById(projectId).isPresent()) {
             throw new IllegalStateException("Project with id [" + projectId + "] already exist.");
         }
+        final String secret = this.projectKeyGenerator.generateKey();
 
-        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(projectId));
-
-        generateSecret(projectId);
+        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(projectId, secret));
 
         return new ProjectImpl(
                 projectEntity
@@ -76,26 +75,6 @@ public class ProjectsServiceImpl implements ProjectsService {
         return new ProjectImpl(
                 this.projectRepository.save(projectEntity)
         );
-    }
-
-    @Override
-    @Transactional
-    public String generateSecret(final String projectId) {
-
-        final Optional<ProjectEntity> optional = this.projectRepository.findById(projectId);
-        if (!optional.isPresent()) {
-            throw new IllegalStateException("Project with id [" + projectId + "] doesn't exist.");
-        }
-
-        final ProjectEntity projectEntity = optional.get();
-
-        final String secret = this.projectKeyGenerator.generateKey();
-
-        projectEntity.getSecrets().add(secret);
-
-        this.projectRepository.save(projectEntity);
-
-        return secret;
     }
 
     @Override

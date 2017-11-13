@@ -52,14 +52,6 @@ public class ProjectsEndpoint implements ProjectsApi {
     }
 
     @Override
-    @GetMapping(PATH_PROJECTS_GENERATE_SECRET)
-    public String generateSecret(
-            @RequestParam("projectId") final String projectId) {
-
-        return projectsService.generateSecret(projectId);
-    }
-
-    @Override
     @GetMapping(PATH_PROJECTS_REMOVE)
     public void remove(
             @RequestParam("projectId") final String projectId) {

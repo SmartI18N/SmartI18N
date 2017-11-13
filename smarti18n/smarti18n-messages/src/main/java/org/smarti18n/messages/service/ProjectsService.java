@@ -16,7 +16,5 @@ public interface ProjectsService {
 
     Project update(Project project);
 
-    String generateSecret(String projectId);
-
     void remove(String projectId);
 }

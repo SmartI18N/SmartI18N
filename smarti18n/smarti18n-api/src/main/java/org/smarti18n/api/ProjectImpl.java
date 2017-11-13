@@ -9,8 +9,8 @@ public class ProjectImpl implements Project {
     private String id;
     private String name;
     private String description;
+    private String secret;
     private Set<Locale> locales;
-    private Set<String> secrets;
 
     public ProjectImpl() {
     }
@@ -19,8 +19,8 @@ public class ProjectImpl implements Project {
         this.id = project.getId();
         this.name = project.getName();
         this.description = project.getDescription();
+        this.secret = project.getSecret();
         this.locales = project.getLocales() == null ? new HashSet<>() : new HashSet<>(project.getLocales());
-        this.secrets = project.getSecrets() == null ? new HashSet<>() : new HashSet<>(project.getSecrets());
     }
 
 
@@ -65,13 +65,13 @@ public class ProjectImpl implements Project {
     }
 
     @Override
-    public Set<String> getSecrets() {
-        return secrets;
+    public String getSecret() {
+        return secret;
     }
 
     @Override
-    public void setSecrets(final Set<String> secrets) {
-        this.secrets = secrets;
+    public void setSecret(final String secret) {
+        this.secret = secret;
     }
 
     @Override

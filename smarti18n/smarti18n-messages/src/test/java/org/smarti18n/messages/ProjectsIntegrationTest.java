@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.util.StringUtils;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -43,7 +44,6 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         assertCreateNewProject();
         assertUpdateProject();
         assertMessageFind();
-        assertGenerateSecret();
     }
 
     @Test(expected = ApiException.class)
@@ -66,24 +66,9 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         this.projectsApi.update(project);
     }
 
-    @Test(expected = ApiException.class)
-    public void unknownGenerateSecret() throws Exception {
-        assertNoProjectsFound();
-
-        this.projectsApi.generateSecret(PROJECT_ID);
-    }
-
 //
 //    ASSERTS
 //
-
-    private void assertGenerateSecret() {
-        final String secret = this.projectsApi.generateSecret(PROJECT_ID);
-
-        final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
-        assertThat(projects, hasSize(2));
-        assertThat(projects, hasItem(projectWith(PROJECT_ID, secret)));
-    }
 
     private void assertUpdateProject() {
         final Project project = this.projectsApi.findOne(PROJECT_ID);
@@ -125,7 +110,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         return new TypeSafeMatcher<Project>() {
             @Override
             protected boolean matchesSafely(final Project item) {
-                return projectId.equals(item.getId());
+                return projectId.equals(item.getId()) && !StringUtils.isEmpty(item.getSecret());
             }
 
             @Override
@@ -154,7 +139,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         return new TypeSafeMatcher<Project>() {
             @Override
             protected boolean matchesSafely(final Project item) {
-                return projectId.equals(item.getId()) && item.getSecrets().contains(secret);
+                return projectId.equals(item.getId()) && item.getSecret().equals(secret);
             }
 
             @Override

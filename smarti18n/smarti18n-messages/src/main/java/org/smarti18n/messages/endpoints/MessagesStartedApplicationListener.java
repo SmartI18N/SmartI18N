@@ -1,7 +1,5 @@
 package org.smarti18n.messages.endpoints;
 
-import java.util.Collections;
-
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -24,8 +22,7 @@ public class MessagesStartedApplicationListener implements ApplicationListener<A
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
         if (!this.projectRepository.findById("default").isPresent()) {
-            final ProjectEntity projectEntity = new ProjectEntity("default");
-            projectEntity.setSecrets(Collections.singleton("default"));
+            final ProjectEntity projectEntity = new ProjectEntity("default", "default");
             projectEntity.setName("Default Project");
             projectEntity.setDescription("Default Project");
 

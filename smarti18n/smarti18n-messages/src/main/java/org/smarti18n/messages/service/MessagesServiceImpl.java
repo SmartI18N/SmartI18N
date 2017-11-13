@@ -178,7 +178,7 @@ public class MessagesServiceImpl implements MessagesService {
         if (optional.isPresent()) {
             final ProjectEntity projectEntity = optional.get();
 
-            if (projectEntity.containsSecret(projectSecret)) {
+            if (projectEntity.getSecret().equals(projectSecret)) {
                 return projectEntity;
             }
         }

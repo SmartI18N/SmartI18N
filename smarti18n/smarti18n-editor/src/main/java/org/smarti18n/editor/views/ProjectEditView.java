@@ -21,7 +21,6 @@ import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.CancelButton;
-import org.smarti18n.editor.components.LabelSet;
 import org.smarti18n.editor.components.SaveButton;
 
 /**
@@ -73,15 +72,16 @@ public class ProjectEditView extends AbstractView implements View {
         checkBoxGroupLocales.setSizeFull();
         layout.addComponent(checkBoxGroupLocales);
 
-        final LabelSet labelSetSecrets = new LabelSet(translate("smarti18n.editor.project-edit.secrets"));
-        labelSetSecrets.setSizeFull();
-        layout.addComponent(labelSetSecrets);
+        final TextField textFieldSecret = new TextField(translate("smarti18n.editor.project-edit.secrets"));
+        textFieldSecret.setReadOnly(true);
+        textFieldSecret.setSizeFull();
+        layout.addComponent(textFieldSecret);
 
         this.binder.forMemberField(textFieldId).bind("id");
         this.binder.forMemberField(textFieldName).bind("name");
         this.binder.forMemberField(textAreaDescription).bind("description");
         this.binder.forMemberField(checkBoxGroupLocales).bind("locales");
-        this.binder.forMemberField(labelSetSecrets).bind("secrets");
+        this.binder.forMemberField(textFieldSecret).bind("secret");
         this.binder.bindInstanceFields(this);
 
         addComponent(layout);

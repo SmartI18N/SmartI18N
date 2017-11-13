@@ -17,6 +17,7 @@ import org.smarti18n.api.ApiException;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.MessagesApiImpl;
+import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApiImpl;
 
 import static org.hamcrest.Matchers.empty;
@@ -42,10 +43,10 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     @Before
     public void setUp() throws Exception {
         final ProjectsApiImpl projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
-        projectsApi.insert(PROJECT_ID);
+        final Project project = projectsApi.insert(PROJECT_ID);
 
-        this.projectId = PROJECT_ID;
-        this.projectSecret = projectsApi.generateSecret(PROJECT_ID);
+        this.projectId = project.getId();
+        this.projectSecret = project.getSecret();
 
         this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port);
     }

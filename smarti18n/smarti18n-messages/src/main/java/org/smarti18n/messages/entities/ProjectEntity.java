@@ -17,17 +17,17 @@ public class ProjectEntity implements Project {
 
     private String name;
     private String description;
+    private String secret;
 
     private Set<Locale> locales;
-    private Set<String> secrets;
 
     ProjectEntity() {
         this.locales = new HashSet<>();
-        this.secrets = new HashSet<>();
     }
 
-    public ProjectEntity(final String id) {
+    public ProjectEntity(final String id, final String secret) {
         this.id = id;
+        this.secret = secret;
     }
 
     @Override
@@ -71,16 +71,12 @@ public class ProjectEntity implements Project {
     }
 
     @Override
-    public Set<String> getSecrets() {
-        return secrets;
+    public String getSecret() {
+        return secret;
     }
 
     @Override
-    public void setSecrets(final Set<String> secrets) {
-        this.secrets = secrets;
-    }
-
-    public boolean containsSecret(final String secret) {
-        return secrets.contains(secret);
+    public void setSecret(final String secret) {
+        this.secret = secret;
     }
 }
