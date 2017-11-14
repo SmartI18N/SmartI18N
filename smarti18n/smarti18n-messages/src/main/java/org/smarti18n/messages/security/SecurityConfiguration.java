@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.smarti18n.api.AngularMessagesApi;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.SpringMessagesApi;
@@ -58,7 +59,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(
                         UserApi.PATH_USERS_FIND_ONE,
-                        UserApi.PATH_USERS_REGISTER
+                        UserApi.PATH_USERS_REGISTER,
+                        AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR
                 ).permitAll()
 
                 .anyRequest().denyAll()

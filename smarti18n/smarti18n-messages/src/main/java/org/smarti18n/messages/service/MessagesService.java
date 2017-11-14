@@ -20,10 +20,6 @@ public interface MessagesService {
             String key
     );
 
-    Map<String, Map<Locale, String>> findForSpringMessageSource(
-            String projectId
-    );
-
     MessageImpl insert(
             String projectId,
             String key
@@ -45,5 +41,14 @@ public interface MessagesService {
     void remove(
             String projectId,
             String key
+    );
+
+    Map<String, Map<Locale, String>> findForSpringMessageSource(
+            String projectId
+    );
+
+    Map<String, String> findForAngularMessageSource(
+            String projectId,
+            Locale locale
     );
 }

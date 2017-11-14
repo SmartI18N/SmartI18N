@@ -61,22 +61,6 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
-
-        final ProjectEntity project = getProject(projectId);
-
-        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
-        final Map<String, Map<Locale, String>> map = new HashMap<>();
-
-        for (final MessageEntity message : messages) {
-            map.put(message.getKey(), new HashMap<>(message.getTranslations()));
-        }
-
-        return map;
-    }
-
-    @Override
-    @Transactional
     public MessageImpl insert(
             final String projectId,
             final String key) {
@@ -167,5 +151,41 @@ public class MessagesServiceImpl implements MessagesService {
         }
 
         throw new IllegalStateException("Project with ID [" + projectId + "] doesn't exist.");
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
+        final ProjectEntity project = getProject(projectId);
+
+        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
+        final Map<String, Map<Locale, String>> map = new HashMap<>();
+
+        for (final MessageEntity message : messages) {
+            map.put(message.getKey(), new HashMap<>(message.getTranslations()));
+        }
+
+        return map;
+    }
+
+    @Override
+    @Transactional
+    public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) {
+        final ProjectEntity project = getProject(projectId);
+
+        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
+        final Map<String, String> map = new HashMap<>();
+
+        for (final MessageEntity message : messages) {
+            if (message.getTranslations().containsKey(locale)) {
+                map.put(message.getKey(), message.getTranslation(locale));
+            }
+            final Locale languageLocale = new Locale(locale.getLanguage());
+            if (message.getTranslations().containsKey(languageLocale)) {
+                map.put(message.getKey(), message.getTranslation(languageLocale));
+            }
+        }
+
+        return map;
     }
 }
