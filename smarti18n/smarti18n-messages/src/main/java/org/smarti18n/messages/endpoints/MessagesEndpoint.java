@@ -41,15 +41,6 @@ public class MessagesEndpoint implements MessagesApi {
     }
 
     @Override
-    @GetMapping(PATH_MESSAGES_FIND_SPRING)
-    public Map<String, Map<Locale, String>> findForSpringMessageSource() {
-
-        final ProjectPrincipal principal = (ProjectPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return messagesService.findForSpringMessageSource(principal.getUsername());
-    }
-
-    @Override
     @GetMapping(PATH_MESSAGES_INSERT)
     public MessageImpl insert(
             @RequestParam("projectId") final String projectId,

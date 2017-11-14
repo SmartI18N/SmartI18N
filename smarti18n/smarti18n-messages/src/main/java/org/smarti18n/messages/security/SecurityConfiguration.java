@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.api.SpringMessagesApi;
 import org.smarti18n.api.UserApi;
 
 /**
@@ -37,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 .antMatchers(
-                        MessagesApi.PATH_MESSAGES_FIND_SPRING
+                        SpringMessagesApi.PATH_MESSAGES_FIND_SPRING
                 ).hasAuthority(ProjectPrincipal.ROLE_PROJECT)
 
                 .antMatchers(

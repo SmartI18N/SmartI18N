@@ -31,7 +31,7 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
                 host,
                 projectId,
                 projectSecret,
-                messages
+                this.messages
         );
 
         new Timer(true).schedule(task, 0, 60 * 1000);
@@ -39,13 +39,20 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
     @Override
     protected MessageFormat resolveCode(final String code, final Locale locale) {
-        if (!this.messages.containsKey(code) || !this.messages.get(code).containsKey(locale)) {
-            return new MessageFormat("?" + code + "?");
+        if (this.messages.containsKey(code)) {
+            final Map<Locale, String> translations = this.messages.get(code);
+
+            if (translations.containsKey(locale)) {
+                return new MessageFormat(translations.get(locale), locale);
+            }
+
+            final Locale languageLocale = new Locale(locale.getLanguage());
+            if (translations.containsKey(languageLocale)) {
+                return new MessageFormat(translations.get(locale), languageLocale);
+            }
         }
 
-        final String message = this.messages.get(code).get(new Locale(locale.getLanguage()));
-
-        return new MessageFormat(message, locale);
+        return new MessageFormat("?" + code + "?");
     }
 
     private static class UpdateMessageSourceTask extends TimerTask {

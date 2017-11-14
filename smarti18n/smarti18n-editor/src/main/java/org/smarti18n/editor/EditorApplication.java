@@ -39,17 +39,17 @@ public class EditorApplication {
 
     @Bean
     MessagesApi messagesApi(final Environment environment) {
-        return new MessagesApiImpl(restTemplate(), environment, userCredentialsSupplier());
+        return new MessagesApiImpl(restTemplate(), environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
     }
 
     @Bean
     ProjectsApi projectsApi(final Environment environment) {
-        return new ProjectsApiImpl(restTemplate(), environment, userCredentialsSupplier());
+        return new ProjectsApiImpl(restTemplate(), environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
     }
 
     @Bean
     UserApi userApi(final Environment environment) {
-        return new UserApiImpl(restTemplate(), environment, userCredentialsSupplier());
+        return new UserApiImpl(restTemplate(), environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
     }
 
     @Bean

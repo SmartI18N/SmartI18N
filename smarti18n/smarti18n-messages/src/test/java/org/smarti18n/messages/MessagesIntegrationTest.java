@@ -3,7 +3,6 @@ package org.smarti18n.messages;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
@@ -17,7 +16,6 @@ import org.smarti18n.api.ApiException;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.MessagesApiImpl;
-import org.smarti18n.api.Project;
 import org.smarti18n.api.UserCredentials;
 
 import static org.hamcrest.Matchers.empty;
@@ -40,9 +38,9 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     @Before
     public void setUp() throws Exception {
         insertTestUser();
-        final Project project = insertTestProject(PROJECT_ID);
+        insertTestProject(PROJECT_ID);
 
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST, project.getSecret());
+        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
     }
 
     @Test
@@ -53,7 +51,6 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertMessageFind();
         assertMessageCopy();
         assertMessageDelete();
-        assertSpringMessageSource();
     }
 
     @Test(expected = ApiException.class)
@@ -81,25 +78,12 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Test(expected = RestClientException.class)
     public void wrongProjectId() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST, "").findAll("irgendwas");
-    }
-
-    @Test(expected = RestClientException.class)
-    public void wrongProjectSecret() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST, "irgendwas").findForSpringMessageSource();
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST).findAll("irgendwas");
     }
 
 //
 //    ASSERTS
 //
-
-    private void assertSpringMessageSource() {
-        final Map<String, Map<Locale, String>> messages = this.messagesApi.findForSpringMessageSource();
-
-        assertThat(messages.get(MESSAGE_KEY), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(TRANSLATION));
-    }
 
     private void assertMessageDelete() {
         this.messagesApi.remove(PROJECT_ID, SECOND_MESSAGE_KEY);

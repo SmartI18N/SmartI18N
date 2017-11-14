@@ -3,17 +3,16 @@ package org.smarti18n.api;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
     public ProjectsApiImpl(
             final RestTemplate restTemplate,
-            final Environment environment,
+            final String host,
             final UserCredentialsSupplier userCredentialsSupplier) {
 
-        super(restTemplate, environment, userCredentialsSupplier);
+        super(restTemplate, host, userCredentialsSupplier);
     }
 
     public ProjectsApiImpl(
@@ -21,7 +20,7 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
             final int port,
             final UserCredentialsSupplier userCredentialsSupplier) {
 
-        super(restTemplate, "http://localhost:" + port, userCredentialsSupplier);
+        super(restTemplate, port, userCredentialsSupplier);
     }
 
     @Override

@@ -2,13 +2,11 @@ package org.smarti18n.api;
 
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
 
 public interface MessagesApi {
 
     String PATH_MESSAGES_FIND_ALL = "/api/1/messages/findAll";
     String PATH_MESSAGES_FIND_ONE = "/api/1/messages/findOne";
-    String PATH_MESSAGES_FIND_SPRING = "/api/1/messages/findForSpringMessageSource";
     String PATH_MESSAGES_INSERT = "/api/1/messages/insert";
     String PATH_MESSAGES_UPDATE = "/api/1/messages/update";
     String PATH_MESSAGES_COPY = "/api/1/messages/copy";
@@ -22,8 +20,6 @@ public interface MessagesApi {
             String projectId,
             String key
     );
-
-    Map<String, Map<Locale, String>> findForSpringMessageSource();
 
     MessageImpl insert(
             String projectId,

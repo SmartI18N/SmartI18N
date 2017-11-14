@@ -2,7 +2,6 @@ package org.smarti18n.api;
 
 import java.util.Collections;
 
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,21 +24,21 @@ abstract class AbstractApiImpl {
 
     AbstractApiImpl(
             final RestTemplate restTemplate,
-            final Environment environment,
-            final UserCredentialsSupplier userCredentialsSupplier) {
-
-        this.restTemplate = restTemplate;
-        this.host = environment.getProperty("smarti18n.messages.host", DEFAULT_HOST);
-        this.userCredentialsSupplier = userCredentialsSupplier;
-    }
-
-    AbstractApiImpl(
-            final RestTemplate restTemplate,
             final String host,
             final UserCredentialsSupplier userCredentialsSupplier) {
 
         this.restTemplate = restTemplate;
         this.host = host;
+        this.userCredentialsSupplier = userCredentialsSupplier;
+    }
+
+    AbstractApiImpl(
+            final RestTemplate restTemplate,
+            final int port,
+            final UserCredentialsSupplier userCredentialsSupplier) {
+
+        this.restTemplate = restTemplate;
+        this.host = "http://localhost:" + port;
         this.userCredentialsSupplier = userCredentialsSupplier;
     }
 

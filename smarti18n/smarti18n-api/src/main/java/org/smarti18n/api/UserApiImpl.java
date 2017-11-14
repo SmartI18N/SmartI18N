@@ -1,6 +1,5 @@
 package org.smarti18n.api;
 
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -10,10 +9,10 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
 
     public UserApiImpl(
             final RestTemplate restTemplate,
-            final Environment environment,
+            final String host,
             final UserCredentialsSupplier userCredentialsSupplier) {
 
-        super(restTemplate, environment, userCredentialsSupplier);
+        super(restTemplate, host, userCredentialsSupplier);
     }
 
     public UserApiImpl(
@@ -21,7 +20,7 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
             final int port,
             final UserCredentialsSupplier userCredentialsSupplier) {
 
-        super(restTemplate, "http://localhost:" + port, userCredentialsSupplier);
+        super(restTemplate, port, userCredentialsSupplier);
     }
 
     @Override

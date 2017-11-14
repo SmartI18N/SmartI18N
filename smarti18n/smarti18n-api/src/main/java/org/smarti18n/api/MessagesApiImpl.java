@@ -1,19 +1,9 @@
 package org.smarti18n.api;
 
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Locale;
-import java.util.Map;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,29 +14,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 
-    private final String projectId;
-    private final String projectSecret;
-
     public MessagesApiImpl(
             final RestTemplate restTemplate,
-            final Environment environment,
+            final String host,
             final UserCredentialsSupplier userCredentialsSupplier) {
 
-        super(restTemplate, environment, userCredentialsSupplier);
-
-        this.projectId = "default";
-        this.projectSecret = "default";
+        super(restTemplate, host, userCredentialsSupplier);
     }
 
     public MessagesApiImpl(
             final RestTemplate restTemplate,
             final int port,
-            final UserCredentialsSupplier userCredentialsSupplier,
-            final String projectSecret) {
+            final UserCredentialsSupplier userCredentialsSupplier) {
 
-        super(restTemplate, "http://localhost:" + port, userCredentialsSupplier);
-        this.projectId = "test";
-        this.projectSecret = projectSecret;
+        super(restTemplate, port, userCredentialsSupplier);
     }
 
     @Override
@@ -64,27 +45,6 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
                 .queryParam("key", key);
 
         return get(uri, MessageImpl.class);
-    }
-
-    @Override
-    public Map<String, Map<Locale, String>> findForSpringMessageSource() {
-        final UriComponentsBuilder builder = uri(MessagesApi.PATH_MESSAGES_FIND_SPRING);
-
-        final String plainCredentials = this.projectId + ":" + this.projectSecret;
-        final String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Basic " + base64Credentials);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        final ResponseEntity<Map<String, Map<Locale, String>>> exchange = this.restTemplate.exchange(
-                builder.build().encode().toUri(),
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                new ParameterizedTypeReference<Map<String, Map<Locale, String>>>() {
-                }
-        );
-        return handleResponse(exchange);
     }
 
     @Override
