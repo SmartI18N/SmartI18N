@@ -84,7 +84,7 @@ abstract class AbstractApiImpl {
     }
 
     private HttpHeaders headers() {
-        final String base64Credentials = this.userCredentialsSupplier.get().getBase64Credentials();
+        final String base64Credentials = this.userCredentialsSupplier.getBase64Credentials();
 
         final HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Basic " + base64Credentials);

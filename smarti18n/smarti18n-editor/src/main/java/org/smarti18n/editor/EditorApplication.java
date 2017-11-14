@@ -63,8 +63,7 @@ public class EditorApplication {
         return () -> {
             final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || authentication.getPrincipal() == null) {
-                //TODO
-                return UserCredentials.TEST;
+                return null;
             }
             final SimpleUserDetails principal = (SimpleUserDetails) authentication.getPrincipal();
 

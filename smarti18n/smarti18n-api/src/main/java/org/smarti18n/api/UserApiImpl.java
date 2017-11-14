@@ -1,7 +1,10 @@
 package org.smarti18n.api;
 
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public class UserApiImpl extends AbstractApiImpl implements UserApi {
 
@@ -23,12 +26,32 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
 
     @Override
     public User findOne(final String mail) {
-        return get(uri(PATH_USERS_FIND_ONE).queryParam("mail", mail), User.class);
+        final UriComponentsBuilder uri = uri(PATH_USERS_FIND_ONE)
+                .queryParam("mail", mail);
+
+        final ResponseEntity<User> exchange = this.restTemplate.exchange(
+                uri.build().encode().toUri(),
+                HttpMethod.GET,
+                null,
+                User.class
+        );
+
+        return handleResponse(exchange);
     }
 
     @Override
     public User register(final String mail, final String password) {
-        return get(uri(PATH_USERS_REGISTER).queryParam("mail", mail).queryParam("password", password), User.class);
+        final UriComponentsBuilder uri = uri(PATH_USERS_REGISTER)
+                .queryParam("mail", mail).queryParam("password", password);
+
+        final ResponseEntity<User> exchange = this.restTemplate.exchange(
+                uri.build().encode().toUri(),
+                HttpMethod.GET,
+                null,
+                User.class
+        );
+
+        return handleResponse(exchange);
     }
 
     @Override

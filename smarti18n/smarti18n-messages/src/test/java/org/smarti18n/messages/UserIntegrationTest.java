@@ -21,8 +21,8 @@ import static org.junit.Assert.assertThat;
  */
 public class UserIntegrationTest extends AbstractIntegrationTest {
 
-    private static final String MAIL = "test@smarti18n.com";
-    private static final String PASSWORD = "testPASSWORD";
+    private static final String MAIL = UserCredentials.TEST.getUsername();
+    private static final String PASSWORD = UserCredentials.TEST.getPassword();
     private static final String VORNAME = "testVORNAME";
     private static final String NACHNAME = "testNACHNAME";
     private static final String COMPANY = "testCOMPANY";

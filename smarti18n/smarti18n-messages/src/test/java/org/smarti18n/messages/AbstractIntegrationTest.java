@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.User;
+import org.smarti18n.api.UserApi;
+import org.smarti18n.api.UserApiImpl;
 import org.smarti18n.api.UserCredentials;
 
 /**
@@ -30,12 +32,11 @@ public abstract class AbstractIntegrationTest {
     protected TestRestTemplate restTemplate;
 
     User insertTestUser() {
-//        final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
-//        return userApi.register(
-//                UserCredentials.TEST.getUsername(),
-//                UserCredentials.TEST.getPassword()
-//        );
-        return null;
+        final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
+        return userApi.register(
+                UserCredentials.TEST.getUsername(),
+                UserCredentials.TEST.getPassword()
+        );
     }
 
     Project insertTestProject(final String projectId) {
