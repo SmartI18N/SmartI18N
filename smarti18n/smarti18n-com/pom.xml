@@ -20,30 +20,71 @@
     </properties>
 
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-    </dependencies>
-
-
     <build>
         <finalName>${project.artifactId}</finalName>
+
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>exec-npm-install</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <imageName>${com.spotify.docker-maven-plugin.registry}/${project.artifactId}</imageName>
+                    <baseImage>node</baseImage>
+                    <workdir>/usr/src/</workdir>
+                    <runs>
+                        <run>["npm", "install"]</run>
+                    </runs>
+                    <entryPoint>["npm", "start"]</entryPoint>
+
+                    <serverId>${com.spotify.docker-maven-plugin.serverId}</serverId>
+                    <registryUrl>https://${com.spotify.docker-maven-plugin.registry}</registryUrl>
+                    <forceTags>true</forceTags>
+
+                    <resources>
+                        <resource>
+                            <targetPath>/usr/src/</targetPath>
+                            <directory>${project.basedir}</directory>
+                            <include>app/index.html</include>
+                            <include>app/css/**</include>
+                            <include>app/js/**</include>
+                            <include>e2e-tests/**</include>
+                            <include>.bowerrc</include>
+                            <include>.jshintrc</include>
+                            <include>.travis.yml</include>
+                            <include>bower.json</include>
+                            <include>karma.conf.js</include>
+                            <include>package.json</include>
+                        </resource>
+                    </resources>
+
+                    <imageTags>
+                        <imageTag>${timestamp}</imageTag>
+                        <imageTag>latest</imageTag>
+                    </imageTags>
+                </configuration>
             </plugin>
         </plugins>
+
     </build>
 
 </project>

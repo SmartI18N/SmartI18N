@@ -19,3 +19,6 @@
 
 smarti18n/smarti18n-editor/src/main/resources/VAADIN/themes/smarti18n/styles.css
 smarti18n/smarti18n-editor/src/main/resources/application-default.properties
+
+smarti18n/smarti18n-com/node_modules
+smarti18n/smarti18n-com/app/bower_components
