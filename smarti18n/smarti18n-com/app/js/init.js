@@ -1,7 +1,18 @@
-(function($){
-  $(function(){
+var app = angular.module('smarti18n-com', ['pascalprecht.translate']);
 
-    $('.button-collapse').sideNav();
+app.config(['$translateProvider', function ($translateProvider) {
+    $translateProvider
+        .useUrlLoader('https://messages.smarti18n.com/api/1/messages/findForAngularMessageSource?projectId=smarti18n-com&locale=de')
+        .preferredLanguage('de')
+        .useSanitizeValueStrategy('sanitizeParameters');
+}]);
 
-  }); // end of document ready
+app.controller("");
+
+(function ($) {
+    $(function () {
+
+        $('.button-collapse').sideNav();
+
+    }); // end of document ready
 })(jQuery); // end of jQuery name space
