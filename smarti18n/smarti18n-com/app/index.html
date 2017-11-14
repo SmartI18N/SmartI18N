@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="smarti18n-com">
+<html lang="de" ng-app="smarti18n-com">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -14,11 +14,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+    <style>
+        #image1 {
+            background-image: url('images/image1_online.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100%;
+            height: 40vw;
+        }
+        #image2 {
+            background-image: url('images/image2_online.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100%;
+            height: 40vw;
+        }
+    </style>
+
 </head>
 
 <body>
 
-<nav class="teal lighten-1" role="navigation">
+<nav class="teal" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="#" class="brand-logo">
             {{'smarti18n.com.app-name' | translate}}
@@ -27,71 +45,58 @@
         <ul class="right hide-on-med-and-down">
             <li><a href="#connectors">
                 {{'smarti18n.com.menu.connectors' | translate}}
-                Connectors
             </a></li>
             <li><a href="#community">
                 {{'smarti18n.com.menu.community' | translate}}
-                Community
             </a></li>
             <li><a href="#pricing">
                 {{'smarti18n.com.menu.pricing' | translate}}
-                Pricing
             </a></li>
             <li><a href="https://editor.smarti18n.com">
                 {{'smarti18n.com.menu.login' | translate}}
-                Login
             </a></li>
             <li class="orange"><a href="#register">
                 {{'smarti18n.com.menu.register' | translate}}
-                Register
             </a></li>
         </ul>
 
         <ul id="nav-mobile" class="side-nav">
             <li><a href="#connectors">
                 {{'smarti18n.com.menu.connectors' | translate}}
-                Connectors
             </a></li>
             <li><a href="#community">
                 {{'smarti18n.com.menu.community' | translate}}
-                Community
             </a></li>
             <li><a href="#pricing">
                 {{'smarti18n.com.menu.pricing' | translate}}
-                Pricing
             </a></li>
             <li><a href="https://editor.smarti18n.com">
                 {{'smarti18n.com.menu.login' | translate}}
-                Login
             </a></li>
             <li class="orange"><a href="#register">
                 {{'smarti18n.com.menu.register' | translate}}
-                Register
             </a></li>
         </ul>
         <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
 </nav>
 
-<div class="section no-pad-bot" id="index-banner">
+<div id="index-banner" class="section no-pad-bot">
     <div class="container">
 
         <br><br>
         <h1 class="header center orange-text">
-            Online Live Editor für I18N
             {{'smarti18n.com.landing.title' | translate}}
         </h1>
 
         <div class="row center">
             <h5 class="header col s12 light">
                 {{'smarti18n.com.landing.message' | translate}}
-                Mit SmartI18n schnell und einfach das eigene Projekt internationalisieren
             </h5>
         </div>
         <div class="row center">
             <a href="https://editor.smarti18n.com" id="editor-button" target="_blank"
                class="btn-large waves-effect waves-light orange">
-                SmartI18N Editor
                 {{'smarti18n.com.app-editor-name' | translate}}
             </a>
         </div>
@@ -101,6 +106,9 @@
 </div>
 
 
+<div id="image1" class="section image"></div>
+
+
 <div class="container" id="connectors">
     <div class="section">
         <br><br>
@@ -108,15 +116,18 @@
 
             <br><br>
             <h4>
-                {{'smarti18n.com.app-editor-name' | translate}}
+                {{'smarti18n.com.connector.title' | translate}}
             </h4>
 
             <div class="col s12 m4">
                 <div class="icon-block">
                     <h2 class="center teal-text"><i class="material-icons">flash_on</i></h2>
                     <h5 class="center">
-                        {{'smarti18n.com.app-editor-name' | translate}}
+                        {{'smarti18n.com.connector.spring' | translate}}
                     </h5>
+                    <p>
+                        {{'smarti18n.com.connector.spring.text' | translate}}
+                    </p>
                 </div>
             </div>
 
@@ -124,8 +135,11 @@
                 <div class="icon-block">
                     <h2 class="center teal-text"><i class="material-icons">group</i></h2>
                     <h5 class="center">
-                        {{'smarti18n.com.app-editor-name' | translate}}
+                        {{'smarti18n.com.connector.angular' | translate}}
                     </h5>
+                    <p>
+                        {{'smarti18n.com.connector.angular.text' | translate}}
+                    </p>
                 </div>
             </div>
 
@@ -133,8 +147,11 @@
                 <div class="icon-block">
                     <h2 class="center teal-text"><i class="material-icons">group</i></h2>
                     <h5 class="center">
-                        {{'smarti18n.com.app-editor-name' | translate}}
+                        {{'smarti18n.com.connector.angular2' | translate}}
                     </h5>
+                    <p>
+                        {{'smarti18n.com.connector.angular2.text' | translate}}
+                    </p>
                 </div>
             </div>
             <br><br>
@@ -151,15 +168,10 @@
 
             <br><br>
             <h4>
-                {{'smarti18n.com.app-editor-name' | translate}}
+                {{'smarti18n.com.community.title' | translate}}
             </h4>
             <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                {{'smarti18n.com.community.text' | translate}}
             </p>
             <br><br>
 
@@ -168,21 +180,19 @@
 </div>
 
 
+<div id="image2" class="section image"></div>
+
+
 <div class="container" id="pricing">
     <div class="section">
         <div class="row center">
 
             <br><br>
             <h4>
-                {{'smarti18n.com.app-editor-name' | translate}}
+                {{'smarti18n.com.pricing.title' | translate}}
             </h4>
             <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                {{'smarti18n.com.pricing.text' | translate}}
             </p>
             <br><br>
 
@@ -198,7 +208,7 @@
 
             <br><br>
             <h4>
-                {{'smarti18n.com.app-editor-name' | translate}}
+                {{'smarti18n.com.register.title' | translate}}
             </h4>
             <div class="col s12 m6 offset-m3">
                 <div class="card">
@@ -206,8 +216,8 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input id="mail" type="text" class="validate">
-                                <label for="mail">E-
-                                    {{'smarti18n.com.app-editor-name' | translate}}
+                                <label for="mail">
+                                    {{'smarti18n.com.register.mail' | translate}}
                                 </label>
                             </div>
                         </div>
@@ -215,13 +225,13 @@
                             <div class="input-field col s12">
                                 <input id="password" type="password" class="validate">
                                 <label for="password">
-                                    {{'smarti18n.com.app-editor-name' | translate}}
+                                    {{'smarti18n.com.register.password' | translate}}
                                 </label>
                             </div>
                         </div>
                         <div class="card-action float">
                             <a href="#">
-                                {{'smarti18n.com.app-editor-name' | translate}}
+                                {{'smarti18n.com.register.register' | translate}}
                             </a>
                         </div>
 
@@ -243,16 +253,16 @@
                     {{'smarti18n.com.app-name' | translate}}
                 </h5>
                 <p class="grey-text text-lighten-4">
-                    {{'smarti18n.com.app-editor-name' | translate}}
+                    {{'smarti18n.com.app-text' | translate}}
                 </p>
             </div>
             <div class="col l3 s12">
-                <h5 class="white-text">Connect</h5>
+                <h5 class="white-text">Links</h5>
                 <ul>
-                    <li><a class="white-text" href="#!">Link 1</a></li>
-                    <li><a class="white-text" href="#!">Link 2</a></li>
-                    <li><a class="white-text" href="#!">Link 3</a></li>
-                    <li><a class="white-text" href="#!">Link 4</a></li>
+                    <li><a class="white-text" href="#!">Impressum</a></li>
+                    <li><a class="white-text" href="#!">Contact</a></li>
+                    <li><a class="white-text" href="#!">Privacy</a></li>
+                    <li><a class="white-text" href="#!">PlanYourTrip</a></li>
                 </ul>
             </div>
         </div>
