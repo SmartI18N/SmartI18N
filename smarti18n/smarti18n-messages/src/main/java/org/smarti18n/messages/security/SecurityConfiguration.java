@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import org.smarti18n.api.AngularMessagesApi;
 import org.smarti18n.api.MessagesApi;
@@ -36,6 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+
                 .authorizeRequests()
 
                 .antMatchers(
@@ -92,4 +96,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder encoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(final CorsRegistry registry) {
+                registry.addMapping(AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR).allowedOrigins("*");
+            }
+        };
+    }
+
 }

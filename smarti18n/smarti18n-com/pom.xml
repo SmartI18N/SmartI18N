@@ -51,10 +51,12 @@
                     <imageName>${com.spotify.docker-maven-plugin.registry}/${project.artifactId}</imageName>
                     <baseImage>node</baseImage>
                     <workdir>/usr/src/</workdir>
-                    <runs>
-                        <run>["npm", "install"]</run>
-                    </runs>
-                    <entryPoint>["npm", "start"]</entryPoint>
+                    <!--<runs>-->
+                        <!--<run>["npm", "install", "&#45;&#45;global", "bower"]</run>-->
+                        <!--<run>["npm", "install"]</run>-->
+                        <!--<run>["bower", "install", "&#45;&#45;allow-root"]</run>-->
+                    <!--</runs>-->
+                    <entryPoint>["sh", "startup.sh"]</entryPoint>
 
                     <serverId>${com.spotify.docker-maven-plugin.serverId}</serverId>
                     <registryUrl>https://${com.spotify.docker-maven-plugin.registry}</registryUrl>
@@ -66,7 +68,9 @@
                             <directory>${project.basedir}</directory>
                             <include>app/index.html</include>
                             <include>app/css/**</include>
+                            <include>app/images/**</include>
                             <include>app/js/**</include>
+                            <include>app/DE.json</include>
                             <include>e2e-tests/**</include>
                             <include>.bowerrc</include>
                             <include>.jshintrc</include>
@@ -74,6 +78,7 @@
                             <include>bower.json</include>
                             <include>karma.conf.js</include>
                             <include>package.json</include>
+                            <include>startup.sh</include>
                         </resource>
                     </resources>
 

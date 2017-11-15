@@ -1,0 +1,1 @@
+npm install --global bower &&  npm install && bower --allow-root --config.interactive=false install && npm start
