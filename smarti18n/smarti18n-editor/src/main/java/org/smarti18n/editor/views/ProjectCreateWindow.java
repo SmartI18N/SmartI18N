@@ -1,11 +1,12 @@
 package org.smarti18n.editor.views;
 
-import com.vaadin.server.Page;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
+import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.utils.I18N;
 import org.smarti18n.editor.components.SaveButton;
+import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.editor.vaadin.VaadinUtils;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -23,9 +24,11 @@ class ProjectCreateWindow extends AbstractSmartI18nWindow {
         formLayout.addComponent(textFieldId);
 
         final SaveButton buttonSave = new SaveButton(clickEvent -> {
-            projectsApi.insert(textFieldId.getValue());
+            final Project project = projectsApi.insert(textFieldId.getValue());
             close();
-            Page.getCurrent().reload();
+            getUI().getNavigator().navigateTo(
+                    VaadinUtils.buildNavigation(ProjectEditView.VIEW_NAME, project.getId())
+            );
         });
 
         formLayout.addComponent(buttonSave);

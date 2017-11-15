@@ -1,4 +1,4 @@
-package org.smarti18n.editor.uis;
+package org.smarti18n.editor.vaadin;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
