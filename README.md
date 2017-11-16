@@ -4,6 +4,10 @@ SmartI18N will die Internationalisierung von Webprojekten vereinfachen und besch
 
 Mehr Informationen zu SmartI18N findest du unter [www.smarti18n.com](https://www.smarti18n.com/)
 
+## First Steps
+
+
+
 ## SDK's
 
 Derzeit gibt es für Spring Message Sources und AngularJS Anbindungen. Schnittstellen dieser Art sollen in Zukunft ergänzt werden.
