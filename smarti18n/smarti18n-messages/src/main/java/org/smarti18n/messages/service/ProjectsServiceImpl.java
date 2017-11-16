@@ -35,20 +35,21 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Override
     @Transactional
     public Project findOne(final String projectId) {
-        return this.projectRepository.findById(projectId).orElse(null);
+        return this.projectRepository.findById(clean(projectId)).orElse(null);
     }
 
     @Override
     @Transactional
     public Project insert(final String projectId) {
-        final String cleanProjectId = projectId.trim();
 
-        if (this.projectRepository.findById(cleanProjectId).isPresent()) {
-            throw new IllegalStateException("Project with id [" + cleanProjectId + "] already exist.");
+        final String cleanedProjectId = clean(projectId);
+
+        if (this.projectRepository.findById(cleanedProjectId).isPresent()) {
+            throw new IllegalStateException("Project with id [" + cleanedProjectId + "] already exist.");
         }
         final String secret = this.projectKeyGenerator.generateKey();
 
-        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(cleanProjectId, secret));
+        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(cleanedProjectId, secret));
 
         return new ProjectImpl(
                 projectEntity
@@ -59,9 +60,11 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Transactional
     public Project update(final Project project) {
 
-        final Optional<ProjectEntity> optional = this.projectRepository.findById(project.getId());
+        final String cleanedProjectId = clean(project.getId());
+
+        final Optional<ProjectEntity> optional = this.projectRepository.findById(cleanedProjectId);
         if (!optional.isPresent()) {
-            throw new IllegalStateException("Project with id [" + project.getId() + "] doesn't exist.");
+            throw new IllegalStateException("Project with id [" + cleanedProjectId + "] doesn't exist.");
         }
 
         final ProjectEntity projectEntity = optional.get();
@@ -76,9 +79,13 @@ public class ProjectsServiceImpl implements ProjectsService {
                 this.projectRepository.save(projectEntity)
         );
     }
-
     @Override
     public void remove(final String projectId) {
-        this.projectRepository.deleteById(projectId);
+        this.projectRepository.deleteById(clean(projectId));
     }
+
+    private static String clean(final String projectId) {
+        return projectId.trim().toLowerCase();
+    }
+
 }

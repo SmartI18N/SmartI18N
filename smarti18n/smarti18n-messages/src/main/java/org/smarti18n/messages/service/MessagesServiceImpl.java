@@ -1,6 +1,7 @@
 package org.smarti18n.messages.service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +39,9 @@ public class MessagesServiceImpl implements MessagesService {
         return this.messageRepository.findByIdProject(project).stream().map(messageEntity -> new MessageImpl(
                 messageEntity.getKey(),
                 messageEntity.getTranslations()
-        )).collect(Collectors.toList());
+        ))
+                .sorted(Comparator.comparing(MessageImpl::getKey))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -47,7 +50,7 @@ public class MessagesServiceImpl implements MessagesService {
         final ProjectEntity project = getProject(projectId);
 
         final Optional<MessageEntity> messageEntity = this.messageRepository.findById(
-                new MessageEntity.MessageId(key, project)
+                new MessageEntity.MessageId(clean(key), project)
         );
 
         if (messageEntity.isPresent()) {
@@ -65,10 +68,9 @@ public class MessagesServiceImpl implements MessagesService {
             final String projectId,
             final String key) {
 
-        final String cleanProjectId = projectId.trim();
-        final String cleanKey = key.trim();
+        final String cleanKey = clean(key.trim());
 
-        final ProjectEntity project = getProject(cleanProjectId);
+        final ProjectEntity project = getProject(projectId);
 
         if (this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project)).isPresent()) {
             throw new IllegalStateException("Message with key [" + cleanKey + "] already exist.");
@@ -87,10 +89,9 @@ public class MessagesServiceImpl implements MessagesService {
             final String translation,
             final Locale language) {
 
-        final String cleanProjectId = projectId.trim();
-        final String cleanKey = key.trim();
+        final String cleanKey = clean(key);
 
-        final ProjectEntity project = getProject(cleanProjectId);
+        final ProjectEntity project = getProject(projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project));
         final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(cleanKey, project));
@@ -114,18 +115,20 @@ public class MessagesServiceImpl implements MessagesService {
 
         final ProjectEntity project = getProject(projectId);
 
-        final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(sourceKey, project));
+        final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(clean(sourceKey), project));
 
         if (!optional.isPresent()) {
-            throw new IllegalStateException("Message with key [" + sourceKey + "] doesn't exist.");
+            throw new IllegalStateException("Message with key [" + clean(sourceKey) + "] doesn't exist.");
         }
 
-        if (this.messageRepository.findById(new MessageEntity.MessageId(targetKey, project)).isPresent()) {
-            throw new IllegalStateException("Message with key [" + targetKey + "] already exist.");
+        final String cleanedTargetKey = clean(targetKey);
+
+        if (this.messageRepository.findById(new MessageEntity.MessageId(cleanedTargetKey, project)).isPresent()) {
+            throw new IllegalStateException("Message with key [" + cleanedTargetKey + "] already exist.");
         }
 
         final MessageEntity messageEntity = optional.get();
-        messageEntity.setKey(targetKey);
+        messageEntity.setKey(cleanedTargetKey);
 
         final MessageEntity saved = this.messageRepository.save(messageEntity);
 
@@ -144,19 +147,7 @@ public class MessagesServiceImpl implements MessagesService {
 
         final ProjectEntity project = getProject(projectId);
 
-        this.messageRepository.deleteById(new MessageEntity.MessageId(key, project));
-    }
-
-    private ProjectEntity getProject(final String projectId) {
-        Assert.notNull(projectId, "projectId");
-
-        final Optional<ProjectEntity> optional = this.projectRepository.findById(projectId);
-
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-
-        throw new IllegalStateException("Project with ID [" + projectId + "] doesn't exist.");
+        this.messageRepository.deleteById(new MessageEntity.MessageId(clean(key), project));
     }
 
     @Override
@@ -193,5 +184,21 @@ public class MessagesServiceImpl implements MessagesService {
         }
 
         return map;
+    }
+
+    private ProjectEntity getProject(final String projectId) {
+        Assert.notNull(projectId, "projectId");
+
+        final Optional<ProjectEntity> optional = this.projectRepository.findById(clean(projectId));
+
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+
+        throw new IllegalStateException("Project with ID [" + clean(projectId) + "] doesn't exist.");
+    }
+
+    private static String clean(final String key) {
+        return key.trim().toLowerCase();
     }
 }

@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 
 public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 
-    private static final String PROJECT_ID = "PROJECT_ID";
+    private static final String PROJECT_ID = "PROJECT_ID".toLowerCase();
     private static final String PROJECT_NAME = "PROJECT_NAME";
     private static final String PROJECT_DESCRIPTION = "PROJECT_DESCRIPTION";
     private static final String NEW_PROJECT_NAME = "NEW_PROJECT_NAME";
