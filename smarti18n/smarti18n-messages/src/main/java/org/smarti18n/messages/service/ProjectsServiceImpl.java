@@ -41,13 +41,14 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Override
     @Transactional
     public Project insert(final String projectId) {
+        final String cleanProjectId = projectId.trim();
 
-        if (this.projectRepository.findById(projectId).isPresent()) {
-            throw new IllegalStateException("Project with id [" + projectId + "] already exist.");
+        if (this.projectRepository.findById(cleanProjectId).isPresent()) {
+            throw new IllegalStateException("Project with id [" + cleanProjectId + "] already exist.");
         }
         final String secret = this.projectKeyGenerator.generateKey();
 
-        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(projectId, secret));
+        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(cleanProjectId, secret));
 
         return new ProjectImpl(
                 projectEntity

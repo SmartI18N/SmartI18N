@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.entities.UserEntity;
+import org.smarti18n.messages.repositories.MessageRepository;
 import org.smarti18n.messages.repositories.ProjectRepository;
 import org.smarti18n.messages.repositories.UserRepository;
 
@@ -22,17 +23,31 @@ public class MessagesStartedApplicationListener implements ApplicationListener<A
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final MessageRepository messageRepository;
 
     public MessagesStartedApplicationListener(
             final UserRepository userRepository,
-            final ProjectRepository projectRepository) {
+            final ProjectRepository projectRepository,
+            final MessageRepository messageRepository) {
 
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
+        this.messageRepository = messageRepository;
     }
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
+
+        this.projectRepository.findAll().forEach(projectEntity -> {
+            projectEntity.setId(projectEntity.getId().trim().toLowerCase());
+            this.projectRepository.save(projectEntity);
+        });
+
+        this.messageRepository.findAll().forEach(messageEntity -> {
+            messageEntity.setKey(messageEntity.getKey().trim().toLowerCase());
+            this.messageRepository.save(messageEntity);
+        });
+
         if (!this.projectRepository.findById(DEFAULT_PROJECT_ID).isPresent()) {
             final ProjectEntity projectEntity = new ProjectEntity(DEFAULT_PROJECT_ID, DEFAULT_PROJECT_SECRET);
             projectEntity.setName("Default Project");

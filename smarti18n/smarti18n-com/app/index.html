@@ -10,26 +10,58 @@
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Noto+Sans|Passion+One|Questrial|Quicksand|Roboto+Slab|Source+Sans+Pro"
+          rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
     <style>
+        body {
+            /*font-family: 'Roboto Slab', serif;*/
+            /*font-family: 'Source Sans Pro', sans-serif;*/
+            /*font-family: 'Noto Sans', sans-serif;*/
+            /*font-family: 'Quicksand', sans-serif;*/
+            /*font-family: 'Passion One', cursive;*/
+            font-family: 'Questrial', sans-serif;
+            /*font-family: 'EB Garamond', serif;*/
+        }
+
+        .section {
+            margin: 5vw 0;
+        }
+
         #image1 {
             background-image: url('images/image1_online.jpg');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: 100%;
-            height: 40vw;
+            height: 30vw;
         }
 
         #image2 {
+            background-image: url('images/image3_online.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100%;
+            height: 30vw;
+        }
+
+        #image3 {
             background-image: url('images/image2_online.jpg');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: 100%;
-            height: 40vw;
+            height: 30vw;
+        }
+
+        #image4 {
+            background-image: url('images/image4_online.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100%;
+            height: 30vw;
         }
     </style>
 
@@ -85,7 +117,6 @@
 <div id="index-banner" class="section no-pad-bot">
     <div class="container">
 
-        <br><br>
         <h1 class="header center orange-text">
             {{'smarti18n.com.landing.title' | translate}}
         </h1>
@@ -101,7 +132,6 @@
                 {{'smarti18n.com.app-editor-name' | translate}}
             </a>
         </div>
-        <br><br>
 
     </div>
 </div>
@@ -112,13 +142,15 @@
 
 <div class="container" id="connectors">
     <div class="section">
-        <br><br>
+
         <div class="row center">
 
-            <br><br>
             <h4>
                 {{'smarti18n.com.connector.title' | translate}}
             </h4>
+            <p>
+                {{'smarti18n.com.connector.text' | translate}}
+            </p>
 
             <div class="col s12 m4">
                 <div class="icon-block">
@@ -134,7 +166,7 @@
 
             <div class="col s12 m4">
                 <div class="icon-block">
-                    <h2 class="center teal-text"><i class="material-icons">group</i></h2>
+                    <h2 class="center teal-text"><i class="material-icons">flash_on</i></h2>
                     <h5 class="center">
                         {{'smarti18n.com.connector.angular' | translate}}
                     </h5>
@@ -146,7 +178,7 @@
 
             <div class="col s12 m4">
                 <div class="icon-block">
-                    <h2 class="center teal-text"><i class="material-icons">group</i></h2>
+                    <h2 class="center teal-text"><i class="material-icons">flash_on</i></h2>
                     <h5 class="center">
                         {{'smarti18n.com.connector.angular2' | translate}}
                     </h5>
@@ -155,26 +187,6 @@
                     </p>
                 </div>
             </div>
-            <br><br>
-
-        </div>
-        <br><br>
-    </div>
-</div>
-
-
-<div class="container" id="community">
-    <div class="section">
-        <div class="row center">
-
-            <br><br>
-            <h4>
-                {{'smarti18n.com.community.title' | translate}}
-            </h4>
-            <p>
-                {{'smarti18n.com.community.text' | translate}}
-            </p>
-            <br><br>
 
         </div>
     </div>
@@ -184,30 +196,84 @@
 <div id="image2" class="section image"></div>
 
 
-<div class="container" id="pricing">
+<div class="container" id="community">
     <div class="section">
         <div class="row center">
 
-            <br><br>
             <h4>
-                {{'smarti18n.com.pricing.title' | translate}}
+                {{'smarti18n.com.community.title' | translate}}
             </h4>
             <p>
-                {{'smarti18n.com.pricing.text' | translate}}
+                {{'smarti18n.com.community.text' | translate}}
             </p>
-            <br><br>
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center teal-text"><i class="material-icons">code</i></h2>
+                    <h5 class="center">
+                        {{'smarti18n.com.community.github' | translate}}
+                    </h5>
+                    <p>
+                        {{'smarti18n.com.community.github.text' | translate}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center teal-text"><i class="material-icons">description</i></h2>
+                    <h5 class="center">
+                        {{'smarti18n.com.community.documentation' | translate}}
+                    </h5>
+                    <p>
+                        {{'smarti18n.com.community.documentation.text' | translate}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center teal-text"><i class="material-icons">save</i></h2>
+                    <h5 class="center">
+                        {{'smarti18n.com.community.download' | translate}}
+                    </h5>
+                    <p>
+                        {{'smarti18n.com.community.download.text' | translate}}
+                    </p>
+                </div>
+            </div>
 
         </div>
     </div>
 </div>
 
 
-<div class="container" id="register">
+<div id="image3" class="section image"></div>
+
+
+<div class="container" id="pricing">
     <div class="section">
-        <br><br>
         <div class="row center">
 
-            <br><br>
+            <h4>
+                {{'smarti18n.com.pricing.title' | translate}}
+            </h4>
+            <p>
+                {{'smarti18n.com.pricing.text' | translate}}
+            </p>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="image4" class="section image"></div>
+
+
+<div class="container" id="register">
+    <div class="section">
+        <div class="row center">
+
             <h4>
                 {{'smarti18n.com.register.title' | translate}}
             </h4>
@@ -239,10 +305,8 @@
                     </form>
                 </div>
             </div>
-            <br><br>
 
         </div>
-        <br><br>
     </div>
 </div>
 
