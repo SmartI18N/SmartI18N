@@ -1,6 +1,6 @@
 # SmartI18N
 
-SmartI18N will die Internationalisierung von Webprojekten vereinfachen und beschleunigen. Es gibt einen Online Editor mit welchem Texte in Echtzeit angepasst und verändert werden können.
+SmartI18N will die Internationalisierung von Webprojekten vereinfachen und beschleunigen. Es gibt einen Online Editor mit welchem Texte in Echtzeit angepasst und verändert werden können. Für die Einbindung stehen verschiedene SDK's zur Verfügung die das arbeiten mit SmartI18N vereinfachen. Mehr Informationen zu SmartI18N findest du unter www.smarti18n.com 
 
 ## SDK's
 
