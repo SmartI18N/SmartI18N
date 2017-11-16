@@ -1,37 +1,15 @@
-## Welcome to GitHub Pages
+# SmartI18N
 
-You can use the [editor on GitHub](https://github.com/SmartI18N/SmartI18N/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+SmartI18N will die Internationalisierung von Webprojekten vereinfachen und beschleunigen. Es gibt einen Online Editor mit welchem Texte in Echtzeit angepasst und verändert werden können.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## SDK's
 
-### Markdown
+Derzeit gibt es für Spring Message Sources und AngularJS Anbindungen. Schnittstellen dieser Art sollen in Zukunft ergänzt werden.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Installing
 
-```markdown
-Syntax highlighted code block
+SmartI18N kann selbst betrieben werden.
 
-# Header 1
-## Header 2
-### Header 3
+## License
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/SmartI18N/SmartI18N/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+SmartI18n is released under version 2.0 of the Apache License.
