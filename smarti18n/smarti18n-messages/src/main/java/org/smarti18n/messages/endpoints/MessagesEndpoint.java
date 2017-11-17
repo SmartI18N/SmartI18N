@@ -2,16 +2,14 @@ package org.smarti18n.messages.endpoints;
 
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.messages.security.ProjectPrincipal;
+import org.smarti18n.messages.security.SecurityUtils;
 import org.smarti18n.messages.service.MessagesService;
 
 @RestController
@@ -28,7 +26,10 @@ public class MessagesEndpoint implements MessagesApi {
     public Collection<MessageImpl> findAll(
             @RequestParam("projectId") final String projectId) {
 
-        return messagesService.findAll(projectId);
+        return messagesService.findAll(
+                SecurityUtils.getUserId(),
+                projectId
+        );
     }
 
     @Override
@@ -37,7 +38,11 @@ public class MessagesEndpoint implements MessagesApi {
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key) {
 
-        return messagesService.findOne(projectId, key);
+        return messagesService.findOne(
+                SecurityUtils.getUserId(),
+                projectId,
+                key
+        );
     }
 
     @Override
@@ -46,7 +51,11 @@ public class MessagesEndpoint implements MessagesApi {
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key) {
 
-        return messagesService.insert(projectId, key);
+        return messagesService.insert(
+                SecurityUtils.getUserId(),
+                projectId,
+                key
+        );
     }
 
     @Override
@@ -57,7 +66,13 @@ public class MessagesEndpoint implements MessagesApi {
             @RequestParam("translation") final String translation,
             @RequestParam("language") final Locale language) {
 
-        return messagesService.update(projectId, key, translation, language);
+        return messagesService.update(
+                SecurityUtils.getUserId(),
+                projectId,
+                key,
+                translation,
+                language
+        );
     }
 
     @Override
@@ -67,7 +82,12 @@ public class MessagesEndpoint implements MessagesApi {
             @RequestParam("sourceKey") final String sourceKey,
             @RequestParam("targetKey") final String targetKey) {
 
-        return messagesService.copy(projectId, sourceKey, targetKey);
+        return messagesService.copy(
+                SecurityUtils.getUserId(),
+                projectId,
+                sourceKey,
+                targetKey
+        );
     }
 
     @Override
@@ -76,6 +96,10 @@ public class MessagesEndpoint implements MessagesApi {
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key) {
 
-        messagesService.remove(projectId, key);
+        messagesService.remove(
+                SecurityUtils.getUserId(),
+                projectId,
+                key
+        );
     }
 }

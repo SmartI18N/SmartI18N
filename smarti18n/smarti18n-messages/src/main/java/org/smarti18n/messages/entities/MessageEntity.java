@@ -52,6 +52,29 @@ public class MessageEntity implements Message {
         this.translations.put(language, translation);
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MessageEntity)) {
+            return false;
+        }
+
+        final MessageEntity that = (MessageEntity) o;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public String toString() {
+        return this.id.key + " " + this.id.project.toString();
+    }
+
     public static class MessageId implements Serializable {
 
         private String key;
@@ -73,6 +96,30 @@ public class MessageEntity implements Message {
 
         ProjectEntity getProject() {
             return project;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof MessageId)) {
+                return false;
+            }
+
+            final MessageId messageId = (MessageId) o;
+
+            if (!key.equals(messageId.key)) {
+                return false;
+            }
+            return project.equals(messageId.project);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = key.hashCode();
+            result = 31 * result + project.hashCode();
+            return result;
         }
     }
 }

@@ -11,10 +11,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.smarti18n.api.ApiException;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.ApiException;
 import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.UserCredentials;
 
@@ -36,7 +36,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        insertTestUser();
+        insertTestUser(UserCredentials.TEST.getUsername(), UserCredentials.TEST.getPassword());
 
         this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
     }
@@ -69,6 +69,24 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         this.projectsApi.update(project);
     }
 
+    @Test
+    public void testFindOnlyOwnProjects() {
+        insertTestProject(PROJECT_ID);
+
+        final String test2User = "test2";
+
+        insertTestUser(test2User, test2User);
+
+        final ProjectsApiImpl projectsApi2 = new ProjectsApiImpl(
+                this.restTemplate.getRestTemplate(),
+                this.port,
+                () -> new UserCredentials(test2User, test2User)
+        );
+
+        final List<? extends Project> projects = projectsApi2.findAll();
+        assertThat(projects, hasSize(0));
+    }
+
 //
 //    ASSERTS
 //
@@ -82,7 +100,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         this.projectsApi.update(project);
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
-        assertThat(projects, hasSize(2));
+        assertThat(projects, hasSize(1));
         assertThat(projects, hasItem(projectWith(PROJECT_ID, NEW_PROJECT_NAME, NEW_PROJECT_DESCRIPTION)));
     }
 
@@ -97,12 +115,12 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         this.projectsApi.insert(PROJECT_ID);
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
-        assertThat(projects, hasSize(2));
+        assertThat(projects, hasSize(1));
         assertThat(projects, hasItem(projectWith(PROJECT_ID)));
     }
 
     private void assertNoProjectsFound() {
-        assertThat(this.projectsApi.findAll(), hasSize(1));
+        assertThat(this.projectsApi.findAll(), hasSize(0));
     }
 
 //
@@ -134,20 +152,6 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
             @Override
             public void describeTo(final Description description) {
                 description.appendValue(projectId).appendValue(projectName).appendValue(projectDescription);
-            }
-        };
-    }
-
-    private Matcher<Project> projectWith(final String projectId, final String secret) {
-        return new TypeSafeMatcher<Project>() {
-            @Override
-            protected boolean matchesSafely(final Project item) {
-                return projectId.equals(item.getId()) && item.getSecret().equals(secret);
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendValue(projectId).appendValue(secret);
             }
         };
     }

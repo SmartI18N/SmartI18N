@@ -37,7 +37,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        insertTestUser();
+        insertTestUser(UserCredentials.TEST.getUsername(), UserCredentials.TEST.getPassword());
         insertTestProject(PROJECT_ID);
 
         this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);

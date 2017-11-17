@@ -10,31 +10,34 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.messages.entities.MessageEntity;
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
-import org.smarti18n.messages.repositories.ProjectRepository;
+
+import static org.smarti18n.messages.service.IdentifierUtils.clean;
 
 @Service
 public class MessagesServiceImpl implements MessagesService {
 
     private final MessageRepository messageRepository;
-    private final ProjectRepository projectRepository;
+    private final EntityLoader entityLoader;
 
-    public MessagesServiceImpl(final MessageRepository messageRepository, final ProjectRepository projectRepository) {
+
+    public MessagesServiceImpl(
+            final MessageRepository messageRepository,
+            final EntityLoader entityLoader) {
+
         this.messageRepository = messageRepository;
-        this.projectRepository = projectRepository;
+        this.entityLoader = entityLoader;
     }
 
     @Override
     @Transactional
-    public Collection<MessageImpl> findAll(
-            final String projectId) {
+    public Collection<MessageImpl> findAll(final String username, final String projectId) {
 
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         return this.messageRepository.findByIdProject(project).stream().map(messageEntity -> new MessageImpl(
                 messageEntity.getKey(),
@@ -46,8 +49,8 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public MessageImpl findOne(final String projectId, final String key) {
-        final ProjectEntity project = getProject(projectId);
+    public MessageImpl findOne(final String username, final String projectId, final String key) {
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> messageEntity = this.messageRepository.findById(
                 new MessageEntity.MessageId(clean(key), project)
@@ -65,12 +68,13 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public MessageImpl insert(
+            final String username,
             final String projectId,
             final String key) {
 
         final String cleanKey = clean(key.trim());
 
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         if (this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project)).isPresent()) {
             throw new IllegalStateException("Message with key [" + cleanKey + "] already exist.");
@@ -84,14 +88,14 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public MessageImpl update(
-            final String projectId,
+            final String username, final String projectId,
             final String key,
             final String translation,
             final Locale language) {
 
         final String cleanKey = clean(key);
 
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project));
         final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(cleanKey, project));
@@ -109,11 +113,11 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public MessageImpl copy(
-            final String projectId,
+            final String username, final String projectId,
             final String sourceKey,
             final String targetKey) {
 
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(clean(sourceKey), project));
 
@@ -142,10 +146,10 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public void remove(
-            final String projectId,
+            final String username, final String projectId,
             final String key) {
 
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         this.messageRepository.deleteById(new MessageEntity.MessageId(clean(key), project));
     }
@@ -153,7 +157,7 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(projectId);
 
         final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
         final Map<String, Map<Locale, String>> map = new HashMap<>();
@@ -168,7 +172,7 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) {
-        final ProjectEntity project = getProject(projectId);
+        final ProjectEntity project = this.entityLoader.findProject(projectId);
 
         final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
         final Map<String, String> map = new HashMap<>();
@@ -184,21 +188,5 @@ public class MessagesServiceImpl implements MessagesService {
         }
 
         return map;
-    }
-
-    private ProjectEntity getProject(final String projectId) {
-        Assert.notNull(projectId, "projectId");
-
-        final Optional<ProjectEntity> optional = this.projectRepository.findById(clean(projectId));
-
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-
-        throw new IllegalStateException("Project with ID [" + clean(projectId) + "] doesn't exist.");
-    }
-
-    private static String clean(final String key) {
-        return key.trim().toLowerCase();
     }
 }

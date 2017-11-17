@@ -83,4 +83,28 @@ public class UserEntity implements User {
     public void setCompany(final String company) {
         this.company = company;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserEntity)) {
+            return false;
+        }
+
+        final UserEntity that = (UserEntity) o;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return mail;
+    }
 }

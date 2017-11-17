@@ -10,46 +10,70 @@ import org.springframework.transaction.annotation.Transactional;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.messages.entities.ProjectEntity;
+import org.smarti18n.messages.entities.UserEntity;
 import org.smarti18n.messages.repositories.ProjectRepository;
+
+import static org.smarti18n.messages.service.IdentifierUtils.clean;
 
 @Service
 public class ProjectsServiceImpl implements ProjectsService {
 
     private final ProjectRepository projectRepository;
-    private final ProjectKeyGenerator projectKeyGenerator;
+    private final SmartKeyGenerator smartKeyGenerator;
+    private final EntityLoader entityLoader;
 
     public ProjectsServiceImpl(
             final ProjectRepository projectRepository,
-            final ProjectKeyGenerator projectKeyGenerator) {
+            final SmartKeyGenerator smartKeyGenerator,
+            final EntityLoader entityLoader) {
 
         this.projectRepository = projectRepository;
-        this.projectKeyGenerator = projectKeyGenerator;
+        this.smartKeyGenerator = smartKeyGenerator;
+        this.entityLoader = entityLoader;
     }
 
     @Override
     @Transactional
-    public List<? extends Project> findAll() {
-        return this.projectRepository.findAll();
+    public List<? extends Project> findAll(final String username) {
+        final UserEntity user = this.entityLoader.findUser(username);
+
+        return this.projectRepository.findByOwners(user);
     }
 
     @Override
     @Transactional
-    public Project findOne(final String projectId) {
-        return this.projectRepository.findById(clean(projectId)).orElse(null);
+    public Project findOne(final String username, final String projectId) {
+        final UserEntity user = this.entityLoader.findUser(username);
+
+        final Optional<ProjectEntity> optional = this.projectRepository.findById(clean(projectId));
+        if (!optional.isPresent()) {
+            return null;
+        }
+
+        final ProjectEntity project = optional.get();
+        if (project.hasOwner(user)) {
+            return project;
+        }
+
+        throw new IllegalStateException(
+                "User with Mail [" + clean(username) + "] hasn't rights for project [" + clean(projectId) + "]"
+        );
     }
 
     @Override
     @Transactional
-    public Project insert(final String projectId) {
+    public Project insert(final String username, final String projectId) {
 
         final String cleanedProjectId = clean(projectId);
 
         if (this.projectRepository.findById(cleanedProjectId).isPresent()) {
             throw new IllegalStateException("Project with id [" + cleanedProjectId + "] already exist.");
         }
-        final String secret = this.projectKeyGenerator.generateKey();
+        final String secret = this.smartKeyGenerator.generateKey();
 
-        final ProjectEntity projectEntity = this.projectRepository.insert(new ProjectEntity(cleanedProjectId, secret));
+        final ProjectEntity projectEntity = this.projectRepository.insert(
+                new ProjectEntity(cleanedProjectId, secret, this.entityLoader.findUser(username))
+        );
 
         return new ProjectImpl(
                 projectEntity
@@ -58,16 +82,8 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional
-    public Project update(final Project project) {
-
-        final String cleanedProjectId = clean(project.getId());
-
-        final Optional<ProjectEntity> optional = this.projectRepository.findById(cleanedProjectId);
-        if (!optional.isPresent()) {
-            throw new IllegalStateException("Project with id [" + cleanedProjectId + "] doesn't exist.");
-        }
-
-        final ProjectEntity projectEntity = optional.get();
+    public Project update(final String username, final Project project) {
+        final ProjectEntity projectEntity = this.entityLoader.findProject(username, project.getId());
 
         projectEntity.setName(project.getName());
         projectEntity.setDescription(project.getDescription());
@@ -79,13 +95,11 @@ public class ProjectsServiceImpl implements ProjectsService {
                 this.projectRepository.save(projectEntity)
         );
     }
+
     @Override
-    public void remove(final String projectId) {
-        this.projectRepository.deleteById(clean(projectId));
-    }
+    public void remove(final String username, final String projectId) {
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
-    private static String clean(final String projectId) {
-        return projectId.trim().toLowerCase();
+        this.projectRepository.delete(project);
     }
-
 }

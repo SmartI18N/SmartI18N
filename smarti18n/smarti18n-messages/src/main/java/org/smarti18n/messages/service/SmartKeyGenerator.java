@@ -11,11 +11,11 @@ import javax.crypto.KeyGenerator;
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @Service
-public class ProjectKeyGenerator {
+public class SmartKeyGenerator {
 
     private final KeyGenerator keyGenerator;
 
-    public ProjectKeyGenerator() throws NoSuchAlgorithmException {
+    public SmartKeyGenerator() throws NoSuchAlgorithmException {
         this.keyGenerator = KeyGenerator.getInstance("AES");
         this.keyGenerator.init(256);
     }

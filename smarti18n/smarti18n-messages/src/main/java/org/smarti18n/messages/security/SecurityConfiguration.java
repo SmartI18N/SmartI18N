@@ -103,6 +103,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             @Override
             public void addCorsMappings(final CorsRegistry registry) {
                 registry.addMapping(AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR).allowedOrigins("*");
+                registry.addMapping(UserApi.PATH_USERS_REGISTER).allowedOrigins(
+                        "https://www.smarti18n.com"
+                );
             }
         };
     }

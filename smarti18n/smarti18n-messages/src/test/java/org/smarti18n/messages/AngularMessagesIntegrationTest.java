@@ -28,7 +28,7 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        insertTestUser();
+        insertTestUser(UserCredentials.TEST.getUsername(), UserCredentials.TEST.getPassword());
         insertTestProject(PROJECT_ID);
 
         this.angularMessagesApi = new AngularMessagesApiImpl(

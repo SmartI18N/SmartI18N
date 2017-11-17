@@ -31,11 +31,11 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected TestRestTemplate restTemplate;
 
-    User insertTestUser() {
+    User insertTestUser(final String username, final String password) {
         final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
         return userApi.register(
-                UserCredentials.TEST.getUsername(),
-                UserCredentials.TEST.getPassword()
+                username,
+                password
         );
     }
 

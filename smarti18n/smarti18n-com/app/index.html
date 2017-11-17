@@ -306,7 +306,7 @@
 <div id="image4" class="section image"></div>
 
 
-<div class="container" id="register">
+<div class="container" id="register" ng-controller="RegisterController">
     <div class="section">
         <div class="row center">
 
@@ -320,7 +320,7 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="mail" type="text" class="validate">
+                                <input id="mail" type="text" class="validate" ng-model="mail">
                                 <label for="mail">
                                     {{'smarti18n.com.register.mail' | translate}}
                                 </label>
@@ -328,14 +328,14 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="password" type="password" class="validate">
+                                <input id="password" type="password" class="validate" ng-model="password">
                                 <label for="password">
                                     {{'smarti18n.com.register.password' | translate}}
                                 </label>
                             </div>
                         </div>
                         <div class="card-action float">
-                            <a href="#">
+                            <a ng-click="register();">
                                 {{'smarti18n.com.register.register' | translate}}
                             </a>
                         </div>

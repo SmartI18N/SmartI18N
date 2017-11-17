@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.messages.security.SecurityUtils;
 import org.smarti18n.messages.service.ProjectsService;
 
 @RestController
@@ -24,7 +25,9 @@ public class ProjectsEndpoint implements ProjectsApi {
     @Override
     @GetMapping(PATH_PROJECTS_FIND_ALL)
     public List<? extends Project> findAll() {
-        return projectsService.findAll();
+        return projectsService.findAll(
+                SecurityUtils.getUserId()
+        );
     }
 
     @Override
@@ -32,7 +35,10 @@ public class ProjectsEndpoint implements ProjectsApi {
     public Project findOne(
             @RequestParam("projectId") final String projectId) {
 
-        return projectsService.findOne(projectId);
+        return projectsService.findOne(
+                SecurityUtils.getUserId(),
+                projectId
+        );
     }
 
     @Override
@@ -40,7 +46,10 @@ public class ProjectsEndpoint implements ProjectsApi {
     public Project insert(
             @RequestParam("projectId") final String projectId) {
 
-        return projectsService.insert(projectId);
+        return projectsService.insert(
+                SecurityUtils.getUserId(),
+                projectId
+        );
     }
 
     @Override
@@ -48,7 +57,10 @@ public class ProjectsEndpoint implements ProjectsApi {
     public Project update(
             @RequestBody final Project project) {
 
-        return projectsService.update(project);
+        return projectsService.update(
+                SecurityUtils.getUserId(),
+                project
+        );
     }
 
     @Override
@@ -56,6 +68,9 @@ public class ProjectsEndpoint implements ProjectsApi {
     public void remove(
             @RequestParam("projectId") final String projectId) {
 
-        this.projectsService.remove(projectId);
+        this.projectsService.remove(
+                SecurityUtils.getUserId(),
+                projectId
+        );
     }
 }

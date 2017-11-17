@@ -29,7 +29,7 @@ public class SpringMessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        insertTestUser();
+        insertTestUser(UserCredentials.TEST.getUsername(), UserCredentials.TEST.getPassword());
         final Project project = insertTestProject(PROJECT_ID);
 
         this.springMessagesApi = new SpringMessagesApiImpl(
