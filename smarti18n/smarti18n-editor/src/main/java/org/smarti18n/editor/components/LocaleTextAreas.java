@@ -14,7 +14,7 @@ import com.vaadin.ui.TextArea;
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-public class LanguageTextAreas extends CustomField<Map<Locale, String>> {
+public class LocaleTextAreas extends CustomField<Map<Locale, String>> {
 
     private final Layout fields = new FormLayout();
     private final Map<Locale, TextArea> textAreas = new HashMap<>();
@@ -30,7 +30,7 @@ public class LanguageTextAreas extends CustomField<Map<Locale, String>> {
         this.fields.removeAllComponents();
 
         for (final Map.Entry<Locale, String> entry : value.entrySet()) {
-            final TextArea textArea = new TextArea(entry.getKey().getLanguage());
+            final TextArea textArea = new TextArea(entry.getKey().toString());
             textArea.setSizeFull();
             textArea.setValue(entry.getValue());
 

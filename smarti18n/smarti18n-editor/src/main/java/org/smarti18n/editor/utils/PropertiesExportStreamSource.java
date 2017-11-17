@@ -15,11 +15,11 @@ import org.smarti18n.api.Message;
 public class PropertiesExportStreamSource implements StreamResource.StreamSource {
 
     private final Supplier<Collection<? extends Message>> supplier;
-    private final Locale language;
+    private final Locale locale;
 
-    public PropertiesExportStreamSource(final Supplier<Collection<? extends Message>> supplier, final Locale language) {
+    public PropertiesExportStreamSource(final Supplier<Collection<? extends Message>> supplier, final Locale locale) {
         this.supplier = supplier;
-        this.language = language;
+        this.locale = locale;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class PropertiesExportStreamSource implements StreamResource.StreamSource
                     .forEach(message -> {
 
                         final String key = message.getKey();
-                        final String translation = message.getTranslation(language);
+                        final String translation = message.getTranslation(locale);
 
                         properties.setProperty(key, translation);
                     });

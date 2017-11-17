@@ -56,11 +56,11 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public MessageImpl update(final String projectId, final String key, final String translation, final Locale language) {
+    public MessageImpl update(final String projectId, final String key, final Locale locale, final String translation) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_UPDATE, projectId)
                 .queryParam("key", key)
                 .queryParam("translation", translation)
-                .queryParam("language", language);
+                .queryParam("locale", locale);
 
         return get(uri, MessageImpl.class);
     }

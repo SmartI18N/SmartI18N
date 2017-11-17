@@ -21,7 +21,7 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
 
     private static final String MESSAGE_KEY = "message.key";
     private static final String TRANSLATION = "ÜBERSETZUNG";
-    private static final Locale LANGUAGE = Locale.GERMAN;
+    private static final Locale LOCALE = Locale.GERMAN;
     private static final String PROJECT_ID = "test";
 
     private AngularMessagesApi angularMessagesApi;
@@ -41,9 +41,9 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
     public void standardWorkflowSpringMessages() throws Exception {
         final MessagesApiImpl messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), port, () -> UserCredentials.TEST);
         messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
-        messagesApi.update(PROJECT_ID, MESSAGE_KEY, TRANSLATION, LANGUAGE);
+        messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 
-        final Map<String, String> messages = this.angularMessagesApi.getMessages(PROJECT_ID, LANGUAGE);
+        final Map<String, String> messages = this.angularMessagesApi.getMessages(PROJECT_ID, LOCALE);
 
         assertThat(messages.get(MESSAGE_KEY), is(notNullValue()));
         assertThat(messages.get(MESSAGE_KEY), is(TRANSLATION));
@@ -51,6 +51,6 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Test(expected = ApiException.class)
     public void wrongProjectId() {
-        this.angularMessagesApi.getMessages("irgendwas", LANGUAGE);
+        this.angularMessagesApi.getMessages("irgendwas", LOCALE);
     }
 }

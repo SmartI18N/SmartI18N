@@ -15,9 +15,11 @@ import com.vaadin.ui.HorizontalLayout;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.utils.ProjectContext;
+import org.smarti18n.api.Project;
+import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.IconButton;
+import org.smarti18n.editor.utils.ProjectContext;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -29,13 +31,15 @@ public class MessageOverviewView extends AbstractView implements View {
     public static final String VIEW_NAME = "messages/overview";
 
     private final MessagesApi messagesApi;
+    private final ProjectsApi projectsApi;
 
     private final ProjectContext projectContext;
 
     private Grid<Message> grid;
 
-    public MessageOverviewView(final MessagesApi messagesApi) {
+    public MessageOverviewView(final MessagesApi messagesApi, final ProjectsApi projectsApi) {
         this.messagesApi = messagesApi;
+        this.projectsApi = projectsApi;
 
         this.projectContext = new ProjectContext();
     }
@@ -47,14 +51,14 @@ public class MessageOverviewView extends AbstractView implements View {
         addComponent(createButtonBar());
 
         grid = new Grid<>(Message.class);
-        grid.setColumns("key", "languagesAsString");
+        grid.setColumns("key", "localesAsString");
 
         grid.getColumn("key")
                 .setCaption(translate("smarti18n.editor.message-overview.key"))
                 .setExpandRatio(1);
 
-        grid.getColumn("languagesAsString")
-                .setCaption(translate("smarti18n.editor.message-overview.languages"));
+        grid.getColumn("localesAsString")
+                .setCaption(translate("smarti18n.editor.message-overview.locales"));
 
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
             messagesApi.remove(projectId(), messageTranslations.getKey());
@@ -82,22 +86,22 @@ public class MessageOverviewView extends AbstractView implements View {
                 translate("smarti18n.editor.message-overview.add-new-message"),
                 VaadinIcons.FILE_ADD,
                 clickEvent -> {
-            this.getUI().addWindow(new MessageCreateWindow(this.messagesApi, projectId()));
-        });
+                    this.getUI().addWindow(new MessageCreateWindow(this.messagesApi, projectId()));
+                });
 
         final IconButton importMessageButton = new IconButton(
                 translate("smarti18n.editor.message-overview.import-messages"),
                 VaadinIcons.UPLOAD,
                 clickEvent -> {
-            this.getUI().addWindow(new MessageImportWindow(this.messagesApi, projectId()));
-        });
+                    this.getUI().addWindow(new MessageImportWindow(this.messagesApi, project()));
+                });
 
         final IconButton exportMessageButton = new IconButton(
                 translate("smarti18n.editor.message-overview.export-messages"),
                 VaadinIcons.DOWNLOAD,
                 clickEvent -> {
-            this.getUI().addWindow(new MessageExportWindow(this.messagesApi, projectId()));
-        });
+                    this.getUI().addWindow(new MessageExportWindow(this.messagesApi, project()));
+                });
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
@@ -108,7 +112,8 @@ public class MessageOverviewView extends AbstractView implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        this.projectContext.setProjectId(viewChangeEvent.getParameters());
+        final Project project = this.projectsApi.findOne(viewChangeEvent.getParameters());
+        this.projectContext.setProject(project);
 
         grid.setItems(
                 new ArrayList<>(this.messagesApi.findAll(projectId()))
@@ -116,7 +121,11 @@ public class MessageOverviewView extends AbstractView implements View {
     }
 
     private String projectId() {
-        return this.projectContext.get();
+        return this.projectContext.getProject().getId();
+    }
+
+    private Project project() {
+        return this.projectContext.getProject();
     }
 
 }

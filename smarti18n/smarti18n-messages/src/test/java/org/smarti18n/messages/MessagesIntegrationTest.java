@@ -29,7 +29,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     private static final String MESSAGE_KEY = "message.key";
     private static final String TRANSLATION = "ÜBERSETZUNG";
-    private static final Locale LANGUAGE = Locale.GERMAN;
+    private static final Locale LOCALE = Locale.GERMAN;
     private static final String SECOND_MESSAGE_KEY = "message.second-key";
     private static final String PROJECT_ID = "test";
 
@@ -90,7 +90,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(1));
-        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
     private void assertMessageCopy() {
@@ -98,23 +98,23 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(2));
-        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
-        assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
+        assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
     private void assertMessageFind() {
         final Message message = this.messagesApi.findOne(PROJECT_ID, MESSAGE_KEY);
 
         assertThat(message, is(notNullValue()));
-        assertThat(message, is(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+        assertThat(message, is(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
     private void assertMessageUpdate() {
-        this.messagesApi.update(PROJECT_ID, MESSAGE_KEY, TRANSLATION, LANGUAGE);
+        this.messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(1));
-        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LANGUAGE, TRANSLATION)));
+        assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
     private void assertMessageInsert() {
@@ -148,18 +148,18 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         };
     }
 
-    private Matcher<Message> messageWith(final String messageKey, final Locale language, final String translation) {
+    private Matcher<Message> messageWith(final String messageKey, final Locale locale, final String translation) {
         return new TypeSafeMatcher<Message>() {
             @Override
             protected boolean matchesSafely(final Message item) {
                 return item.getKey().equals(messageKey)
-                        && item.getTranslations().containsKey(language)
-                        && item.getTranslations().get(language).equals(translation);
+                        && item.getTranslations().containsKey(locale)
+                        && item.getTranslations().get(locale).equals(translation);
             }
 
             @Override
             public void describeTo(final Description description) {
-                description.appendValue(messageKey).appendValue(language).appendValue(translation);
+                description.appendValue(messageKey).appendValue(locale).appendValue(translation);
             }
         };
     }

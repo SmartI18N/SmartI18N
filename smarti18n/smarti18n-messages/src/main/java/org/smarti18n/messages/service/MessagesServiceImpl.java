@@ -90,8 +90,7 @@ public class MessagesServiceImpl implements MessagesService {
     public MessageImpl update(
             final String username, final String projectId,
             final String key,
-            final String translation,
-            final Locale language) {
+            final Locale locale, final String translation) {
 
         final String cleanKey = clean(key);
 
@@ -100,7 +99,7 @@ public class MessagesServiceImpl implements MessagesService {
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project));
         final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(cleanKey, project));
 
-        messageEntity.putTranslation(language, translation);
+        messageEntity.putTranslation(locale, translation);
 
         final MessageEntity saved = this.messageRepository.save(messageEntity);
 

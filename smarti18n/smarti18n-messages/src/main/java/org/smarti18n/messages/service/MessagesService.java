@@ -12,34 +12,40 @@ import org.smarti18n.api.MessageImpl;
 public interface MessagesService {
 
     Collection<MessageImpl> findAll(
-            final String username, String projectId
+            String username,
+            String projectId
     );
 
     MessageImpl findOne(
-            final String username, String projectId,
+            String username,
+            String projectId,
             String key
     );
 
     MessageImpl insert(
-            final String username, String projectId,
+            String username,
+            String projectId,
             String key
     );
 
     MessageImpl update(
-            final String username, String projectId,
+            String username,
+            String projectId,
             String key,
-            String translation,
-            Locale language
+            Locale locale,
+            String translation
     );
 
     MessageImpl copy(
-            final String username, String projectId,
+            String username,
+            String projectId,
             String sourceKey,
             String targetKey
     );
 
     void remove(
-            final String username, String projectId,
+            String username,
+            String projectId,
             String key
     );
 

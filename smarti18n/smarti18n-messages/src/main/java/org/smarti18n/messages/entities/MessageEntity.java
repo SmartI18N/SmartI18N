@@ -48,8 +48,8 @@ public class MessageEntity implements Message {
         this.translations = translations;
     }
 
-    public void putTranslation(final Locale language, final String translation) {
-        this.translations.put(language, translation);
+    public void putTranslation(final Locale locale, final String translation) {
+        this.translations.put(locale, translation);
     }
 
     @Override

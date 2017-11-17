@@ -19,9 +19,21 @@ public class UserEntity implements User {
     private String nachname;
     private String company;
 
+    public UserEntity() {
+    }
+
     public UserEntity(final String mail, final String password) {
         this.mail = mail;
         this.password = password;
+    }
+
+    public UserEntity(final User user) {
+        this.id = user.getId();
+        this.mail = user.getMail();
+        this.password = user.getPassword();
+        this.vorname = user.getVorname();
+        this.nachname = user.getNachname();
+        this.company = user.getCompany();
     }
 
     @Override

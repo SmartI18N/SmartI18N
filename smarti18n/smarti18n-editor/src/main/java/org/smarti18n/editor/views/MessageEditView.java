@@ -17,7 +17,7 @@ import org.smarti18n.editor.utils.ProjectContext;
 import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.CancelButton;
 import org.smarti18n.editor.components.HiddenField;
-import org.smarti18n.editor.components.LanguageTextAreas;
+import org.smarti18n.editor.components.LocaleTextAreas;
 import org.smarti18n.editor.components.SaveButton;
 
 /**
@@ -48,14 +48,14 @@ public class MessageEditView extends AbstractView implements View {
 
         addComponent(createButtonBar());
 
-        final LanguageTextAreas languageTextAreas = new LanguageTextAreas();
-        languageTextAreas.setSizeFull();
+        final LocaleTextAreas localeTextAreas = new LocaleTextAreas();
+        localeTextAreas.setSizeFull();
 
         this.binder.forField(new HiddenField()).bind("key");
-        this.binder.forMemberField(languageTextAreas).bind("translations");
+        this.binder.forMemberField(localeTextAreas).bind("translations");
         this.binder.bindInstanceFields(this);
 
-        final VerticalLayout layout = new VerticalLayout(languageTextAreas);
+        final VerticalLayout layout = new VerticalLayout(localeTextAreas);
         layout.setSizeFull();
         layout.setMargin(true);
 
@@ -73,14 +73,14 @@ public class MessageEditView extends AbstractView implements View {
             binder.writeBeanIfValid(message);
 
             message.getTranslations().forEach(
-                    (locale, translation) -> messagesApi.update(this.projectContext.get(), message.getKey(), translation, locale)
+                    (locale, translation) -> messagesApi.update(projectId(), message.getKey(), locale, translation)
             );
 
-            navigateTo(MessageOverviewView.VIEW_NAME, projectContext.get());
+            navigateTo(MessageOverviewView.VIEW_NAME, projectId());
         });
 
         final CancelButton buttonCancel = new CancelButton(
-                clickEvent -> navigateTo(MessageOverviewView.VIEW_NAME, projectContext.get())
+                clickEvent -> navigateTo(MessageOverviewView.VIEW_NAME, projectId())
         );
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -96,9 +96,13 @@ public class MessageEditView extends AbstractView implements View {
         projectContext.setProjectId(parameters[0]);
         final String key = parameters[1];
 
-        final Message message = this.messagesApi.findOne(this.projectContext.get(), key);
+        final Message message = this.messagesApi.findOne(projectId(), key);
 
         this.binder.readBean(message);
+    }
+
+    private String projectId() {
+        return this.projectContext.getProjectId();
     }
 
 }

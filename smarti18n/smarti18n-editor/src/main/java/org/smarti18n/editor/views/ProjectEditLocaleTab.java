@@ -34,7 +34,7 @@ public class ProjectEditLocaleTab extends FormLayout implements Tab {
         setMargin(true);
 
         final TwinColSelect<Locale> localeTwinColSelect = new TwinColSelect<>(
-                I18N.getMessage("smarti18n.editor.project-edit.languages"),
+                I18N.getMessage("smarti18n.editor.project-edit.locales"),
                 AVAILABLE_LOCALES
         );
         localeTwinColSelect.setSizeFull();

@@ -63,15 +63,14 @@ public class MessagesEndpoint implements MessagesApi {
     public MessageImpl update(
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key,
-            @RequestParam("translation") final String translation,
-            @RequestParam("language") final Locale language) {
+            @RequestParam("locale") final Locale locale,
+            @RequestParam("translation") final String translation) {
 
         return messagesService.update(
                 SecurityUtils.getUserId(),
                 projectId,
                 key,
-                translation,
-                language
+                locale, translation
         );
     }
 

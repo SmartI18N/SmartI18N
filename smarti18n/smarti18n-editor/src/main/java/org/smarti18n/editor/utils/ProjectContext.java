@@ -1,23 +1,38 @@
 package org.smarti18n.editor.utils;
 
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
+
+import org.smarti18n.api.Project;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public class ProjectContext {
 
+    private Project project;
     private String projectId;
 
-    public String get() {
-        return projectId;
+    public void setProject(final Project project) {
+        Assert.notNull(project, "project");
+
+        this.project = project;
+    }
+
+    public Project getProject() {
+        Assert.notNull(project, "project");
+
+        return project;
     }
 
     public void setProjectId(final String projectId) {
-        if (StringUtils.isEmpty(projectId)) {
-            throw new IllegalStateException("Project ID not set");
-        }
+        Assert.notNull(projectId, "projectId");
 
         this.projectId = projectId;
+    }
+
+    public String getProjectId() {
+        Assert.notNull(projectId, "projectId");
+
+        return projectId;
     }
 }

@@ -36,10 +36,9 @@ public class StartView extends AbstractView implements View {
         final SimpleUserDetails principal = (SimpleUserDetails) authentication.getPrincipal();
         final String username = principal.getName();
 
-        addComponent(new Label(translate("smarti18n.editor.start.welcome", username)));
-
-        addComponent(new Label(translate("smarti18n.editor.start.which-language", getLocale().toString())));
         addComponent(new Label(getLocale().toString()));
+        addComponent(new Label(username));
+
     }
 
 }

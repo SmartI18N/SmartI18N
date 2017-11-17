@@ -21,28 +21,28 @@ public interface Message extends Serializable {
 
     void setTranslations(Map<Locale, String> translations);
 
-    default String getTranslation(Locale language) {
+    default String getTranslation(Locale locale) {
         final Map<Locale, String> translations = getTranslations();
         if (translations == null) {
             return null;
         }
-        return translations.getOrDefault(language, "");
+        return translations.getOrDefault(locale, "");
     }
 
-    default Set<Locale> getLanguages() {
+    default Set<Locale> getLocales() {
         return getTranslations().entrySet().stream()
                 .filter(localeStringEntry -> !StringUtils.isEmpty(localeStringEntry.getValue()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
 
-    default String getLanguagesAsString() {
+    default String getLocalesAsString() {
         final StringBuilder builder = new StringBuilder();
-        getLanguages().forEach(locale -> {
+        getLocales().forEach(locale -> {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(locale.getLanguage());
+            builder.append(locale.toString());
         });
         return builder.toString();
     }

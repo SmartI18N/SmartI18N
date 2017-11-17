@@ -8,22 +8,24 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Upload;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.api.Project;
 import org.smarti18n.editor.components.IconButton;
-import org.smarti18n.editor.components.LanguageComboBox;
+import org.smarti18n.editor.components.LocaleComboBox;
+import org.smarti18n.editor.utils.I18N;
 import org.smarti18n.editor.utils.PropertiesImportStreamReceiver;
 
 class MessageImportWindow extends AbstractSmartI18nWindow {
 
-    MessageImportWindow(final MessagesApi messagesApi, final String projectId) {
+    MessageImportWindow(final MessagesApi messagesApi, final Project project) {
         super(I18N.getMessage("smarti18n.editor.message-import.caption"));
 
         final FormLayout formLayout = new FormLayout();
 
-        final LanguageComboBox languageComboBox = new LanguageComboBox("Lang"
-//                I18N.getMessage("smarti18n.editor.message-export.language")
+        final LocaleComboBox localeComboBox = new LocaleComboBox(
+                I18N.getMessage("smarti18n.editor.message-export.locale"),
+                project.getLocales()
         );
-        formLayout.addComponent(languageComboBox);
+        formLayout.addComponent(localeComboBox);
 
         final Map<String, String> messages = new HashMap<>();
         final PropertiesImportStreamReceiver uploadReceiver = new PropertiesImportStreamReceiver((locale, resourceBundle) -> {
@@ -37,7 +39,7 @@ class MessageImportWindow extends AbstractSmartI18nWindow {
                 I18N.getMessage("smarti18n.editor.message-import.import"),
                 VaadinIcons.UPLOAD,
                 event -> messages.forEach(
-                        (key, value) -> messagesApi.update(projectId, key, value, languageComboBox.getValue())
+                        (key, value) -> messagesApi.update(project.getId(), key, localeComboBox.getValue(), value)
                 )
         );
 

@@ -29,8 +29,8 @@ public interface MessagesApi {
     MessageImpl update(
             String projectId,
             String key,
-            String translation,
-            Locale language
+            Locale locale,
+            String translation
     );
 
     MessageImpl copy(

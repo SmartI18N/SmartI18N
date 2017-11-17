@@ -22,7 +22,7 @@ public class SpringMessagesIntegrationTest extends AbstractIntegrationTest {
 
     private static final String MESSAGE_KEY = "message.key";
     private static final String TRANSLATION = "ÜBERSETZUNG";
-    private static final Locale LANGUAGE = Locale.GERMAN;
+    private static final Locale LOCALE = Locale.GERMAN;
     private static final String PROJECT_ID = "test";
 
     private SpringMessagesApi springMessagesApi;
@@ -44,13 +44,13 @@ public class SpringMessagesIntegrationTest extends AbstractIntegrationTest {
     public void standardWorkflowSpringMessages() throws Exception {
         final MessagesApiImpl messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), port, () -> UserCredentials.TEST);
         messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
-        messagesApi.update(PROJECT_ID, MESSAGE_KEY, TRANSLATION, LANGUAGE);
+        messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 
         final Map<String, Map<Locale, String>> messages = this.springMessagesApi.findForSpringMessageSource();
 
         assertThat(messages.get(MESSAGE_KEY), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(notNullValue()));
-        assertThat(messages.get(MESSAGE_KEY).get(LANGUAGE), is(TRANSLATION));
+        assertThat(messages.get(MESSAGE_KEY).get(LOCALE), is(notNullValue()));
+        assertThat(messages.get(MESSAGE_KEY).get(LOCALE), is(TRANSLATION));
     }
 
     @Test(expected = RestClientException.class)
