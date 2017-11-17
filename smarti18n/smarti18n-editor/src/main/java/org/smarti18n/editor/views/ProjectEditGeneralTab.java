@@ -12,11 +12,11 @@ import org.smarti18n.editor.utils.I18N;
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-class ProjectEditCommonTab extends FormLayout implements Tab {
+class ProjectEditGeneralTab extends FormLayout implements Tab {
 
     private final Binder<Project> binder;
 
-    ProjectEditCommonTab(final Binder<Project> binder) {
+    ProjectEditGeneralTab(final Binder<Project> binder) {
         this.binder = binder;
     }
 

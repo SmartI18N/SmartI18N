@@ -48,7 +48,7 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
             final Locale languageLocale = new Locale(locale.getLanguage());
             if (translations.containsKey(languageLocale)) {
-                return new MessageFormat(translations.get(locale), languageLocale);
+                return new MessageFormat(translations.get(languageLocale), languageLocale);
             }
         }
 

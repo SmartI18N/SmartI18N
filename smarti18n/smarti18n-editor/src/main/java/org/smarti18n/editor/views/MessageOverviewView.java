@@ -62,7 +62,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
         grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
             messagesApi.remove(projectId(), messageTranslations.getKey());
-            Page.getCurrent().reload();
+            reloadGrid();
         }));
 
         grid.addItemClickListener(itemClick -> {
@@ -115,6 +115,10 @@ public class MessageOverviewView extends AbstractView implements View {
         final Project project = this.projectsApi.findOne(viewChangeEvent.getParameters());
         this.projectContext.setProject(project);
 
+        reloadGrid();
+    }
+
+    private void reloadGrid() {
         grid.setItems(
                 new ArrayList<>(this.messagesApi.findAll(projectId()))
         );

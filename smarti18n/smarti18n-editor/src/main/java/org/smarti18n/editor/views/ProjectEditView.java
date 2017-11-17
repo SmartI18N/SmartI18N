@@ -32,7 +32,7 @@ public class ProjectEditView extends AbstractView implements View {
     private final Binder<Project> binder;
 
 
-    private final ProjectEditCommonTab commonTab;
+    private final ProjectEditGeneralTab commonTab;
     private final ProjectEditLocaleTab localeTab;
     private final ProjectEditUserTab userTab;
 
@@ -41,7 +41,7 @@ public class ProjectEditView extends AbstractView implements View {
 
         this.binder = new Binder<>(Project.class);
 
-        this.commonTab = new ProjectEditCommonTab(
+        this.commonTab = new ProjectEditGeneralTab(
                 this.binder
         );
         this.localeTab = new ProjectEditLocaleTab(

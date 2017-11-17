@@ -1,8 +1,11 @@
 package org.smarti18n.editor.views;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
+
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.components.IconButton;
@@ -27,11 +30,11 @@ class MessageCreateWindow extends AbstractSmartI18nWindow {
 
         final IconButton buttonSave = new SaveButton(clickEvent -> {
             final MessageImpl message = messagesApi.insert(projectId, textFieldKey.getValue());
-            close();
-            Page.getCurrent().reload();
+
             getUI().getNavigator().navigateTo(
                     VaadinUtils.buildNavigation(MessageEditView.VIEW_NAME, projectId, message.getKey())
             );
+            close();
         });
 
         formLayout.addComponent(buttonSave);

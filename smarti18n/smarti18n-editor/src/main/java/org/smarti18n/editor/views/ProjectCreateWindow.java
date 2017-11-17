@@ -25,10 +25,11 @@ class ProjectCreateWindow extends AbstractSmartI18nWindow {
 
         final SaveButton buttonSave = new SaveButton(clickEvent -> {
             final Project project = projectsApi.insert(textFieldId.getValue());
-            close();
+
             getUI().getNavigator().navigateTo(
                     VaadinUtils.buildNavigation(ProjectEditView.VIEW_NAME, project.getId())
             );
+            close();
         });
 
         formLayout.addComponent(buttonSave);

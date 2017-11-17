@@ -1,5 +1,6 @@
 package org.smarti18n.editor.vaadin;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.icons.VaadinIcons;
@@ -20,6 +21,9 @@ import org.vaadin.teemusa.sidemenu.SideMenu;
  */
 @SpringUI
 @Theme("smarti18n")
+@StyleSheet({
+        "http://fonts.googleapis.com/css?family=Questrial"
+})
 @Viewport("initial-scale=1, maximum-scale=1")
 public class EditorUI extends UI {
 

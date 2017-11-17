@@ -1,7 +1,7 @@
 //$mat-background-color: #303030;
 
-$primary: #ffb74d;
-$secondary: #00838f;
+$primary: #ff9800;
+$secondary: #009688;
 
 $mat-custom-color: #00bcd4;
 
@@ -14,21 +14,36 @@ $v-focus-color: $primary;
 .smarti18n {
   @include material;
 
+  font-family: 'Questrial', sans-serif;
+
   .valo-menu {
     .valo-menu-title {
       background: $secondary;
-      color: white;
+
+      .v-captiontext {
+        color: white;
+        font-size: 2em;
+      }
 
       img {
         display: none;
       }
 
     }
+
+    .valo-menu-item {
+      color: #444444;
+    }
+
+
+    .v-csslayout-valo-menuitems {
+      margin-top: 20px;
+    }
   }
 
 
-  .v-widget > .v-caption {
-    //font-size: 2em;
+  .valo-content .v-caption:first {
+    font-size: 2em;
   }
 
 }
