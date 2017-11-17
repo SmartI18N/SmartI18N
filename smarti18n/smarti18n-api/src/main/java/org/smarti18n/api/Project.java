@@ -1,5 +1,6 @@
 package org.smarti18n.api;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Set;
 
@@ -8,7 +9,7 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = ProjectImpl.class)
-public interface Project {
+public interface Project extends Serializable {
 
     String getId();
 
@@ -37,4 +38,9 @@ public interface Project {
             return getName();
         }
     }
+
+    Set<User> getOwners();
+
+    void setOwners(Set<User> owners);
+
 }

@@ -3,11 +3,13 @@ package org.smarti18n.messages.entities;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.smarti18n.api.Project;
+import org.smarti18n.api.User;
 
 @Document(collection = "projects")
 public class ProjectEntity implements Project {
@@ -81,12 +83,14 @@ public class ProjectEntity implements Project {
         this.secret = secret;
     }
 
-    public Set<UserEntity> getOwners() {
-        return owners;
+    @Override
+    public Set<User> getOwners() {
+        return owners.stream().collect(Collectors.toSet());
     }
 
-    public void setOwners(final Set<UserEntity> owners) {
-        this.owners = owners;
+    @Override
+    public void setOwners(final Set<User> owners) {
+        this.owners = owners.stream().map(UserEntity::new).collect(Collectors.toSet());
     }
 
     public void addOwner(final UserEntity user) {

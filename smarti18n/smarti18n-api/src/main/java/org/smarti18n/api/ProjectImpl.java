@@ -11,6 +11,7 @@ public class ProjectImpl implements Project {
     private String description;
     private String secret;
     private Set<Locale> locales;
+    private Set<User> owners;
 
     public ProjectImpl() {
     }
@@ -72,6 +73,16 @@ public class ProjectImpl implements Project {
     @Override
     public void setSecret(final String secret) {
         this.secret = secret;
+    }
+
+    @Override
+    public Set<User> getOwners() {
+        return owners;
+    }
+
+    @Override
+    public void setOwners(final Set<User> owners) {
+        this.owners = owners;
     }
 
     @Override

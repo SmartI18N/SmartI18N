@@ -7,6 +7,8 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
@@ -46,15 +48,22 @@ public class MessageEditView extends AbstractView implements View {
 
         addComponent(createButtonBar());
 
-        final LanguageTextAreas layout = new LanguageTextAreas();
-        layout.setSizeFull();
+        final LanguageTextAreas languageTextAreas = new LanguageTextAreas();
+        languageTextAreas.setSizeFull();
 
         this.binder.forField(new HiddenField()).bind("key");
-        this.binder.forMemberField(layout).bind("translations");
+        this.binder.forMemberField(languageTextAreas).bind("translations");
         this.binder.bindInstanceFields(this);
 
-        addComponent(layout);
-        setExpandRatio(layout, 1f);
+        final VerticalLayout layout = new VerticalLayout(languageTextAreas);
+        layout.setSizeFull();
+        layout.setMargin(true);
+
+        final Panel panel = new Panel(layout);
+        panel.setSizeFull();
+
+        addComponent(panel);
+        setExpandRatio(panel, 1f);
     }
 
     private HorizontalLayout createButtonBar() {

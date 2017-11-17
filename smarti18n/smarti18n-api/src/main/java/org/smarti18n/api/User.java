@@ -1,9 +1,11 @@
 package org.smarti18n.api;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = UserImpl.class)
-public interface User {
+public interface User extends Serializable {
 
     String getId();
 

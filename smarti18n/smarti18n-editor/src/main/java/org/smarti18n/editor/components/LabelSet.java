@@ -1,5 +1,6 @@
 package org.smarti18n.editor.components;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-public class LabelSet extends CustomField<Set<String>> {
+public class LabelSet extends CustomField<Set<? extends Serializable>> {
 
     private VerticalLayout layout;
 
@@ -27,8 +28,8 @@ public class LabelSet extends CustomField<Set<String>> {
     }
 
     @Override
-    protected void doSetValue(final Set<String> value) {
-        value.forEach(string -> layout.addComponent(new Label(string)));
+    protected void doSetValue(final Set<? extends Serializable> value) {
+        value.forEach(obj -> layout.addComponent(new Label(obj.toString())));
     }
 
     @Override

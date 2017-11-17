@@ -1,20 +1,14 @@
 package org.smarti18n.editor.views;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CheckBoxGroup;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
@@ -22,6 +16,7 @@ import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.CancelButton;
 import org.smarti18n.editor.components.SaveButton;
+import org.smarti18n.editor.utils.I18N;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -36,10 +31,25 @@ public class ProjectEditView extends AbstractView implements View {
 
     private final Binder<Project> binder;
 
+
+    private final ProjectEditCommonTab commonTab;
+    private final ProjectEditLocaleTab localeTab;
+    private final ProjectEditUserTab userTab;
+
     protected ProjectEditView(final ProjectsApi projectsApi) {
         this.projectsApi = projectsApi;
 
         this.binder = new Binder<>(Project.class);
+
+        this.commonTab = new ProjectEditCommonTab(
+                this.binder
+        );
+        this.localeTab = new ProjectEditLocaleTab(
+                this.binder
+        );
+        this.userTab = new ProjectEditUserTab(
+                this.binder
+        );
     }
 
     @PostConstruct
@@ -49,43 +59,22 @@ public class ProjectEditView extends AbstractView implements View {
 
         addComponent(createButtonBar());
 
-        final Layout layout = new FormLayout();
-        layout.setSizeFull();
+        final TabSheet tabSheet = new TabSheet();
+        tabSheet.setSizeFull();
 
-        final TextField textFieldId = new TextField(translate("smarti18n.editor.project-edit.id"));
-        textFieldId.setReadOnly(true);
-        textFieldId.setSizeFull();
-        layout.addComponent(textFieldId);
+        this.commonTab.init();
+        this.localeTab.init();
+        this.userTab.init();
 
-        final TextField textFieldName = new TextField(translate("smarti18n.editor.project-edit.name"));
-        textFieldName.setSizeFull();
-        layout.addComponent(textFieldName);
+        tabSheet.addTab(this.commonTab, I18N.getMessage("smarti18n.editor.project-edit.common.tab-caption"));
+        tabSheet.addTab(this.localeTab, I18N.getMessage("smarti18n.editor.project-edit.locale.tab-caption"));
+        tabSheet.addTab(this.userTab, I18N.getMessage("smarti18n.editor.project-edit.user.tab-caption"));
 
-        final TextArea textAreaDescription = new TextArea(translate("smarti18n.editor.project-edit.description"));
-        textAreaDescription.setSizeFull();
-        layout.addComponent(textAreaDescription);
+        final Panel panel = new Panel(tabSheet);
+        panel.setSizeFull();
 
-        final CheckBoxGroup<Locale> checkBoxGroupLocales = new CheckBoxGroup<>(
-                translate("smarti18n.editor.project-edit.languages"),
-                Arrays.asList(Locale.GERMAN, Locale.ENGLISH, Locale.ITALIAN)
-        );
-        checkBoxGroupLocales.setSizeFull();
-        layout.addComponent(checkBoxGroupLocales);
-
-        final TextField textFieldSecret = new TextField(translate("smarti18n.editor.project-edit.secrets"));
-        textFieldSecret.setReadOnly(true);
-        textFieldSecret.setSizeFull();
-        layout.addComponent(textFieldSecret);
-
-        this.binder.forMemberField(textFieldId).bind("id");
-        this.binder.forMemberField(textFieldName).bind("name");
-        this.binder.forMemberField(textAreaDescription).bind("description");
-        this.binder.forMemberField(checkBoxGroupLocales).bind("locales");
-        this.binder.forMemberField(textFieldSecret).bind("secret");
-        this.binder.bindInstanceFields(this);
-
-        addComponent(layout);
-        setExpandRatio(layout, 1);
+        addComponent(panel);
+        setExpandRatio(panel, 1);
     }
 
     private HorizontalLayout createButtonBar() {
@@ -116,5 +105,9 @@ public class ProjectEditView extends AbstractView implements View {
         final Project project = this.projectsApi.findOne(projectId);
 
         this.binder.readBean(project);
+
+        this.commonTab.enter(viewChangeEvent);
+        this.localeTab.enter(viewChangeEvent);
+        this.userTab.enter(viewChangeEvent);
     }
 }

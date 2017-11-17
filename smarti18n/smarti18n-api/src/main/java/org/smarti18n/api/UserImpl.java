@@ -9,6 +9,13 @@ public class UserImpl implements User {
     private String nachname;
     private String company;
 
+    public UserImpl() {
+    }
+
+    public UserImpl(final String id) {
+        this.id = id;
+    }
+
     @Override
     public String getId() {
         return id;
@@ -69,4 +76,27 @@ public class UserImpl implements User {
         this.company = company;
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserImpl)) {
+            return false;
+        }
+
+        final UserImpl user = (UserImpl) o;
+
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return mail;
+    }
 }
