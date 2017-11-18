@@ -23,6 +23,7 @@ class MessageExportWindow extends AbstractSmartI18nWindow {
         final String projectId = project.getId();
 
         final FormLayout formLayout = new FormLayout();
+        formLayout.setMargin(true);
 
         final LocaleComboBox localeComboBox = new LocaleComboBox(
                 I18N.getMessage("smarti18n.editor.message-export.locale"),

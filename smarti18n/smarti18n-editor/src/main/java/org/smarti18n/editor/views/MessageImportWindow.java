@@ -20,6 +20,7 @@ class MessageImportWindow extends AbstractSmartI18nWindow {
         super(I18N.getMessage("smarti18n.editor.message-import.caption"));
 
         final FormLayout formLayout = new FormLayout();
+        formLayout.setMargin(true);
 
         final LocaleComboBox localeComboBox = new LocaleComboBox(
                 I18N.getMessage("smarti18n.editor.message-export.locale"),
@@ -34,14 +35,25 @@ class MessageImportWindow extends AbstractSmartI18nWindow {
 
         final Upload uploadButton = new Upload("", uploadReceiver);
         uploadButton.addSucceededListener(uploadReceiver);
+        uploadButton.setVisible(true);
 
         final IconButton importButton = new IconButton(
-                I18N.getMessage("smarti18n.editor.message-import.import"),
+                I18N.getMessage("smarti18n.editor.message-import.import", "0"),
                 VaadinIcons.UPLOAD,
                 event -> messages.forEach(
                         (key, value) -> messagesApi.update(project.getId(), key, localeComboBox.getValue(), value)
                 )
         );
+        importButton.setVisible(false);
+
+        uploadButton.addSucceededListener(event -> {
+            importButton.setCaption(
+                    I18N.getMessage("smarti18n.editor.message-import.import", String.valueOf(messages.size()))
+            );
+
+            uploadButton.setVisible(false);
+            importButton.setVisible(true);
+        });
 
         formLayout.addComponent(new HorizontalLayout(uploadButton, importButton));
 
