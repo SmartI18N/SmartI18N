@@ -17,6 +17,11 @@ $v-focus-color: $primary;
   font-family: 'Questrial', sans-serif;
 
   .valo-menu {
+
+    .valo-menu-toggle {
+      color: white;
+    }
+
     .valo-menu-title {
       background: $secondary;
 
@@ -37,13 +42,14 @@ $v-focus-color: $primary;
 
 
     .v-csslayout-valo-menuitems {
-      margin-top: 20px;
+      padding-top: 20px;
     }
   }
 
 
-  .valo-content .v-caption:first {
+  .valo-content .v-widget > .v-caption > .v-captiontext {
     font-size: 2em;
+    margin: 10px;
   }
 
 }
