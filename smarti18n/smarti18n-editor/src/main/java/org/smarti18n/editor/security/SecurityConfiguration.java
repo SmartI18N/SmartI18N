@@ -3,35 +3,103 @@ package org.smarti18n.editor.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 
+import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
+
+import org.vaadin.spring.http.HttpService;
+import org.vaadin.spring.http.VaadinHttpService;
+import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
+import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
+import org.vaadin.spring.security.shared.VaadinAuthenticationSuccessHandler;
+import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
+import org.vaadin.spring.security.shared.VaadinUrlAuthenticationSuccessHandler;
+import org.vaadin.spring.security.web.VaadinRedirectStrategy;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, proxyTargetClass = true)
+@EnableVaadinSharedSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserApi userApi;
 
     @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
 
-                .anyRequest().authenticated().and()
+        http.authorizeRequests()
+                .antMatchers("/login/**").anonymous()
+                .antMatchers("/vaadinServlet/UIDL/**").permitAll()
+                .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
+                .anyRequest().authenticated();
 
-                .httpBasic();
+        http.httpBasic().disable();
+        http.formLogin().disable();
+
+        http.logout()
+                .addLogoutHandler(new VaadinSessionClosingLogoutHandler())
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
+
+        http.rememberMe()
+                .rememberMeServices(rememberMeServices()).key("myAppKey");
+
+        http.sessionManagement()
+                .sessionAuthenticationStrategy(sessionAuthenticationStrategy());
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/VAADIN/**");
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    RememberMeServices rememberMeServices() {
+        return new TokenBasedRememberMeServices("myAppKey", userDetailsService());
+    }
+
+    @Bean
+    SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new SessionFixationProtectionStrategy();
+    }
+
+    @Bean(name = VaadinSharedSecurityConfiguration.VAADIN_AUTHENTICATION_SUCCESS_HANDLER_BEAN)
+    VaadinAuthenticationSuccessHandler vaadinAuthenticationSuccessHandler(
+            final HttpService httpService,
+            final VaadinRedirectStrategy vaadinRedirectStrategy) {
+
+        return new VaadinUrlAuthenticationSuccessHandler(httpService, vaadinRedirectStrategy, "/");
     }
 
     @Override
@@ -40,17 +108,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(username -> new SimpleUserDetails(
-                this.userApi.findOne(username)
-        ));
+        authProvider.setUserDetailsService(username -> {
+            final User user = this.userApi.findOne(username);
+
+            if (user == null) {
+                throw new UsernameNotFoundException("Username [" + username + "] not found!");
+            }
+
+            return new SimpleUserDetails(user);
+        });
         authProvider.setPasswordEncoder(encoder());
         return authProvider;
     }
 
     @Bean
-    public PasswordEncoder encoder() {
+    PasswordEncoder encoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 

@@ -6,20 +6,28 @@ import com.vaadin.annotations.Viewport;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
+
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.utils.I18N;
 import org.smarti18n.editor.views.MessageOverviewView;
 import org.smarti18n.editor.views.ProjectOverviewView;
 import org.smarti18n.editor.views.StartView;
+
+import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.teemusa.sidemenu.SideMenu;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Optional;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-@SpringUI
+@SpringUI(path = "/")
 @Theme("smarti18n")
 @StyleSheet({
         "http://fonts.googleapis.com/css?family=Questrial"
@@ -28,12 +36,18 @@ import org.vaadin.teemusa.sidemenu.SideMenu;
 public class EditorUI extends UI {
 
     private final SpringViewProvider viewProvider;
+    private final VaadinSecurity vaadinSecurity;
 
     private final ProjectsApi projectsApi;
 
 
-    public EditorUI(final SpringViewProvider viewProvider, final ProjectsApi projectsApi) {
+    public EditorUI(
+            final SpringViewProvider viewProvider,
+            final VaadinSecurity vaadinSecurity,
+            final ProjectsApi projectsApi) {
+
         this.viewProvider = viewProvider;
+        this.vaadinSecurity = vaadinSecurity;
         this.projectsApi = projectsApi;
 
         getPage().setTitle(I18N.getMessage("smarti18n.editor.title"));
@@ -56,6 +70,8 @@ public class EditorUI extends UI {
                 VaadinIcons.LIST,
                 MessageOverviewView.VIEW_NAME + "/" + project.getId()
         ));
+
+        sideMenu.addMenuItem(I18N.getMessage("common.logout"), VaadinIcons.EXIT, this.vaadinSecurity::logout);
 
         setContent(sideMenu);
 

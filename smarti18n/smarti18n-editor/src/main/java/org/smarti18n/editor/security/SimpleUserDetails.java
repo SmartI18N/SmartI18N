@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 
 import org.smarti18n.api.User;
 
@@ -15,6 +16,8 @@ public class SimpleUserDetails implements UserDetails {
     private final User user;
 
     SimpleUserDetails(final User user) {
+        Assert.notNull(user, "user");
+        
         this.user = user;
     }
 

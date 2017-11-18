@@ -27,6 +27,7 @@ import org.smarti18n.editor.security.SimpleUserDetails;
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @SpringBootApplication(
+        exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class,
         scanBasePackages = "org.smarti18n.editor"
 )
 @EnableAutoConfiguration
