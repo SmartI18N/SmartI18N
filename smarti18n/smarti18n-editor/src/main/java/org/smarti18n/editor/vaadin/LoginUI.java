@@ -13,9 +13,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.LoginForm;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 import org.springframework.security.core.AuthenticationException;
 
@@ -39,19 +41,17 @@ public class LoginUI extends UI {
     protected void init(final VaadinRequest request) {
         setSizeFull();
 
-        final Panel loginPanel = createLoginForm();
-        final Panel registerPanel = createRegisterForm();
+        final HorizontalLayout layout = new HorizontalLayout(
+                createLoginForm(),
+                createRegisterForm()
+        );
 
-        final HorizontalLayout layout = new HorizontalLayout();
-        layout.setSizeFull();
+        final VerticalLayout content = new VerticalLayout();
+        content.setSizeFull();
+        content.addComponent(layout);
+        content.setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
 
-        layout.addComponent(loginPanel);
-        layout.addComponent(registerPanel);
-
-        layout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
-        layout.setComponentAlignment(registerPanel, Alignment.MIDDLE_CENTER);
-
-        setContent(layout);
+        setContent(content);
     }
 
     private Panel createLoginForm() {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.entities.UserEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
@@ -84,9 +85,10 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
         }
 
         this.projectRepository.findAll().forEach(project -> {
-            project.getOwners().isEmpty();
-            project.addOwner(defaultUser);
-            this.projectRepository.save(project);
+            if (project.getOwners().isEmpty()) {
+                project.addOwner(defaultUser);
+                this.projectRepository.save(project);
+            }
         });
 
         this.logger.info("Initializing Application finished");

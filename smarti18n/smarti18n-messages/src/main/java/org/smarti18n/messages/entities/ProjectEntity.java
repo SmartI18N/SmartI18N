@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.smarti18n.api.Project;
@@ -22,6 +23,8 @@ public class ProjectEntity implements Project {
     private String secret;
 
     private Set<Locale> locales = new HashSet<>();
+
+    @DBRef
     private Set<UserEntity> owners = new HashSet<>();
 
     ProjectEntity() {
@@ -85,7 +88,7 @@ public class ProjectEntity implements Project {
 
     @Override
     public Set<User> getOwners() {
-        return owners.stream().collect(Collectors.toSet());
+        return new HashSet<>(owners);
     }
 
     @Override

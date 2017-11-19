@@ -14,6 +14,7 @@ import com.vaadin.ui.UI;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.utils.I18N;
 import org.smarti18n.editor.views.MessageOverviewView;
+import org.smarti18n.editor.views.ProfileView;
 import org.smarti18n.editor.views.ProjectOverviewView;
 import org.smarti18n.editor.views.StartView;
 
@@ -70,6 +71,8 @@ public class EditorUI extends UI {
                 VaadinIcons.LIST,
                 MessageOverviewView.VIEW_NAME + "/" + project.getId()
         ));
+
+        sideMenu.addNavigation(I18N.getMessage("smarti18n.editor.menu.profile"), VaadinIcons.USER, ProfileView.VIEW_NAME);
 
         sideMenu.addMenuItem(I18N.getMessage("common.logout"), VaadinIcons.EXIT, this.vaadinSecurity::logout);
 

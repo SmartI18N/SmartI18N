@@ -103,11 +103,7 @@ public class MessageOverviewView extends AbstractView implements View {
                     this.getUI().addWindow(new MessageExportWindow(this.messagesApi, project()));
                 });
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-        buttonLayout.addComponents(newMessageButton, importMessageButton, exportMessageButton);
-
-        return buttonLayout;
+        return new HorizontalLayout(newMessageButton, importMessageButton, exportMessageButton);
     }
 
     @Override

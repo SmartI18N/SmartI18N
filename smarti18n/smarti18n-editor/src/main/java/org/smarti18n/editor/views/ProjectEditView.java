@@ -91,11 +91,7 @@ public class ProjectEditView extends AbstractView implements View {
                 clickEvent -> navigateTo(ProjectOverviewView.VIEW_NAME)
         );
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-        buttonLayout.addComponents(buttonSave, buttonCancel);
-
-        return buttonLayout;
+        return new HorizontalLayout(buttonSave, buttonCancel);
     }
 
     @Override
