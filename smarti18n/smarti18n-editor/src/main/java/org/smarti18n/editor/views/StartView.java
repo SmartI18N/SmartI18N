@@ -3,14 +3,21 @@ package org.smarti18n.editor.views;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
+
 import javax.annotation.PostConstruct;
-import org.smarti18n.editor.components.AbstractView;
+
+import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.components.IconButton;
 import org.smarti18n.editor.security.SimpleUserDetails;
+import org.smarti18n.editor.utils.I18N;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -21,23 +28,42 @@ public class StartView extends AbstractView implements View {
 
     public static final String VIEW_NAME = "";
 
-    public StartView() {
+    private final ProjectsApi projectsApi;
 
+    public StartView(final ProjectsApi projectsApi) {
+        this.projectsApi = projectsApi;
     }
 
     @PostConstruct
-    private void init() {
-        setCaption(translate("smarti18n.editor.start.caption"));
+    void init() {
+        super.init(translate("smarti18n.editor.start.caption"));
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        removeAllComponents();
+
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final SimpleUserDetails principal = (SimpleUserDetails) authentication.getPrincipal();
         final String username = principal.getName();
 
-        addComponent(new Label(getLocale().toString()));
-        addComponent(new Label(username));
+        final Panel panel = new Panel();
+        panel.setContent(new VerticalLayout(
+                new Label(getLocale().toString()),
+                new Label(username)
+        ));
+        addComponent(panel);
+
+        final Panel newProject = new Panel(I18N.getMessage("smarti18n.editor.start.new-project.caption"));
+        newProject.setContent(new VerticalLayout(
+                new Label(I18N.getMessage("smarti18n.editor.start.new-project.text")),
+                new IconButton(
+                        translate("smarti18n.editor.project-overview.add-new-project"),
+                        VaadinIcons.FILE_ADD,
+                        clickEvent -> this.getUI().addWindow(new ProjectCreateWindow(this.projectsApi))
+                )
+        ));
+        addComponent(newProject);
 
     }
 

@@ -42,8 +42,8 @@ public class LoginUI extends UI {
         setSizeFull();
 
         final HorizontalLayout layout = new HorizontalLayout(
-                createLoginForm(),
-                createRegisterForm()
+                createLoginForm()
+//                createRegisterForm()
         );
 
         final VerticalLayout content = new VerticalLayout();

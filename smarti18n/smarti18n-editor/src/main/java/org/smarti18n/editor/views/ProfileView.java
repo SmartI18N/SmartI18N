@@ -5,7 +5,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
@@ -13,13 +12,9 @@ import com.vaadin.ui.TextField;
 
 import javax.annotation.PostConstruct;
 
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserImpl;
-import org.smarti18n.editor.components.AbstractView;
-import org.smarti18n.editor.components.CancelButton;
 import org.smarti18n.editor.components.SaveButton;
 import org.smarti18n.editor.security.SimpleUserDetails;
 import org.smarti18n.editor.utils.I18N;
@@ -45,11 +40,10 @@ public class ProfileView extends AbstractView implements View {
     }
 
     @PostConstruct
-    private void init() {
-        setCaption(translate("smarti18n.editor.profile.caption"));
-        setSizeFull();
+    void init() {
+        super.init(translate("smarti18n.editor.profile.caption"));
 
-        addComponent(createButtonBar());
+        setSizeFull();
 
         final FormLayout formLayout = new FormLayout();
         formLayout.setMargin(true);
@@ -76,6 +70,8 @@ public class ProfileView extends AbstractView implements View {
 
         addComponent(panel);
         setExpandRatio(panel, 1);
+
+        addComponent(createButtonBar());
 
         this.binder.forMemberField(textFieldMail).bind("mail");
         this.binder.forMemberField(textFieldVorname).bind("vorname");

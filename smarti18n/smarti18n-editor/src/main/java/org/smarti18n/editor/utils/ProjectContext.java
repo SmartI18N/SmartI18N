@@ -31,8 +31,13 @@ public class ProjectContext {
     }
 
     public String getProjectId() {
-        Assert.notNull(projectId, "projectId");
+        if (projectId == null) {
+            final Project project = getProject();
 
+            return project.getId();
+        }
+
+        Assert.notNull(projectId, "projectId");
         return projectId;
     }
 }

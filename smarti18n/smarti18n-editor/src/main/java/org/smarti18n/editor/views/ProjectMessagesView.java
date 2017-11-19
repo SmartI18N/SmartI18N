@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Page;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import javax.annotation.PostConstruct;
@@ -17,7 +15,6 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.IconButton;
 import org.smarti18n.editor.utils.ProjectContext;
 
@@ -25,30 +22,25 @@ import org.smarti18n.editor.utils.ProjectContext;
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
-@SpringView(name = MessageOverviewView.VIEW_NAME)
-public class MessageOverviewView extends AbstractView implements View {
+@SpringView(name = ProjectMessagesView.VIEW_NAME)
+public class ProjectMessagesView extends AbstractProjectView implements View {
 
-    public static final String VIEW_NAME = "messages/overview";
+    public static final String VIEW_NAME = "project/messages";
 
     private final MessagesApi messagesApi;
-    private final ProjectsApi projectsApi;
-
-    private final ProjectContext projectContext;
 
     private Grid<Message> grid;
 
-    public MessageOverviewView(final MessagesApi messagesApi, final ProjectsApi projectsApi) {
-        this.messagesApi = messagesApi;
-        this.projectsApi = projectsApi;
+    public ProjectMessagesView(final MessagesApi messagesApi, final ProjectsApi projectsApi) {
+        super(projectsApi);
 
-        this.projectContext = new ProjectContext();
+        this.messagesApi = messagesApi;
     }
 
     @PostConstruct
     void init() {
-        setCaption(translate("smarti18n.editor.message-overview.caption"));
-
-        addComponent(createButtonBar());
+        super.init(translate("smarti18n.editor.message-overview.caption"));
+        setSizeFull();
 
         grid = new Grid<>(Message.class);
         grid.setColumns("key", "localesAsString");
@@ -67,7 +59,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
         grid.addItemClickListener(itemClick -> {
             final String key = itemClick.getItem().getKey();
-            navigateTo(MessageEditView.VIEW_NAME, projectId(), key);
+            navigateTo(ProjectMessageEditView.VIEW_NAME, projectId(), key);
         });
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
@@ -77,7 +69,8 @@ public class MessageOverviewView extends AbstractView implements View {
         addComponent(grid);
         setExpandRatio(grid, 1);
 
-        setSizeFull();
+        addComponent(createButtonBar());
+
     }
 
     private HorizontalLayout createButtonBar() {
@@ -108,8 +101,7 @@ public class MessageOverviewView extends AbstractView implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        final Project project = this.projectsApi.findOne(viewChangeEvent.getParameters());
-        this.projectContext.setProject(project);
+        super.enter(viewChangeEvent);
 
         reloadGrid();
     }

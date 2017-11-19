@@ -1,5 +1,7 @@
 package org.smarti18n.editor.vaadin;
 
+import com.vaadin.ui.UI;
+
 import java.util.Arrays;
 
 /**
@@ -17,5 +19,9 @@ public final class VaadinUtils {
         );
 
         return navigationState.toString();
+    }
+
+    public static void navigateTo(final String viewId, final String ... params) {
+        UI.getCurrent().getNavigator().navigateTo(VaadinUtils.buildNavigation(viewId, params));
     }
 }

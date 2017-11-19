@@ -5,16 +5,16 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+
 import javax.annotation.PostConstruct;
+
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.editor.utils.ProjectContext;
-import org.smarti18n.editor.components.AbstractView;
 import org.smarti18n.editor.components.CancelButton;
 import org.smarti18n.editor.components.HiddenField;
 import org.smarti18n.editor.components.LocaleTextAreas;
@@ -24,8 +24,8 @@ import org.smarti18n.editor.components.SaveButton;
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
-@SpringView(name = MessageEditView.VIEW_NAME)
-public class MessageEditView extends AbstractView implements View {
+@SpringView(name = ProjectMessageEditView.VIEW_NAME)
+public class ProjectMessageEditView extends AbstractView implements View {
 
     static final String VIEW_NAME = "messages/edit";
 
@@ -34,7 +34,7 @@ public class MessageEditView extends AbstractView implements View {
     private final Binder<Message> binder;
     private final ProjectContext projectContext;
 
-    public MessageEditView(final MessagesApi messagesApi) {
+    public ProjectMessageEditView(final MessagesApi messagesApi) {
         this.messagesApi = messagesApi;
 
         this.binder = new Binder<>(Message.class);
@@ -42,11 +42,10 @@ public class MessageEditView extends AbstractView implements View {
     }
 
     @PostConstruct
-    private void init() {
-        setCaption(translate("smarti18n.editor.message-edit.caption"));
-        setSizeFull();
+    void init() {
+        super.init(translate("smarti18n.editor.message-edit.caption"));
 
-        addComponent(createButtonBar());
+        setSizeFull();
 
         final LocaleTextAreas localeTextAreas = new LocaleTextAreas();
         localeTextAreas.setSizeFull();
@@ -64,6 +63,8 @@ public class MessageEditView extends AbstractView implements View {
 
         addComponent(panel);
         setExpandRatio(panel, 1f);
+
+        addComponent(createButtonBar());
     }
 
     private HorizontalLayout createButtonBar() {
@@ -76,11 +77,11 @@ public class MessageEditView extends AbstractView implements View {
                     (locale, translation) -> messagesApi.update(projectId(), message.getKey(), locale, translation)
             );
 
-            navigateTo(MessageOverviewView.VIEW_NAME, projectId());
+            navigateTo(ProjectMessagesView.VIEW_NAME, projectId());
         });
 
         final CancelButton buttonCancel = new CancelButton(
-                clickEvent -> navigateTo(MessageOverviewView.VIEW_NAME, projectId())
+                clickEvent -> navigateTo(ProjectMessagesView.VIEW_NAME, projectId())
         );
 
         return new HorizontalLayout(buttonSave, buttonCancel);

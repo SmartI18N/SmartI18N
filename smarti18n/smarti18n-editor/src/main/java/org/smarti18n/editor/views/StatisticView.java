@@ -5,7 +5,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import javax.annotation.PostConstruct;
-import org.smarti18n.editor.components.AbstractView;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -21,8 +20,8 @@ public class StatisticView extends AbstractView implements View {
     }
 
     @PostConstruct
-    private void init() {
-        setCaption(translate("smarti18n.editor.statistic.caption"));
+    void init() {
+        super.init(translate("smarti18n.editor.statistic.caption"));
     }
 
     @Override

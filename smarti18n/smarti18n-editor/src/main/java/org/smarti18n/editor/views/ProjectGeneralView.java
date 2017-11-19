@@ -1,27 +1,39 @@
 package org.smarti18n.editor.views;
 
 import com.vaadin.data.Binder;
+import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import org.smarti18n.api.Project;
-import org.smarti18n.editor.components.Tab;
+import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.utils.I18N;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-class ProjectEditGeneralTab extends FormLayout implements Tab {
+@UIScope
+@SpringView(name = ProjectGeneralView.VIEW_NAME)
+class ProjectGeneralView extends AbstractProjectView implements View {
+
+    public static final String VIEW_NAME = "project/general";
 
     private final Binder<Project> binder;
 
-    ProjectEditGeneralTab(final Binder<Project> binder) {
-        this.binder = binder;
+    ProjectGeneralView(final ProjectsApi projectsApi) {
+        super(projectsApi);
+
+        this.binder = new Binder<>(Project.class);
     }
 
-    @Override
-    public void init() {
+    @PostConstruct
+    void init() {
+        super.init(translate("smarti18n.editor.project-edit.caption"));
+
         setSizeFull();
         setMargin(true);
 
@@ -52,6 +64,7 @@ class ProjectEditGeneralTab extends FormLayout implements Tab {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        super.enter(viewChangeEvent);
     }
 
 }
