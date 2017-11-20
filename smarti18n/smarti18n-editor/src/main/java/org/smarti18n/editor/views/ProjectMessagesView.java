@@ -16,7 +16,6 @@ import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.IconButton;
-import org.smarti18n.editor.utils.ProjectContext;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -68,12 +67,10 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
 
         addComponent(grid);
         setExpandRatio(grid, 1);
-
-        addComponent(createButtonBar());
-
     }
 
-    private HorizontalLayout createButtonBar() {
+    @Override
+    protected HorizontalLayout createButtonBar() {
 
         final IconButton newMessageButton = new IconButton(
                 translate("smarti18n.editor.message-overview.add-new-message"),

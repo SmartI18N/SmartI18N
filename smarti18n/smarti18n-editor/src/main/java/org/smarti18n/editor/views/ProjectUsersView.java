@@ -1,17 +1,19 @@
 package org.smarti18n.editor.views;
 
-import com.vaadin.data.Binder;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.components.LabelSet;
+import org.smarti18n.api.User;
+import org.smarti18n.editor.components.IconButton;
 import org.smarti18n.editor.utils.I18N;
-
-import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -20,30 +22,61 @@ import javax.annotation.PostConstruct;
 @SpringView(name = ProjectUsersView.VIEW_NAME)
 public class ProjectUsersView extends AbstractProjectView implements View {
 
-    public static final String VIEW_NAME = "project/general";
+    public static final String VIEW_NAME = "project/users";
 
-    private final Binder<Project> binder;
+    private Grid<User> grid;
 
     ProjectUsersView(final ProjectsApi projectsApi) {
         super(projectsApi);
-
-        this.binder = new Binder<>(Project.class);
     }
 
     @PostConstruct
     public void init() {
-        super.init(I18N.getMessage("smarti18n.editor.project-edit.owners"));
+        super.init(I18N.getMessage("smarti18n.editor.project-owner.caption"));
+        setSizeFull();
 
-        final LabelSet labelSet = new LabelSet("");
-        labelSet.setSizeFull();
-        addComponent(labelSet);
+        grid = new Grid<>(User.class);
+        grid.setColumns("mail", "vorname", "nachname", "company");
 
-        this.binder.forMemberField(labelSet).bind("owners");
-        this.binder.bindInstanceFields(this);
+        grid.getColumn("company")
+                .setExpandRatio(1);
+
+        grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
+            reloadGrid();
+        }));
+
+        grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
+        grid.setSizeFull();
+
+        addComponent(grid);
+        setExpandRatio(grid, 1);
+    }
+
+    @Override
+    protected HorizontalLayout createButtonBar() {
+        final IconButton newLocaleButton = new IconButton(
+                translate("smarti18n.editor.message-overview.add-new-owner"),
+                VaadinIcons.FILE_ADD,
+                clickEvent -> {
+
+                });
+
+        return new HorizontalLayout(newLocaleButton);
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         super.enter(viewChangeEvent);
+
+        reloadGrid();
     }
+
+    private void reloadGrid() {
+        final Project project = this.projectContext.getProject();
+        grid.setItems(
+                project.getOwners()
+        );
+    }
+
 }

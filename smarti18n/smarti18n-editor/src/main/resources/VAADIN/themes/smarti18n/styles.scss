@@ -40,16 +40,14 @@ $v-focus-color: $primary;
       color: #444444;
     }
 
-
     .v-csslayout-valo-menuitems {
       padding-top: 20px;
     }
   }
 
-
-  .valo-content .v-widget > .v-caption > .v-captiontext {
-    font-size: 2em;
-    margin: 10px;
+  h2 {
+    margin-top: 0.77em;
+    margin-bottom: 0.77em;
   }
 
 }

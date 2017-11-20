@@ -27,7 +27,7 @@ class ProjectCreateWindow extends AbstractSmartI18nWindow {
             final Project project = projectsApi.insert(textFieldId.getValue());
 
             getUI().getNavigator().navigateTo(
-                    VaadinUtils.buildNavigation(ProjectEditView.VIEW_NAME, project.getId())
+                    VaadinUtils.buildNavigation(ProjectMessagesView.VIEW_NAME, project.getId())
             );
             close();
         });

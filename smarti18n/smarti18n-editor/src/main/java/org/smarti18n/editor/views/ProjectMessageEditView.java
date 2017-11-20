@@ -8,13 +8,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-
 import javax.annotation.PostConstruct;
-
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.editor.utils.ProjectContext;
+import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.CancelButton;
 import org.smarti18n.editor.components.HiddenField;
 import org.smarti18n.editor.components.LocaleTextAreas;
@@ -25,20 +23,20 @@ import org.smarti18n.editor.components.SaveButton;
  */
 @UIScope
 @SpringView(name = ProjectMessageEditView.VIEW_NAME)
-public class ProjectMessageEditView extends AbstractView implements View {
+public class ProjectMessageEditView extends AbstractProjectView implements View {
 
     static final String VIEW_NAME = "messages/edit";
 
     private final MessagesApi messagesApi;
 
     private final Binder<Message> binder;
-    private final ProjectContext projectContext;
 
-    public ProjectMessageEditView(final MessagesApi messagesApi) {
+    public ProjectMessageEditView(final MessagesApi messagesApi, final ProjectsApi projectApi) {
+        super(projectApi);
+
         this.messagesApi = messagesApi;
 
         this.binder = new Binder<>(Message.class);
-        this.projectContext = new ProjectContext();
     }
 
     @PostConstruct
@@ -63,11 +61,10 @@ public class ProjectMessageEditView extends AbstractView implements View {
 
         addComponent(panel);
         setExpandRatio(panel, 1f);
-
-        addComponent(createButtonBar());
     }
 
-    private HorizontalLayout createButtonBar() {
+    @Override
+    protected HorizontalLayout createButtonBar() {
 
         final SaveButton buttonSave = new SaveButton(clickEvent -> {
             final Message message = new MessageImpl();
@@ -90,7 +87,7 @@ public class ProjectMessageEditView extends AbstractView implements View {
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final String[] parameters = viewChangeEvent.getParameters().split("/");
-        projectContext.setProjectId(parameters[0]);
+        loadProjectContext(parameters[0]);
         final String key = parameters[1];
 
         final Message message = this.messagesApi.findOne(projectId(), key);

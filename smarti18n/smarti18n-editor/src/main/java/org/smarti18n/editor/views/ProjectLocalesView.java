@@ -1,22 +1,20 @@
 package org.smarti18n.editor.views;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
-import com.vaadin.data.Binder;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.TwinColSelect;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.components.IconButton;
 import org.smarti18n.editor.utils.I18N;
-
-import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -27,34 +25,56 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
 
     public static final String VIEW_NAME = "project/locales";
 
-    private static final List<Locale> AVAILABLE_LOCALES = Arrays.stream(Locale.getAvailableLocales())
-            .sorted(Comparator.comparing(Locale::toString)).collect(Collectors.toList());
-
-    private final Binder<Project> binder;
+    private Grid<Locale> grid;
 
     ProjectLocalesView(final ProjectsApi projectsApi) {
         super(projectsApi);
-
-        this.binder = new Binder<>(Project.class);
     }
 
     @PostConstruct
     public void init() {
-        super.init(I18N.getMessage("smarti18n.editor.project-edit.locales"));
+        super.init(I18N.getMessage("smarti18n.editor.project-locales.caption"));
+        setSizeFull();
 
-        final TwinColSelect<Locale> localeTwinColSelect = new TwinColSelect<>(
-                "",
-                AVAILABLE_LOCALES
-        );
-        localeTwinColSelect.setSizeFull();
-        addComponent(localeTwinColSelect);
+        grid = new Grid<>(Locale.class);
+        grid.setColumns("displayLanguage", "language", "displayCountry", "country");
+        grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
+            reloadGrid();
+        }));
 
-        this.binder.forMemberField(localeTwinColSelect).bind("locales");
-        this.binder.bindInstanceFields(this);
+        grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
+        grid.setSizeFull();
+
+        addComponent(grid);
+        setExpandRatio(grid, 1);
+    }
+
+    @Override
+    protected HorizontalLayout createButtonBar() {
+        final IconButton newLocaleButton = new IconButton(
+                translate("smarti18n.editor.message-overview.add-new-locale"),
+                VaadinIcons.FILE_ADD,
+                clickEvent -> {
+
+                });
+
+        return new HorizontalLayout(newLocaleButton);
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         super.enter(viewChangeEvent);
+
+        reloadGrid();
     }
+
+    private void reloadGrid() {
+        final Project project = this.projectContext.getProject();
+
+        grid.setItems(
+                project.getLocales()
+        );
+    }
+
 }
