@@ -9,6 +9,6 @@ import org.smarti18n.editor.utils.I18N;
 public class SaveButton extends IconButton {
 
     public SaveButton(final ClickListener listener) {
-        super(I18N.getMessage("common.save"), VaadinIcons.LOCK, listener);
+        super(I18N.translate("common.save"), VaadinIcons.LOCK, listener);
     }
 }

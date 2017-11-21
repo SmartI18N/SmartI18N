@@ -12,6 +12,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.ValoTheme;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
@@ -42,17 +43,17 @@ class ProjectGeneralView extends AbstractProjectView implements View {
         setSizeFull();
         setMargin(true);
 
-        final TextField textFieldId = new TextField(I18N.getMessage("smarti18n.editor.project-edit.id"));
+        final TextField textFieldId = new TextField(I18N.translate("smarti18n.editor.project-edit.id"));
         textFieldId.setReadOnly(true);
         textFieldId.setSizeFull();
 
-        final TextField textFieldName = new TextField(I18N.getMessage("smarti18n.editor.project-edit.name"));
+        final TextField textFieldName = new TextField(I18N.translate("smarti18n.editor.project-edit.name"));
         textFieldName.setSizeFull();
 
-        final TextArea textAreaDescription = new TextArea(I18N.getMessage("smarti18n.editor.project-edit.description"));
+        final TextArea textAreaDescription = new TextArea(I18N.translate("smarti18n.editor.project-edit.description"));
         textAreaDescription.setSizeFull();
 
-        final TextField textFieldSecret = new TextField(I18N.getMessage("smarti18n.editor.project-edit.secret"));
+        final TextField textFieldSecret = new TextField(I18N.translate("smarti18n.editor.project-edit.secret"));
         textFieldSecret.setReadOnly(true);
         textFieldSecret.setSizeFull();
 
@@ -74,7 +75,7 @@ class ProjectGeneralView extends AbstractProjectView implements View {
 
     @Override
     protected HorizontalLayout createButtonBar() {
-        final IconButton saveButton = new IconButton(I18N.getMessage("common.save"), VaadinIcons.SAFE, clickEvent -> {
+        final IconButton saveButton = new IconButton(I18N.translate("common.save"), VaadinIcons.SAFE, clickEvent -> {
             try {
                 final Project project = projectContext.getProject();
                 binder.writeBean(project);
@@ -85,8 +86,15 @@ class ProjectGeneralView extends AbstractProjectView implements View {
             }
         });
 
+        final IconButton removeProjectButton = new IconButton(I18N.translate("smarti18n.editor.project-general.remove-project.button"), VaadinIcons.FOLDER_REMOVE, clickEvent -> {
+                projectsApi.remove(projectContext.getProjectId());
+                navigateTo(StartView.VIEW_NAME);
+        });
+        removeProjectButton.addStyleName(ValoTheme.BUTTON_DANGER);
+
         return new HorizontalLayout(
-                saveButton
+                saveButton,
+                removeProjectButton
         );
     }
 

@@ -1,36 +1,40 @@
 package org.smarti18n.editor.views;
 
+import java.util.Arrays;
+import java.util.Locale;
+
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.AddButton;
 import org.smarti18n.editor.components.CancelButton;
 import org.smarti18n.editor.utils.I18N;
-import org.smarti18n.editor.vaadin.VaadinUtils;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-public class ProjectCreateWindow extends AbstractSmartI18nWindow {
+class ProjectLocaleAddWindow extends AbstractSmartI18nWindow {
 
-    public ProjectCreateWindow(final ProjectsApi projectsApi) {
-        super(I18N.translate("smarti18n.editor.project-create.caption"));
+    ProjectLocaleAddWindow(final ProjectsApi projectsApi, final String projectId) {
+        super(I18N.translate("smarti18n.editor.locale-add.caption"));
 
         final FormLayout formLayout = new FormLayout();
         formLayout.setMargin(true);
 
-        final TextField textFieldId = new TextField(I18N.translate("smarti18n.editor.project-create.id"));
-        textFieldId.setSizeFull();
-        formLayout.addComponent(textFieldId);
+        final ComboBox<Locale> localeComboBox = new ComboBox<>(
+                I18N.translate("smarti18n.editor.locale-add.locale"),
+                Arrays.asList(Locale.getAvailableLocales())
+        );
+        localeComboBox.setSizeFull();
+        formLayout.addComponent(localeComboBox);
 
         final AddButton addButton = new AddButton(clickEvent -> {
-            final Project project = projectsApi.insert(textFieldId.getValue());
+            final Project project = projectsApi.findOne(projectId);
+            project.getLocales().add(localeComboBox.getValue());
+            projectsApi.update(project);
 
-            getUI().getNavigator().navigateTo(
-                    VaadinUtils.buildNavigation(ProjectMessagesView.VIEW_NAME, project.getId())
-            );
             close();
         });
         final CancelButton cancelButton = new CancelButton(clickEvent -> close());

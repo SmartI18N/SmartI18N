@@ -1,5 +1,7 @@
 package org.smarti18n.editor.views;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -9,17 +11,13 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
-
 import javax.annotation.PostConstruct;
-
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserImpl;
 import org.smarti18n.editor.components.SaveButton;
 import org.smarti18n.editor.security.SimpleUserDetails;
 import org.smarti18n.editor.utils.I18N;
-
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -45,23 +43,25 @@ public class ProfileView extends AbstractView implements View {
 
         setSizeFull();
 
+        addComponent(createButtonBar());
+
         final FormLayout formLayout = new FormLayout();
         formLayout.setMargin(true);
 
-        final TextField textFieldMail = new TextField(I18N.getMessage("smarti18n.editor.profile.mail"));
+        final TextField textFieldMail = new TextField(I18N.translate("smarti18n.editor.profile.mail"));
         textFieldMail.setSizeFull();
         textFieldMail.setReadOnly(true);
         formLayout.addComponent(textFieldMail);
 
-        final TextField textFieldVorname = new TextField(I18N.getMessage("smarti18n.editor.profile.vorname"));
+        final TextField textFieldVorname = new TextField(I18N.translate("smarti18n.editor.profile.vorname"));
         textFieldVorname.setSizeFull();
         formLayout.addComponent(textFieldVorname);
 
-        final TextField textFieldNachname = new TextField(I18N.getMessage("smarti18n.editor.profile.nachname"));
+        final TextField textFieldNachname = new TextField(I18N.translate("smarti18n.editor.profile.nachname"));
         textFieldNachname.setSizeFull();
         formLayout.addComponent(textFieldNachname);
 
-        final TextField textFieldCompany = new TextField(I18N.getMessage("smarti18n.editor.profile.company"));
+        final TextField textFieldCompany = new TextField(I18N.translate("smarti18n.editor.profile.company"));
         textFieldCompany.setSizeFull();
         formLayout.addComponent(textFieldCompany);
 
@@ -70,8 +70,6 @@ public class ProfileView extends AbstractView implements View {
 
         addComponent(panel);
         setExpandRatio(panel, 1);
-
-        addComponent(createButtonBar());
 
         this.binder.forMemberField(textFieldMail).bind("mail");
         this.binder.forMemberField(textFieldVorname).bind("vorname");

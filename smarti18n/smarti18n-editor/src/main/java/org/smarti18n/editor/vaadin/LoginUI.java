@@ -13,7 +13,6 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.LoginForm;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
@@ -34,7 +33,7 @@ public class LoginUI extends UI {
         this.vaadinSecurity = vaadinSecurity;
         this.userApi = userApi;
 
-        getPage().setTitle(I18N.getMessage("smarti18n.editor.title"));
+        getPage().setTitle(I18N.translate("smarti18n.editor.title"));
     }
 
     @Override
@@ -71,7 +70,7 @@ public class LoginUI extends UI {
         });
 
         final Panel panel = new Panel();
-        panel.setCaption(I18N.getMessage("smarti18n.editor.login.caption"));
+        panel.setCaption(I18N.translate("smarti18n.editor.login.caption"));
         panel.setContent(new MarginLayout(loginForm));
         panel.setSizeUndefined();
         return panel;
@@ -80,7 +79,7 @@ public class LoginUI extends UI {
     private Panel createRegisterForm() {
         final LoginForm form = new LoginForm();
         form.setSizeFull();
-        form.setLoginButtonCaption(I18N.getMessage("smarti18n.editor.register.caption"));
+        form.setLoginButtonCaption(I18N.translate("smarti18n.editor.register.caption"));
 
         form.addLoginListener(event -> {
             try {
@@ -98,7 +97,7 @@ public class LoginUI extends UI {
         });
 
         final Panel panel = new Panel();
-        panel.setCaption(I18N.getMessage("smarti18n.editor.register.caption"));
+        panel.setCaption(I18N.translate("smarti18n.editor.register.caption"));
         panel.setContent(new MarginLayout(form));
         panel.setSizeUndefined();
         return panel;

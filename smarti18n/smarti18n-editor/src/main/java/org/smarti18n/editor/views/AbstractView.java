@@ -26,7 +26,7 @@ abstract class AbstractView extends VerticalLayout implements View {
     }
 
     String translate(final String code, final String... args) {
-        return I18N.getMessage(code, args);
+        return I18N.translate(code, args);
     }
 
     void navigateTo(final String viewId, final String... params) {

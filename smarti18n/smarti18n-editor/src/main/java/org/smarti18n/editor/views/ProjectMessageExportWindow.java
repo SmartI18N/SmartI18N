@@ -15,10 +15,10 @@ import org.smarti18n.editor.components.LocaleComboBox;
 import org.smarti18n.editor.utils.I18N;
 import org.smarti18n.editor.utils.PropertiesExportStreamSource;
 
-class MessageExportWindow extends AbstractSmartI18nWindow {
+class ProjectMessageExportWindow extends AbstractSmartI18nWindow {
 
-    MessageExportWindow(final MessagesApi messagesApi, final Project project) {
-        super(I18N.getMessage("smarti18n.editor.message-export.caption"));
+    ProjectMessageExportWindow(final MessagesApi messagesApi, final Project project) {
+        super(I18N.translate("smarti18n.editor.message-export.caption"));
 
         final String projectId = project.getId();
 
@@ -26,7 +26,7 @@ class MessageExportWindow extends AbstractSmartI18nWindow {
         formLayout.setMargin(true);
 
         final LocaleComboBox localeComboBox = new LocaleComboBox(
-                I18N.getMessage("smarti18n.editor.message-export.locale"),
+                I18N.translate("smarti18n.editor.message-export.locale"),
                 project.getLocales()
         );
         formLayout.addComponent(localeComboBox);

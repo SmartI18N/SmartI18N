@@ -15,16 +15,21 @@ public class I18N {
 
     private static MessageSource messageSource;
 
-    private final Logger logger = LoggerFactory.getLogger(I18N.class);
-
     public I18N(final MessageSource messageSource) {
-        this.logger.info("Create and init static I18N class");
+        logger().info("Create and init static I18N class");
 
         I18N.messageSource = messageSource;
     }
 
-    public static String getMessage(final String code, final String... args) {
-        return messageSource.getMessage(code, args, VaadinSession.getCurrent().getLocale());
+    public static String translate(final String code, final String... args) {
+        final String message = messageSource.getMessage(code, args, VaadinSession.getCurrent().getLocale());
+        if (message.contains(code)) {
+            logger().warn(code);
+        }
+        return message;
     }
 
+    private static Logger logger() {
+        return LoggerFactory.getLogger(I18N.class);
+    }
 }

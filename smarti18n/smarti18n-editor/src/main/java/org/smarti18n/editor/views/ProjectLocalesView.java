@@ -33,12 +33,16 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
 
     @PostConstruct
     public void init() {
-        super.init(I18N.getMessage("smarti18n.editor.project-locales.caption"));
+        super.init(I18N.translate("smarti18n.editor.project-locales.caption"));
         setSizeFull();
 
         grid = new Grid<>(Locale.class);
         grid.setColumns("displayLanguage", "language", "displayCountry", "country");
-        grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
+        grid.addComponentColumn(locale -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
+            final Project project = projectsApi.findOne(this.projectContext.getProjectId());
+            project.getLocales().remove(locale);
+            projectsApi.update(project);
+
             reloadGrid();
         }));
 
@@ -53,10 +57,16 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
     @Override
     protected HorizontalLayout createButtonBar() {
         final IconButton newLocaleButton = new IconButton(
-                translate("smarti18n.editor.message-overview.add-new-locale"),
+                translate("smarti18n.editor.project-locales.add-new-locale"),
                 VaadinIcons.FILE_ADD,
                 clickEvent -> {
+                    final ProjectLocaleAddWindow window = new ProjectLocaleAddWindow(
+                            this.projectsApi,
+                            this.projectContext.getProjectId()
+                    );
+                    window.addCloseListener(closeEvent -> reloadGrid());
 
+                    this.getUI().addWindow(window);
                 });
 
         return new HorizontalLayout(newLocaleButton);

@@ -12,6 +12,7 @@ import com.vaadin.ui.UI;
 
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.editor.views.ProjectCreateWindow;
 import org.smarti18n.editor.views.ProjectMessagesView;
 import org.smarti18n.editor.views.ProfileView;
 import org.smarti18n.editor.views.StartView;
@@ -45,19 +46,19 @@ public class EditorUI extends UI {
         this.vaadinSecurity = vaadinSecurity;
         this.projectsApi = projectsApi;
 
-        getPage().setTitle(I18N.getMessage("smarti18n.editor.title"));
+        getPage().setTitle(I18N.translate("smarti18n.editor.title"));
     }
 
     @Override
     protected void init(final VaadinRequest vaadinRequest) {
         final SideMenu sideMenu = new SideMenu();
-        sideMenu.setMenuCaption(I18N.getMessage("smarti18n.editor.title"));
+        sideMenu.setMenuCaption(I18N.translate("smarti18n.editor.title"));
 
         sideMenu.setUserName("Marc Bellmann");
         sideMenu.setUserMenuVisible(false);
         sideMenu.setIcon(null);
 
-        sideMenu.addNavigation(I18N.getMessage("smarti18n.editor.menu.start"), VaadinIcons.HOME, StartView.VIEW_NAME);
+        sideMenu.addNavigation(I18N.translate("smarti18n.editor.menu.start"), VaadinIcons.HOME, StartView.VIEW_NAME);
 
         projectsApi.findAll().forEach(project -> sideMenu.addNavigation(
                 project.getDisplayName(),
@@ -65,9 +66,11 @@ public class EditorUI extends UI {
                 ProjectMessagesView.VIEW_NAME + "/" + project.getId()
         ));
 
-        sideMenu.addNavigation(I18N.getMessage("smarti18n.editor.menu.profile"), VaadinIcons.USER, ProfileView.VIEW_NAME);
+        sideMenu.addMenuItem(I18N.translate("smarti18n.editor.menu.new-project"), VaadinIcons.FOLDER_ADD, () -> addWindow(new ProjectCreateWindow(this.projectsApi)));
 
-        sideMenu.addMenuItem(I18N.getMessage("common.logout"), VaadinIcons.EXIT, this.vaadinSecurity::logout);
+        sideMenu.addNavigation(I18N.translate("smarti18n.editor.menu.profile"), VaadinIcons.USER, ProfileView.VIEW_NAME);
+
+        sideMenu.addMenuItem(I18N.translate("common.logout"), VaadinIcons.EXIT, this.vaadinSecurity::logout);
 
         setContent(sideMenu);
 

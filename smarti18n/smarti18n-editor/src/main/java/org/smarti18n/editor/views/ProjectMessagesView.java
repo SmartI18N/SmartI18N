@@ -76,21 +76,21 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
                 translate("smarti18n.editor.message-overview.add-new-message"),
                 VaadinIcons.FILE_ADD,
                 clickEvent -> {
-                    this.getUI().addWindow(new MessageCreateWindow(this.messagesApi, projectId()));
+                    this.getUI().addWindow(new ProjectMessageCreateWindow(this.messagesApi, projectId()));
                 });
 
         final IconButton importMessageButton = new IconButton(
                 translate("smarti18n.editor.message-overview.import-messages"),
                 VaadinIcons.UPLOAD,
                 clickEvent -> {
-                    this.getUI().addWindow(new MessageImportWindow(this.messagesApi, project()));
+                    this.getUI().addWindow(new ProjectMessageImportWindow(this.messagesApi, project()));
                 });
 
         final IconButton exportMessageButton = new IconButton(
                 translate("smarti18n.editor.message-overview.export-messages"),
                 VaadinIcons.DOWNLOAD,
                 clickEvent -> {
-                    this.getUI().addWindow(new MessageExportWindow(this.messagesApi, project()));
+                    this.getUI().addWindow(new ProjectMessageExportWindow(this.messagesApi, project()));
                 });
 
         return new HorizontalLayout(newMessageButton, importMessageButton, exportMessageButton);

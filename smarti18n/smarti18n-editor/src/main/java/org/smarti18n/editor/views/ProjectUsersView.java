@@ -32,7 +32,7 @@ public class ProjectUsersView extends AbstractProjectView implements View {
 
     @PostConstruct
     public void init() {
-        super.init(I18N.getMessage("smarti18n.editor.project-owner.caption"));
+        super.init(I18N.translate("smarti18n.editor.project-owner.caption"));
         setSizeFull();
 
         grid = new Grid<>(User.class);
@@ -56,10 +56,16 @@ public class ProjectUsersView extends AbstractProjectView implements View {
     @Override
     protected HorizontalLayout createButtonBar() {
         final IconButton newLocaleButton = new IconButton(
-                translate("smarti18n.editor.message-overview.add-new-owner"),
+                translate("smarti18n.editor.project-owner.add-new-owner"),
                 VaadinIcons.FILE_ADD,
                 clickEvent -> {
+                    final ProjectUserAddWindow window = new ProjectUserAddWindow(
+                            this.projectsApi,
+                            this.projectContext.getProjectId()
+                    );
+                    window.addCloseListener(closeEvent -> reloadGrid());
 
+                    this.getUI().addWindow(window);
                 });
 
         return new HorizontalLayout(newLocaleButton);

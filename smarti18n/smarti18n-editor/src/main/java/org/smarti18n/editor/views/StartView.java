@@ -11,9 +11,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-
 import javax.annotation.PostConstruct;
-
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.IconButton;
 import org.smarti18n.editor.security.SimpleUserDetails;
@@ -47,16 +45,15 @@ public class StartView extends AbstractView implements View {
         final SimpleUserDetails principal = (SimpleUserDetails) authentication.getPrincipal();
         final String username = principal.getName();
 
-        final Panel panel = new Panel();
-        panel.setContent(new VerticalLayout(
-                new Label(getLocale().toString()),
-                new Label(username)
+        final Panel welcome = new Panel(translate("smarti18n.editor.welcome.caption", username));
+        welcome.setContent(new VerticalLayout(
+                new Label(translate("smarti18n.editor.welcome.text", username))
         ));
-        addComponent(panel);
+        addComponent(welcome);
 
-        final Panel newProject = new Panel(I18N.getMessage("smarti18n.editor.start.new-project.caption"));
+        final Panel newProject = new Panel(I18N.translate("smarti18n.editor.start.new-project.caption"));
         newProject.setContent(new VerticalLayout(
-                new Label(I18N.getMessage("smarti18n.editor.start.new-project.text")),
+                new Label(I18N.translate("smarti18n.editor.start.new-project.text")),
                 new IconButton(
                         translate("smarti18n.editor.project-overview.add-new-project"),
                         VaadinIcons.FILE_ADD,
