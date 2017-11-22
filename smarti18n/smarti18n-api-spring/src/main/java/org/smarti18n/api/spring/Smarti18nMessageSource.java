@@ -15,16 +15,54 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ *
+ */
 public class Smarti18nMessageSource extends AbstractMessageSource {
 
+    /**
+     * Path to load all Messages
+     */
     private static final String PATH_MESSAGES_SOURCE = "/api/1/messages/findForSpringMessageSource";
 
+    /**
+     * Message Cache
+     */
     private final Map<String, Map<Locale, String>> messages;
 
+    /**
+     * Default Constructor for HelloWorld Example
+     */
+    public Smarti18nMessageSource() {
+        this("default", "default");
+    }
+
+    /**
+     * smarti18n.com Constructor
+     *
+     * @param projectId     Project ID
+     * @param projectSecret Project Secret from Project Settings
+     */
+    public Smarti18nMessageSource(final String projectId, final String projectSecret) {
+        this("https://messages.smarti18n.com", projectId, projectSecret);
+    }
+
+    /**
+     * Own hosted smarti18n Construktor
+     *
+     * @param host          URL to own hosted smarti18n
+     * @param projectId     Project ID
+     * @param projectSecret Project Secret from Project Settings
+     */
     public Smarti18nMessageSource(final String host, final String projectId, final String projectSecret) {
+        Assert.notNull(host, "host");
+        Assert.notNull(projectId, "projectId");
+        Assert.notNull(projectSecret, "projectSecret");
+
         this.messages = new HashMap<>();
 
         final UpdateMessageSourceTask task = new UpdateMessageSourceTask(
@@ -34,9 +72,13 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
                 this.messages
         );
 
+        // Update Every Minute
         new Timer(true).schedule(task, 0, 60 * 1000);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected MessageFormat resolveCode(final String code, final Locale locale) {
         if (this.messages.containsKey(code)) {
