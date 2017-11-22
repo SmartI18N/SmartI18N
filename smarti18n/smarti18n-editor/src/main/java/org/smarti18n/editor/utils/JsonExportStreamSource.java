@@ -1,44 +1,50 @@
 package org.smarti18n.editor.utils;
 
+import org.smarti18n.api.Message;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.vaadin.server.StreamResource;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Properties;
+import java.util.Map;
 import java.util.function.Supplier;
 
-import com.vaadin.server.StreamResource;
-import org.smarti18n.api.Message;
-
-public class PropertiesExportStreamSource implements StreamResource.StreamSource {
+public class JsonExportStreamSource implements StreamResource.StreamSource {
 
     private final Supplier<Collection<? extends Message>> supplier;
     private final Supplier<Locale> locale;
 
-    public PropertiesExportStreamSource(final Supplier<Collection<? extends Message>> supplier, final Supplier<Locale> locale) {
+    public JsonExportStreamSource(final Supplier<Collection<? extends Message>> supplier, final Supplier<Locale> locale) {
         this.supplier = supplier;
         this.locale = locale;
     }
 
     @Override
     public InputStream getStream() {
-        try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            final Properties properties = new Properties();
+            final Map<String,String> map = new HashMap<>();
             supplier.get()
                     .forEach(message -> {
-
                         final String key = message.getKey();
                         final String translation = message.getTranslation(locale.get());
 
-                        properties.setProperty(key, translation);
+                        map.put(key, translation);
                     });
 
-            properties.store(output, "smarti18n Export");
+        try {
+            final ObjectMapper objectMapper = new ObjectMapper();
 
-            return new ByteArrayInputStream(output.toByteArray());
-        } catch (IOException e) {
+            final byte[] bytes = objectMapper.writeValueAsBytes(map);
+
+            return new ByteArrayInputStream(bytes);
+        } catch (JsonProcessingException e) {
             throw new IllegalStateException(e);
         }
     }

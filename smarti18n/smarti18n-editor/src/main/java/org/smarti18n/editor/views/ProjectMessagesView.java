@@ -16,6 +16,7 @@ import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.components.IconButton;
+import org.smarti18n.editor.gateway.SpringImportExportHandler;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -79,21 +80,7 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
                     this.getUI().addWindow(new ProjectMessageCreateWindow(this.messagesApi, projectId()));
                 });
 
-        final IconButton importMessageButton = new IconButton(
-                translate("smarti18n.editor.message-overview.import-messages"),
-                VaadinIcons.UPLOAD,
-                clickEvent -> {
-                    this.getUI().addWindow(new ProjectMessageImportWindow(this.messagesApi, project()));
-                });
-
-        final IconButton exportMessageButton = new IconButton(
-                translate("smarti18n.editor.message-overview.export-messages"),
-                VaadinIcons.DOWNLOAD,
-                clickEvent -> {
-                    this.getUI().addWindow(new ProjectMessageExportWindow(this.messagesApi, project()));
-                });
-
-        return new HorizontalLayout(newMessageButton, importMessageButton, exportMessageButton);
+        return new HorizontalLayout(newMessageButton);
     }
 
     @Override
@@ -111,10 +98,6 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
 
     private String projectId() {
         return this.projectContext.getProject().getId();
-    }
-
-    private Project project() {
-        return this.projectContext.getProject();
     }
 
 }
