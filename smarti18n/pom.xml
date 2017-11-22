@@ -36,8 +36,7 @@
 
         <com.spotify.docker-maven-plugin.version>1.0.0</com.spotify.docker-maven-plugin.version>
         <com.spotify.docker-maven-plugin.serverId>pytRegistry</com.spotify.docker-maven-plugin.serverId>
-        <com.spotify.docker-maven-plugin.registry>registry.planyourtrip.travel
-        </com.spotify.docker-maven-plugin.registry>
+        <com.spotify.docker-maven-plugin.registry>registry.planyourtrip.travel</com.spotify.docker-maven-plugin.registry>
 
     </properties>
 
@@ -99,6 +98,7 @@
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
+                    <arguments>-DskipTests</arguments>
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
                 </configuration>
