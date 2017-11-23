@@ -35,8 +35,7 @@
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
 
         <com.spotify.docker-maven-plugin.version>1.0.0</com.spotify.docker-maven-plugin.version>
-        <com.spotify.docker-maven-plugin.serverId>pytRegistry</com.spotify.docker-maven-plugin.serverId>
-        <com.spotify.docker-maven-plugin.registry>registry.planyourtrip.travel</com.spotify.docker-maven-plugin.registry>
+        <com.spotify.docker-maven-plugin.serverId>smarti18nDockerCloud</com.spotify.docker-maven-plugin.serverId>
 
     </properties>
 
@@ -112,13 +111,11 @@
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>${com.spotify.docker-maven-plugin.version}</version>
                     <configuration>
-                        <imageName>${com.spotify.docker-maven-plugin.registry}/${project.artifactId}</imageName>
+                        <imageName>${docker.imageName}</imageName>
                         <baseImage>java</baseImage>
                         <entryPoint>["java", "-jar", "/${project.build.finalName}.war"]</entryPoint>
 
                         <serverId>${com.spotify.docker-maven-plugin.serverId}</serverId>
-                        <registryUrl>https://${com.spotify.docker-maven-plugin.registry}</registryUrl>
-                        <forceTags>true</forceTags>
 
                         <resources>
                             <resource>
@@ -189,18 +186,36 @@
         <profile>
             <id>release</id>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <phase>post-integration-test</phase>
+                                    <goals>
+                                        <goal>build</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.sonatype.plugins</groupId>
+                            <artifactId>nexus-staging-maven-plugin</artifactId>
+                            <version>1.6.7</version>
+                            <extensions>true</extensions>
+                            <configuration>
+                                <serverId>ossrhSmartI18N</serverId>
+                                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                                <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+
                 <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrhSmartI18N</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>

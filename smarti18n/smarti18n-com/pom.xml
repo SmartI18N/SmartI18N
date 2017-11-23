@@ -15,6 +15,8 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+
+        <docker.imageName>smarti18n/com</docker.imageName>
     </properties>
 
 
@@ -46,19 +48,11 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <configuration>
-                    <imageName>${com.spotify.docker-maven-plugin.registry}/${project.artifactId}</imageName>
                     <baseImage>node</baseImage>
                     <workdir>/usr/src/</workdir>
-                    <!--<runs>-->
-                        <!--<run>["npm", "install", "&#45;&#45;global", "bower"]</run>-->
-                        <!--<run>["npm", "install"]</run>-->
-                        <!--<run>["bower", "install", "&#45;&#45;allow-root"]</run>-->
-                    <!--</runs>-->
                     <entryPoint>["sh", "startup.sh"]</entryPoint>
 
                     <serverId>${com.spotify.docker-maven-plugin.serverId}</serverId>
-                    <registryUrl>https://${com.spotify.docker-maven-plugin.registry}</registryUrl>
-                    <forceTags>true</forceTags>
 
                     <resources>
                         <resource>
