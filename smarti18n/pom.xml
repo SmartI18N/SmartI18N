@@ -128,6 +128,7 @@
                         <imageTags>
                             <imageTag>${timestamp}</imageTag>
                             <imageTag>latest</imageTag>
+                            <imageTag>${project.version}</imageTag>
                         </imageTags>
                     </configuration>
                 </plugin>
