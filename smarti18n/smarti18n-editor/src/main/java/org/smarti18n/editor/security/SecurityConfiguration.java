@@ -20,6 +20,8 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 
@@ -63,8 +65,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
 
+        final LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint("/login");
+        authenticationEntryPoint.setForceHttps(true);
         http.exceptionHandling()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
+                .authenticationEntryPoint(authenticationEntryPoint);
 
         http.rememberMe()
                 .rememberMeServices(rememberMeServices()).key("myAppKey");
@@ -111,11 +115,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(username -> {
+            final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
+
+            logger.info("try " + username);
             final User user = this.userApi.findOne(username);
 
             if (user == null) {
+                logger.info("no user found");
                 throw new UsernameNotFoundException("Username [" + username + "] not found!");
             }
+            logger.info("found " + user);
 
             return new SimpleUserDetails(user);
         });
