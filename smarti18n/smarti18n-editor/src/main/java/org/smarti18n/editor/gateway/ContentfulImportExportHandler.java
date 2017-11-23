@@ -1,24 +1,22 @@
 package org.smarti18n.editor.gateway;
 
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.Project;
-import org.smarti18n.editor.components.FormWindow;
-import org.smarti18n.editor.components.IconButton;
-import org.smarti18n.editor.utils.I18N;
+import java.util.Locale;
+
+import org.springframework.stereotype.Component;
 
 import com.contentful.java.cda.CDAArray;
 import com.contentful.java.cda.CDAClient;
 import com.contentful.java.cda.CDAEntry;
 import com.contentful.java.cda.CDALocale;
 import com.contentful.java.cda.CDASpace;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
-
-import org.springframework.stereotype.Component;
-
-import java.util.Locale;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api.Project;
+import org.smarti18n.editor.components.FormWindow;
+import org.smarti18n.editor.components.IconButton;
+import org.smarti18n.editor.utils.I18N;
 
 @Component
 public class ContentfulImportExportHandler implements ImportExportHandler {
@@ -100,6 +98,8 @@ public class ContentfulImportExportHandler implements ImportExportHandler {
                             this.messagesApi.update(project.getId(), key, locale, value);
                         }
                     });
+
+                    formWindow.close();
                 }
         );
         formWindow.addFormButtons(importButton);

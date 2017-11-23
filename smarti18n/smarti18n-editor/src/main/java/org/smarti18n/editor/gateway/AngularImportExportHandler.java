@@ -1,5 +1,14 @@
 package org.smarti18n.editor.gateway;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
+import com.vaadin.ui.Window;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
@@ -8,17 +17,6 @@ import org.smarti18n.editor.components.IconButton;
 import org.smarti18n.editor.components.LocaleComboBox;
 import org.smarti18n.editor.utils.I18N;
 import org.smarti18n.editor.utils.JsonExportStreamSource;
-import org.smarti18n.editor.utils.PropertiesExportStreamSource;
-
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.StreamResource;
-import com.vaadin.ui.Window;
-
-import org.springframework.stereotype.Component;
-
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Component
 public class AngularImportExportHandler implements ImportExportHandler {
@@ -75,9 +73,12 @@ public class AngularImportExportHandler implements ImportExportHandler {
         );
 
         final IconButton downloadButton = new IconButton("Download", VaadinIcons.DOWNLOAD);
-        downloadButton.addClickListener(event -> streamResource.setFilename(
-                "smarti18n-" + projectId + "_" + localeComboBox.getValue().toString() + ".json"
-        ));
+        downloadButton.addClickListener(event -> {
+            streamResource.setFilename(
+                    "smarti18n-" + projectId + "_" + localeComboBox.getValue().toString() + ".json"
+            );
+            formWindow.close();
+        });
 
         fileDownloader.extend(downloadButton);
         formWindow.addFormButtons(downloadButton);
