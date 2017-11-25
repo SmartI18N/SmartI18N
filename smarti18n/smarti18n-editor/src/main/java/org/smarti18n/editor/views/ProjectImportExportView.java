@@ -76,6 +76,6 @@ public class ProjectImportExportView extends AbstractProjectView implements View
 
     @Override
     protected HorizontalLayout createButtonBar() {
-        return new HorizontalLayout();
+        return null;
     }
 }

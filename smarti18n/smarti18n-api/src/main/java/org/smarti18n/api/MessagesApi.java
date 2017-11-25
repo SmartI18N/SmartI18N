@@ -12,7 +12,7 @@ public interface MessagesApi {
     String PATH_MESSAGES_COPY = "/api/1/messages/copy";
     String PATH_MESSAGES_REMOVE = "/api/1/messages/remove";
 
-    Collection<? extends Message> findAll(
+    Collection<Message> findAll(
             String projectId
     );
 
@@ -21,19 +21,24 @@ public interface MessagesApi {
             String key
     );
 
-    MessageImpl insert(
+    Message insert(
             String projectId,
             String key
     );
 
-    MessageImpl update(
+    Message update(
             String projectId,
             String key,
             Locale locale,
             String translation
     );
 
-    MessageImpl copy(
+    Message update(
+            String projectId,
+            Message message
+    );
+
+    Message copy(
             String projectId,
             String sourceKey,
             String targetKey

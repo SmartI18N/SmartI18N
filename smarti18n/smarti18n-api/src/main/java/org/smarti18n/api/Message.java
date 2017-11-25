@@ -21,12 +21,19 @@ public interface Message extends Serializable {
 
     void setTranslations(Map<Locale, String> translations);
 
-    default String getTranslation(Locale locale) {
+    default String getTranslation(final Locale locale) {
         final Map<Locale, String> translations = getTranslations();
         if (translations == null) {
             return null;
         }
         return translations.getOrDefault(locale, "");
+    }
+
+    default void setTranslation(final Locale locale, final String value) {
+        final Map<Locale, String> translations = getTranslations();
+        if (translations != null) {
+            translations.put(locale, value);
+        }
     }
 
     default Set<Locale> getLocales() {

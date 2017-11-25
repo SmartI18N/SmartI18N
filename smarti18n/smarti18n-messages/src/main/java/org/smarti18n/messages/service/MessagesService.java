@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
+import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 
 /**
@@ -11,24 +12,24 @@ import org.smarti18n.api.MessageImpl;
  */
 public interface MessagesService {
 
-    Collection<MessageImpl> findAll(
+    Collection<Message> findAll(
             String username,
             String projectId
     );
 
-    MessageImpl findOne(
+    Message findOne(
             String username,
             String projectId,
             String key
     );
 
-    MessageImpl insert(
+    Message insert(
             String username,
             String projectId,
             String key
     );
 
-    MessageImpl update(
+    Message update(
             String username,
             String projectId,
             String key,
@@ -36,7 +37,13 @@ public interface MessagesService {
             String translation
     );
 
-    MessageImpl copy(
+    Message update(
+            String userId,
+            String projectId,
+            Message message
+    );
+
+    Message copy(
             String username,
             String projectId,
             String sourceKey,

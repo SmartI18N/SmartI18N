@@ -1,6 +1,7 @@
 package org.smarti18n.messages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -115,6 +116,8 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
         assertThat(messages, hasSize(1));
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
+
+        this.messagesApi.update(PROJECT_ID, messages.stream().findFirst().get());
     }
 
     private void assertMessageInsert() {

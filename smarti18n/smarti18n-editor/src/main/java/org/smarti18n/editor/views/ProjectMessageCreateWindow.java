@@ -1,6 +1,8 @@
 package org.smarti18n.editor.views;
 
 import com.vaadin.ui.TextField;
+
+import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.vaadin.components.AddButton;
@@ -21,7 +23,7 @@ class ProjectMessageCreateWindow extends FormWindow {
         addFormComponent(textFieldKey);
 
         final AddButton addButton = new AddButton(clickEvent -> {
-            final MessageImpl message = messagesApi.insert(projectId, textFieldKey.getValue());
+            final Message message = messagesApi.insert(projectId, textFieldKey.getValue());
 
             getUI().getNavigator().navigateTo(
                     VaadinUtils.buildNavigation(ProjectMessageEditView.VIEW_NAME, projectId, message.getKey())

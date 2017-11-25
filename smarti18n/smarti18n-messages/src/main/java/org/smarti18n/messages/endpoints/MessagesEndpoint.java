@@ -4,9 +4,12 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.messages.security.SecurityUtils;
@@ -23,7 +26,7 @@ public class MessagesEndpoint implements MessagesApi {
 
     @Override
     @GetMapping(PATH_MESSAGES_FIND_ALL)
-    public Collection<MessageImpl> findAll(
+    public Collection<Message> findAll(
             @RequestParam("projectId") final String projectId) {
 
         return messagesService.findAll(
@@ -34,7 +37,7 @@ public class MessagesEndpoint implements MessagesApi {
 
     @Override
     @GetMapping(PATH_MESSAGES_FIND_ONE)
-    public MessageImpl findOne(
+    public Message findOne(
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key) {
 
@@ -47,7 +50,7 @@ public class MessagesEndpoint implements MessagesApi {
 
     @Override
     @GetMapping(PATH_MESSAGES_INSERT)
-    public MessageImpl insert(
+    public Message insert(
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key) {
 
@@ -60,7 +63,7 @@ public class MessagesEndpoint implements MessagesApi {
 
     @Override
     @GetMapping(PATH_MESSAGES_UPDATE)
-    public MessageImpl update(
+    public Message update(
             @RequestParam("projectId") final String projectId,
             @RequestParam("key") final String key,
             @RequestParam("locale") final Locale locale,
@@ -75,8 +78,21 @@ public class MessagesEndpoint implements MessagesApi {
     }
 
     @Override
+    @PostMapping(PATH_MESSAGES_UPDATE)
+    public Message update(
+            @RequestParam("projectId") final String projectId,
+            @RequestBody final Message message) {
+
+        return messagesService.update(
+                SecurityUtils.getUserId(),
+                projectId,
+                message
+        );
+    }
+
+    @Override
     @GetMapping(PATH_MESSAGES_COPY)
-    public MessageImpl copy(
+    public Message copy(
             @RequestParam("projectId") final String projectId,
             @RequestParam("sourceKey") final String sourceKey,
             @RequestParam("targetKey") final String targetKey) {

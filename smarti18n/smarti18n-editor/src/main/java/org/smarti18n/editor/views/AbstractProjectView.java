@@ -24,6 +24,7 @@ abstract class AbstractProjectView extends AbstractView {
         menuBar.setWidth(100, Unit.PERCENTAGE);
 
         menuBar.addItem(translate("smarti18n.editor.project-menu.messages"), navigateToProjectView(ProjectMessagesView.VIEW_NAME));
+        menuBar.addItem(translate("smarti18n.editor.project-menu.translator"), navigateToProjectView(ProjectTranslatorView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.import-export"), navigateToProjectView(ProjectImportExportView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.locales"), navigateToProjectView(ProjectLocalesView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.users"), navigateToProjectView(ProjectUsersView.VIEW_NAME));
@@ -32,7 +33,10 @@ abstract class AbstractProjectView extends AbstractView {
 
         super.init(caption);
 
-        addComponent(createButtonBar());
+        final HorizontalLayout buttonBar = createButtonBar();
+        if (buttonBar != null) {
+            addComponent(buttonBar);
+        }
     }
 
     private MenuBar.Command navigateToProjectView(final String viewName) {

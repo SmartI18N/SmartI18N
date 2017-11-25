@@ -1,12 +1,12 @@
 package org.smarti18n.api;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
 
 /**
  * @author Marc Bellmann &lt;marc@smarti18n.com&gt;
@@ -31,7 +31,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public Collection<MessageImpl> findAll(final String projectId) {
+    public Collection<Message> findAll(final String projectId) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_FIND_ALL, projectId);
 
         return Arrays.asList(
@@ -48,7 +48,7 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public MessageImpl insert(final String projectId, final String key) {
+    public Message insert(final String projectId, final String key) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_INSERT, projectId)
                 .queryParam("key", key);
 
@@ -56,17 +56,24 @@ public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
     }
 
     @Override
-    public MessageImpl update(final String projectId, final String key, final Locale locale, final String translation) {
+    public Message update(final String projectId, final String key, final Locale locale, final String translation) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_UPDATE, projectId)
                 .queryParam("key", key)
                 .queryParam("translation", translation)
                 .queryParam("locale", locale);
 
-        return get(uri, MessageImpl.class);
+        return get(uri, Message.class);
     }
 
     @Override
-    public MessageImpl copy(final String projectId, final String sourceKey, final String targetKey) {
+    public Message update(final String projectId, final Message message) {
+        final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_UPDATE, projectId);
+
+        return post(uri, message, Message.class);
+    }
+
+    @Override
+    public Message copy(final String projectId, final String sourceKey, final String targetKey) {
         final UriComponentsBuilder uri = uri(MessagesApi.PATH_MESSAGES_COPY, projectId)
                 .queryParam("sourceKey", sourceKey)
                 .queryParam("targetKey", targetKey);

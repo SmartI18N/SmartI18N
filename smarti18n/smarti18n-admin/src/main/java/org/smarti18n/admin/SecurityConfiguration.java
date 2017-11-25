@@ -1,8 +1,7 @@
-package org.smarti18n.admin;
+package org.smarti18n.editor.security;
 
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
-import org.smarti18n.api.UserRole;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -27,7 +25,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,8 +43,6 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 @EnableVaadinSharedSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private static final String ROLE_SUPERUSER = UserRole.SUPERUSER.name();
-
     @Autowired
     private UserApi userApi;
 
@@ -59,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/**").anonymous()
                 .antMatchers("/vaadinServlet/UIDL/**").permitAll()
                 .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
-                .anyRequest().hasAuthority(ROLE_SUPERUSER);
+                .anyRequest().authenticated();
 
         http.httpBasic().disable();
         http.formLogin().disable();
@@ -71,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         final LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint("/login");
-        authenticationEntryPoint.setForceHttps(false);
+        authenticationEntryPoint.setForceHttps(true);
         http.exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 
@@ -129,11 +124,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 logger.info("no user found");
                 throw new UsernameNotFoundException("Username [" + username + "] not found!");
             }
-
-            if (user.getRole() != UserRole.SUPERUSER) {
-                throw new BadCredentialsException("user doesn't have the correct role");
-            }
-
             logger.info("found " + user);
 
             return new SimpleUserDetails(user);

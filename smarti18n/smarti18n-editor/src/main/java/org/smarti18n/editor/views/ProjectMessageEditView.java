@@ -1,5 +1,14 @@
 package org.smarti18n.editor.views;
 
+import org.smarti18n.api.Message;
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.components.LabelField;
+import org.smarti18n.vaadin.components.CancelButton;
+import org.smarti18n.vaadin.components.LocaleTextAreas;
+import org.smarti18n.vaadin.components.SaveButton;
+
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -8,15 +17,8 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.Message;
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.vaadin.components.CancelButton;
-import org.smarti18n.vaadin.components.HiddenField;
-import org.smarti18n.vaadin.components.LocaleTextAreas;
-import org.smarti18n.vaadin.components.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -45,19 +47,17 @@ public class ProjectMessageEditView extends AbstractProjectView implements View 
 
         setSizeFull();
 
+        final LabelField keyField = new LabelField();
         final LocaleTextAreas localeTextAreas = new LocaleTextAreas();
-        localeTextAreas.setSizeFull();
 
-        this.binder.forField(new HiddenField()).bind("key");
+        this.binder.forField(keyField).bind("key");
         this.binder.forMemberField(localeTextAreas).bind("translations");
         this.binder.bindInstanceFields(this);
 
-        final VerticalLayout layout = new VerticalLayout(localeTextAreas);
-        layout.setSizeFull();
+        final VerticalLayout layout = new VerticalLayout(keyField, localeTextAreas);
         layout.setMargin(true);
 
         final Panel panel = new Panel(layout);
-        panel.setSizeFull();
 
         addComponent(panel);
         setExpandRatio(panel, 1f);

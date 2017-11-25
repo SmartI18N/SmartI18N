@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.messages.entities.MessageEntity;
 import org.smarti18n.messages.entities.ProjectEntity;
@@ -35,7 +36,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Collection<MessageImpl> findAll(final String username, final String projectId) {
+    public Collection<Message> findAll(final String username, final String projectId) {
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
@@ -49,7 +50,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public MessageImpl findOne(final String username, final String projectId, final String key) {
+    public Message findOne(final String username, final String projectId, final String key) {
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> messageEntity = this.messageRepository.findById(
@@ -67,7 +68,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public MessageImpl insert(
+    public Message insert(
             final String username,
             final String projectId,
             final String key) {
@@ -87,7 +88,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public MessageImpl update(
+    public Message update(
             final String username, final String projectId,
             final String key,
             final Locale locale, final String translation) {
@@ -96,7 +97,9 @@ public class MessagesServiceImpl implements MessagesService {
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
-        final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project));
+        final Optional<MessageEntity> optional = this.messageRepository.findById(
+                new MessageEntity.MessageId(cleanKey, project)
+        );
         final MessageEntity messageEntity = optional.orElseGet(() -> new MessageEntity(cleanKey, project));
 
         messageEntity.putTranslation(locale, translation);
@@ -111,7 +114,25 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public MessageImpl copy(
+    public Message update(final String username, final String projectId, final Message message) {
+        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
+
+        final Optional<MessageEntity> optional = this.messageRepository.findById(
+                new MessageEntity.MessageId(message.getKey(), project)
+        );
+
+        final MessageEntity messageEntity = optional.orElseThrow(() -> new IllegalStateException(
+                "Message with key [" + message.getKey() + "] and Project [" + projectId + "] doesn't exist!"
+        ));
+
+        messageEntity.setTranslations(message.getTranslations());
+
+        return this.messageRepository.save(messageEntity);
+    }
+
+    @Override
+    @Transactional
+    public Message copy(
             final String username, final String projectId,
             final String sourceKey,
             final String targetKey) {
