@@ -14,8 +14,6 @@ import org.smarti18n.messages.entities.UserEntity;
  */
 public class UserPrincipal implements UserDetails {
 
-    static final String ROLE_USER = "USER";
-
     private final UserEntity user;
 
     UserPrincipal(final UserEntity user) {
@@ -24,7 +22,9 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(ROLE_USER));
+        return Collections.singletonList(new SimpleGrantedAuthority(
+                this.user.getRole().name()
+        ));
     }
 
     @Override

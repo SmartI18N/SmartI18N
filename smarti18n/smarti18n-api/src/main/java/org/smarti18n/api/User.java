@@ -30,4 +30,8 @@ public interface User extends Serializable {
     String getCompany();
 
     void setCompany(String company);
+
+    UserRole getRole();
+
+    void setRole(UserRole role);
 }

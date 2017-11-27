@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.smarti18n.api.UserRole;
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.entities.UserEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
@@ -62,7 +62,7 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
 
             this.logger.info("Create Default User [" + DEFAULT_USER_MAIL + "] with Password [" + password + "]");
 
-            final UserEntity userEntity = new UserEntity(DEFAULT_USER_MAIL, password);
+            final UserEntity userEntity = new UserEntity(DEFAULT_USER_MAIL, password, UserRole.SUPERUSER);
             userEntity.setVorname("Default");
             userEntity.setNachname("Default");
             userEntity.setCompany("Default");
@@ -89,6 +89,11 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
                 project.addOwner(defaultUser);
                 this.projectRepository.save(project);
             }
+        });
+
+        this.userRepository.findAll().stream().filter(user -> user.getRole() == null).forEach(user -> {
+            user.setRole(UserRole.SUPERUSER);
+            this.userRepository.save(user);
         });
 
         this.logger.info("Initializing Application finished");

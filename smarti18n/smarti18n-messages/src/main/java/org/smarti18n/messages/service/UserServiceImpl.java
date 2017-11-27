@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.smarti18n.api.User;
+import org.smarti18n.api.UserRole;
 import org.smarti18n.messages.entities.UserEntity;
 import org.smarti18n.messages.repositories.UserRepository;
 
@@ -32,7 +33,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("User with Mail [" + mail + "] already exist!");
         });
 
-        return this.userRepository.insert(new UserEntity(mail, password));
+        final boolean firstUser = this.userRepository.count() == 0;
+        final UserRole role = firstUser ? UserRole.SUPERUSER : UserRole.USER;
+
+        return this.userRepository.insert(new UserEntity(mail, password, role));
     }
 
     @Override

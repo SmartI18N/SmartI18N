@@ -8,6 +8,7 @@ public class UserImpl implements User {
     private String vorname;
     private String nachname;
     private String company;
+    private UserRole role;
 
     public UserImpl() {
     }
@@ -74,6 +75,16 @@ public class UserImpl implements User {
     @Override
     public void setCompany(final String company) {
         this.company = company;
+    }
+
+    @Override
+    public UserRole getRole() {
+        return this.role;
+    }
+
+    @Override
+    public void setRole(final UserRole role) {
+        this.role = role;
     }
 
     @Override

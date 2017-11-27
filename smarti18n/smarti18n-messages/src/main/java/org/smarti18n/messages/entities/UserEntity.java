@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.smarti18n.api.User;
+import org.smarti18n.api.UserRole;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -18,13 +19,15 @@ public class UserEntity implements User {
     private String vorname;
     private String nachname;
     private String company;
+    private UserRole role;
 
     public UserEntity() {
     }
 
-    public UserEntity(final String mail, final String password) {
+    public UserEntity(final String mail, final String password, final UserRole role) {
         this.mail = mail;
         this.password = password;
+        this.role = role;
     }
 
     public UserEntity(final User user) {
@@ -34,6 +37,7 @@ public class UserEntity implements User {
         this.vorname = user.getVorname();
         this.nachname = user.getNachname();
         this.company = user.getCompany();
+        this.role = user.getRole();
     }
 
     @Override
@@ -94,6 +98,16 @@ public class UserEntity implements User {
     @Override
     public void setCompany(final String company) {
         this.company = company;
+    }
+
+    @Override
+    public UserRole getRole() {
+        return role;
+    }
+
+    @Override
+    public void setRole(final UserRole role) {
+        this.role = role;
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.SpringMessagesApi;
 import org.smarti18n.api.UserApi;
+import org.smarti18n.api.UserRole;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -31,6 +32,9 @@ import org.smarti18n.api.UserApi;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     static final String REALM = "SMARTI18N_MESSAGES";
+
+    static final String ROLE_SUPERUSER = UserRole.SUPERUSER.name();
+    static final String ROLE_USER = UserRole.USER.name();
 
     @Autowired
     private UserOrProjectPrincipalService userOrProjectPrincipalService;
@@ -59,7 +63,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         ProjectsApi.PATH_PROJECTS_UPDATE,
                         ProjectsApi.PATH_PROJECTS_REMOVE,
                         UserApi.PATH_USERS_UPDATE
-                ).hasAuthority(UserPrincipal.ROLE_USER)
+                ).hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+
+                .antMatchers(
+
+                ).hasAuthority(ROLE_SUPERUSER)
 
                 .antMatchers(
                         UserApi.PATH_USERS_FIND_ONE,
