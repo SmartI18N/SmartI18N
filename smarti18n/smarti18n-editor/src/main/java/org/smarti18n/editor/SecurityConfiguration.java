@@ -1,4 +1,4 @@
-package org.smarti18n.admin.security;
+package org.smarti18n.editor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
+import org.smarti18n.vaadin.security.SimpleUserDetails;
+
 import org.vaadin.spring.http.HttpService;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;

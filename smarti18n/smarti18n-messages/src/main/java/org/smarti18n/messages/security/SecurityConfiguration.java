@@ -33,8 +33,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     static final String REALM = "SMARTI18N_MESSAGES";
 
-    static final String ROLE_SUPERUSER = UserRole.SUPERUSER.name();
-    static final String ROLE_USER = UserRole.USER.name();
+    private static final String ROLE_SUPERUSER = UserRole.SUPERUSER.name();
+    private static final String ROLE_USER = UserRole.USER.name();
 
     @Autowired
     private UserOrProjectPrincipalService userOrProjectPrincipalService;

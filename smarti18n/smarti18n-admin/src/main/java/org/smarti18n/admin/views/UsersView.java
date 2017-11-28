@@ -17,6 +17,7 @@ import org.smarti18n.api.UserApi;
 @UIScope
 @SpringView(name = UsersView.VIEW_NAME)
 public class UsersView extends AbstractView implements View {
+
     public static final String VIEW_NAME = "users";
 
     private final UserApi userApi;
@@ -30,13 +31,15 @@ public class UsersView extends AbstractView implements View {
     @PostConstruct
     void init() {
         super.init(translate("smarti18n.admin.users.caption"));
+
         setSizeFull();
 
         this.grid = new Grid<>(User.class);
-        this.grid.setColumns("mail", "vorname", "nachname", "company", "role");
         this.grid.setSizeFull();
+        this.grid.setColumns("mail", "vorname", "nachname", "company", "role");
 
         addComponent(this.grid);
+        setExpandRatio(this.grid, 1);
     }
 
     @Override

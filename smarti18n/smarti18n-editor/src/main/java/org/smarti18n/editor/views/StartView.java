@@ -14,7 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.vaadin.components.IconButton;
-import org.smarti18n.editor.security.SimpleUserDetails;
+import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.smarti18n.vaadin.utils.I18N;
 
 /**

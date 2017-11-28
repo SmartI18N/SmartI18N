@@ -49,9 +49,9 @@ public class VaadinConfiguration {
     @Bean
     Smarti18nMessageSource messageSource(final Environment environment) {
         return new Smarti18nMessageSource(
-                environment.getProperty("smarti18n.messages.host"),
-                environment.getProperty("smarti18n.messages.projectId"),
-                environment.getProperty("smarti18n.messages.projectSecret")
+                environment.getProperty("smarti18n.host"),
+                environment.getProperty("smarti18n.projectId"),
+                environment.getProperty("smarti18n.projectSecret")
         );
     }
 

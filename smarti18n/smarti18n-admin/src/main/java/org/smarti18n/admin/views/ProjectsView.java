@@ -45,8 +45,8 @@ public class ProjectsView extends AbstractView implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        final List<? extends Project> projects = this.projectsApi.findAll();
+        final List<Project> projects = this.projectsApi.findAll();
 
-        grid.setItems(new ArrayList<Project>(projects));
+        grid.setItems(projects);
     }
 }

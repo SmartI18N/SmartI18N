@@ -16,7 +16,7 @@ import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserImpl;
 import org.smarti18n.vaadin.components.SaveButton;
-import org.smarti18n.editor.security.SimpleUserDetails;
+import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.smarti18n.vaadin.utils.I18N;
 
 /**
