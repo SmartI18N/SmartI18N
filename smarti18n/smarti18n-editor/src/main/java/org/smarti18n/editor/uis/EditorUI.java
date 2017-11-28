@@ -10,6 +10,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
 
+import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.editor.views.ProjectCreateWindow;
@@ -19,6 +20,8 @@ import org.smarti18n.editor.views.StartView;
 
 import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.teemusa.sidemenu.SideMenu;
+
+import java.util.Comparator;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -60,11 +63,13 @@ public class EditorUI extends UI {
 
         sideMenu.addNavigation(I18N.translate("smarti18n.editor.menu.start"), VaadinIcons.HOME, StartView.VIEW_NAME);
 
-        projectsApi.findAll().forEach(project -> sideMenu.addNavigation(
-                project.getDisplayName(),
-                VaadinIcons.LIST,
-                ProjectMessagesView.VIEW_NAME + "/" + project.getId()
-        ));
+        projectsApi.findAll().stream()
+                .sorted(Comparator.comparing(Project::getDisplayName))
+                .forEach(project -> sideMenu.addNavigation(
+                        project.getDisplayName(),
+                        VaadinIcons.FOLDER,
+                        ProjectMessagesView.VIEW_NAME + "/" + project.getId()
+                ));
 
         sideMenu.addMenuItem(I18N.translate("smarti18n.editor.menu.new-project"), VaadinIcons.FOLDER_ADD, () -> addWindow(new ProjectCreateWindow(this.projectsApi)));
 
