@@ -80,7 +80,9 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
     }
 
     private void reloadGrid() {
-        final Project project = this.projectContext.getProject();
+        final Project project = this.projectsApi.findOne(
+                this.projectContext.getProjectId()
+        );
 
         grid.setItems(
                 project.getLocales()

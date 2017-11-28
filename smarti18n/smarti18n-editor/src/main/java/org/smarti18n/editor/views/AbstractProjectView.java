@@ -3,6 +3,7 @@ package org.smarti18n.editor.views;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
+
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.vaadin.utils.ProjectContext;
@@ -24,7 +25,7 @@ abstract class AbstractProjectView extends AbstractView {
         menuBar.setWidth(100, Unit.PERCENTAGE);
 
         menuBar.addItem(translate("smarti18n.editor.project-menu.messages"), navigateToProjectView(ProjectMessagesView.VIEW_NAME));
-        menuBar.addItem(translate("smarti18n.editor.project-menu.translator"), navigateToProjectView(ProjectTranslatorView.VIEW_NAME));
+        //menuBar.addItem(translate("smarti18n.editor.project-menu.translator"), navigateToProjectView(ProjectTranslatorView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.import-export"), navigateToProjectView(ProjectImportExportView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.locales"), navigateToProjectView(ProjectLocalesView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.users"), navigateToProjectView(ProjectUsersView.VIEW_NAME));
