@@ -1,5 +1,7 @@
 package org.smarti18n.messages;
 
+import java.util.List;
+
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.hamcrest.Description;
@@ -12,6 +14,8 @@ import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
 import org.smarti18n.api.UserCredentials;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -39,6 +43,15 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
         assertRegisterNewUser();
         assertFindUser();
         assertUpdateUser();
+//        assertFindAllUser();
+    }
+
+    // TODO Nur SUPERUSER dürfen das
+    private void assertFindAllUser() {
+        final List<User> users = this.userApi.findAll();
+
+        assertThat(users, hasSize(2));
+        assertThat(users, hasItem(userWith(MAIL, PASSWORD)));
     }
 
     private void assertUpdateUser() {

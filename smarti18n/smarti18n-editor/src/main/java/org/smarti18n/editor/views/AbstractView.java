@@ -5,8 +5,8 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import org.smarti18n.editor.utils.I18N;
-import org.smarti18n.editor.vaadin.VaadinUtils;
+import org.smarti18n.vaadin.utils.I18N;
+import org.smarti18n.vaadin.utils.VaadinUtils;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

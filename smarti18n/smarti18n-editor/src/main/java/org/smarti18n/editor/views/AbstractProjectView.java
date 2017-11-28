@@ -3,10 +3,9 @@ package org.smarti18n.editor.views;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.themes.ValoTheme;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.utils.ProjectContext;
+import org.smarti18n.vaadin.utils.ProjectContext;
 
 abstract class AbstractProjectView extends AbstractView {
 

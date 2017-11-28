@@ -24,7 +24,8 @@ public class ProjectsEndpoint implements ProjectsApi {
 
     @Override
     @GetMapping(PATH_PROJECTS_FIND_ALL)
-    public List<? extends Project> findAll() {
+    public List<Project> findAll() {
+
         return projectsService.findAll(
                 SecurityUtils.getUserId()
         );

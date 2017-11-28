@@ -1,5 +1,8 @@
 package org.smarti18n.api;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +24,15 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
             final UserCredentialsSupplier userCredentialsSupplier) {
 
         super(restTemplate, port, userCredentialsSupplier);
+    }
+
+    @Override
+    public List<User> findAll() {
+        final UriComponentsBuilder uri = uri(PATH_USERS_FIND_ALL);
+
+        return Arrays.asList(
+                get(uri, User[].class)
+        );
     }
 
     @Override

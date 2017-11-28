@@ -2,10 +2,10 @@ package org.smarti18n.editor.views;
 
 import com.vaadin.ui.TextField;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.components.AddButton;
-import org.smarti18n.editor.components.CancelButton;
-import org.smarti18n.editor.components.FormWindow;
-import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.vaadin.components.AddButton;
+import org.smarti18n.vaadin.components.CancelButton;
+import org.smarti18n.vaadin.components.FormWindow;
+import org.smarti18n.vaadin.utils.I18N;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

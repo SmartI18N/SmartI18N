@@ -13,17 +13,12 @@
     <properties>
         <start-class>org.smarti18n.editor.EditorApplication</start-class>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-
-        <com.vaadin.version>8.1.3</com.vaadin.version>
-        <com.vaadin.spring.version>2.0.1</com.vaadin.spring.version>
-
         <docker.imageName>smarti18n/editor</docker.imageName>
     </properties>
 
 
     <dependencies>
+
         <dependency>
             <groupId>org.smarti18n</groupId>
             <artifactId>smarti18n-api</artifactId>
@@ -34,80 +29,11 @@
             <artifactId>smarti18n-api-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <!--org.springframework.boot-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>${org.springframework.boot.version}</version>
+            <groupId>org.smarti18n</groupId>
+            <artifactId>smarti18n-vaadin</artifactId>
+            <version>${project.version}</version>
         </dependency>
-
-        <!--&lt;!&ndash;org.springframework.security&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.security</groupId>-->
-        <!--<artifactId>spring-security-config</artifactId>-->
-        <!--<version>5.0.0.RC1</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
-            <version>5.0.0.RC1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
-            <version>5.0.0.RC1</version>
-        </dependency>
-
-        <!--com.vaadin-->
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
-            <version>${com.vaadin.spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client-compiled</artifactId>
-            <version>${com.vaadin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-themes</artifactId>
-            <version>${com.vaadin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-server</artifactId>
-            <version>${com.vaadin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.teemusa</groupId>
-            <artifactId>sidemenu</artifactId>
-            <version>2.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-core</artifactId>
-            <version>2.0.0.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-boot</artifactId>
-            <version>2.0.0.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-security</artifactId>
-            <version>2.0.0.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.appreciated</groupId>
-            <artifactId>material</artifactId>
-            <version>1.1.4</version>
-        </dependency>
-
 
         <dependency>
             <groupId>com.contentful.java</groupId>
@@ -116,13 +42,6 @@
         </dependency>
 
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-    </repositories>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -142,20 +61,6 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${com.vaadin.version}</version>
-                <executions>
-                    <!-- You are free to mark this as permanently ignored in Eclipse -->
-                    <execution>
-                        <configuration>
-                            <!-- if you don't specify any modules, the plugin will find them -->
-                        </configuration>
-                        <goals>
-                            <goal>resources</goal>
-                            <goal>update-widgetset</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

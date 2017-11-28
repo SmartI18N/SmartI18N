@@ -13,10 +13,8 @@ import com.vaadin.ui.HorizontalLayout;
 import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.components.IconButton;
-import org.smarti18n.editor.gateway.SpringImportExportHandler;
+import org.smarti18n.vaadin.components.IconButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

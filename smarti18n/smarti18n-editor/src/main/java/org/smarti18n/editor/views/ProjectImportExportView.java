@@ -2,7 +2,7 @@ package org.smarti18n.editor.views;
 
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.editor.gateway.ImportExportHandler;
-import org.smarti18n.editor.utils.I18N;
+import org.smarti18n.vaadin.utils.I18N;
 
 import com.vaadin.navigator.View;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;

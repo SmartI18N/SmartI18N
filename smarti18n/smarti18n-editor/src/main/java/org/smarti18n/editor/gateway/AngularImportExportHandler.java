@@ -12,11 +12,11 @@ import com.vaadin.ui.Window;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
-import org.smarti18n.editor.components.FormWindow;
-import org.smarti18n.editor.components.IconButton;
-import org.smarti18n.editor.components.LocaleComboBox;
-import org.smarti18n.editor.utils.I18N;
-import org.smarti18n.editor.utils.JsonExportStreamSource;
+import org.smarti18n.vaadin.components.FormWindow;
+import org.smarti18n.vaadin.components.IconButton;
+import org.smarti18n.vaadin.components.LocaleComboBox;
+import org.smarti18n.vaadin.utils.I18N;
+import org.smarti18n.vaadin.utils.JsonExportStreamSource;
 
 @Component
 public class AngularImportExportHandler implements ImportExportHandler {

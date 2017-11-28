@@ -3,12 +3,14 @@ package org.smarti18n.messages.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectImpl;
+import org.smarti18n.api.UserRole;
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.entities.UserEntity;
 import org.smarti18n.messages.repositories.ProjectRepository;
@@ -34,10 +36,16 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional
-    public List<? extends Project> findAll(final String username) {
+    public List<Project> findAll(final String username) {
         final UserEntity user = this.entityLoader.findUser(username);
 
-        return this.projectRepository.findByOwners(user);
+        if (user.getRole() == UserRole.SUPERUSER) {
+            return this.projectRepository.findAll()
+                    .stream().collect(Collectors.toList());
+        }
+
+        return this.projectRepository.findByOwners(user)
+                .stream().collect(Collectors.toList());
     }
 
     @Override

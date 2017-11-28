@@ -1,6 +1,8 @@
 package org.smarti18n.messages.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,13 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Override
+    @Transactional
+    public List<User> findAll() {
+        return this.userRepository.findAll()
+                .stream().collect(Collectors.toList());
     }
 
     @Override

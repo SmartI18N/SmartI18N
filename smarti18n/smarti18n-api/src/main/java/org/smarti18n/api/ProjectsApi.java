@@ -10,7 +10,7 @@ public interface ProjectsApi {
     String PATH_PROJECTS_UPDATE = "/api/1/projects/update";
     String PATH_PROJECTS_REMOVE = "/api/1/projects/remove";
 
-    List<? extends Project> findAll();
+    List<Project> findAll();
 
     Project findOne(
             String projectId

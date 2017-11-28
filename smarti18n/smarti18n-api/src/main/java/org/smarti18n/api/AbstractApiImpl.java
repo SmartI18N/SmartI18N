@@ -82,7 +82,7 @@ abstract class AbstractApiImpl {
         return exchange.getBody();
     }
 
-    private HttpHeaders headers() {
+    protected HttpHeaders headers() {
         final String base64Credentials = this.userCredentialsSupplier.getBase64Credentials();
 
         final HttpHeaders headers = new HttpHeaders();

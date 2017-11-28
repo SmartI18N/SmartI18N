@@ -1,0 +1,24 @@
+//$mat-background-color: #303030;
+
+$primary: #ff9800;
+$secondary: #009688;
+
+$mat-custom-color: #00bcd4;
+
+$v-unit-size: 45px;
+
+$v-focus-color: $primary;
+
+@import "../material/material.scss";
+
+.smarti18n {
+  @include material;
+
+  font-family: 'Questrial', sans-serif;
+
+  h2 {
+    margin-top: 0.77em;
+    margin-bottom: 0.77em;
+  }
+
+}

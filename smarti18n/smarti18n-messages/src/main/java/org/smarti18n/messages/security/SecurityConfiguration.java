@@ -66,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 ).hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
 
                 .antMatchers(
-
+                        UserApi.PATH_USERS_FIND_ALL
                 ).hasAuthority(ROLE_SUPERUSER)
 
                 .antMatchers(

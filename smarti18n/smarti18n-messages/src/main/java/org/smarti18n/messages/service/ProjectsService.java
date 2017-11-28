@@ -8,7 +8,7 @@ import org.smarti18n.api.Project;
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public interface ProjectsService {
-    List<? extends Project> findAll(final String username);
+    List<Project> findAll(final String username);
 
     Project findOne(final String username, String projectId);
 

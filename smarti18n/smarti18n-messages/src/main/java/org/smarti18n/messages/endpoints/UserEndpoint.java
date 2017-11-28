@@ -1,5 +1,7 @@
 package org.smarti18n.messages.endpoints;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,12 @@ public class UserEndpoint implements UserApi {
 
     public UserEndpoint(final UserService userService) {
         this.userService = userService;
+    }
+
+    @Override
+    @GetMapping(PATH_USERS_FIND_ALL)
+    public List<User> findAll() {
+        return this.userService.findAll();
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.smarti18n.api.Project;
 import org.smarti18n.api.User;
+import org.smarti18n.api.UserRole;
 
 @Document(collection = "projects")
 public class ProjectEntity implements Project {
@@ -101,7 +102,7 @@ public class ProjectEntity implements Project {
     }
 
     public boolean hasOwner(final UserEntity user) {
-        return this.owners.contains(user);
+        return user.getRole() == UserRole.SUPERUSER || this.owners.contains(user);
     }
 
     @Override

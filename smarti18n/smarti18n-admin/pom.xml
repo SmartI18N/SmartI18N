@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>smarti18n</artifactId>
+        <groupId>org.smarti18n</groupId>
+        <version>0.1-M14-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>smarti18n-admin</artifactId>
+    <packaging>war</packaging>
+
+    <properties>
+        <start-class>org.smarti18n.admin.AdminApplication</start-class>
+
+        <docker.imageName>smarti18n/admin</docker.imageName>
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.smarti18n</groupId>
+            <artifactId>smarti18n-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarti18n</groupId>
+            <artifactId>smarti18n-api-spring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarti18n</groupId>
+            <artifactId>smarti18n-vaadin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${com.vaadin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

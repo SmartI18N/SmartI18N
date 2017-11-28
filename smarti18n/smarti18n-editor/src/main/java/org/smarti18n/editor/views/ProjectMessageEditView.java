@@ -13,10 +13,10 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.components.CancelButton;
-import org.smarti18n.editor.components.HiddenField;
-import org.smarti18n.editor.components.LocaleTextAreas;
-import org.smarti18n.editor.components.SaveButton;
+import org.smarti18n.vaadin.components.CancelButton;
+import org.smarti18n.vaadin.components.HiddenField;
+import org.smarti18n.vaadin.components.LocaleTextAreas;
+import org.smarti18n.vaadin.components.SaveButton;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
