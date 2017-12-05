@@ -26,7 +26,7 @@ public class MessageCacheImpl implements MessageCache {
     }
 
 
-    @Cacheable("findByProjectId")
+    @Cacheable(CACHE_FIND_BY_PROJECT_ID)
     @Override
     public Collection<MessageEntity> findByProjectId(
             final String projectId) {
@@ -36,7 +36,7 @@ public class MessageCacheImpl implements MessageCache {
         return findByProject(project);
     }
 
-    @Cacheable("findByProjectId")
+    @Cacheable(CACHE_FIND_BY_USERNAME_AND_PROJECT_ID)
     @Override
     public Collection<MessageEntity> findByUsernameAndProjectId(
             final String username,
