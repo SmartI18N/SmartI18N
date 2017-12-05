@@ -7,7 +7,7 @@ import com.vaadin.spring.annotation.UIScope;
 import javax.annotation.PostConstruct;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
 @SpringView(name = StartView.VIEW_NAME)

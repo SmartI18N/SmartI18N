@@ -21,7 +21,7 @@ import org.smarti18n.api.UserCredentialsSupplier;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @Configuration
 public class VaadinConfiguration {

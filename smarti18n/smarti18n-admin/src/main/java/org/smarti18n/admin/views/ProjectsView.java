@@ -1,6 +1,5 @@
 package org.smarti18n.admin.views;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.navigator.View;
@@ -13,7 +12,7 @@ import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
 @SpringView(name = ProjectsView.VIEW_NAME)

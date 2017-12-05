@@ -1,18 +1,4 @@
-package org.smarti18n.editor.security;
-
-import org.smarti18n.api.User;
-import org.smarti18n.api.UserApi;
-import org.smarti18n.vaadin.security.SimpleUserDetails;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.vaadin.spring.http.HttpService;
-import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
-import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
-import org.vaadin.spring.security.shared.VaadinAuthenticationSuccessHandler;
-import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
-import org.vaadin.spring.security.shared.VaadinUrlAuthenticationSuccessHandler;
-import org.vaadin.spring.security.web.VaadinRedirectStrategy;
+package org.smarti18n.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +19,19 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.smarti18n.api.User;
+import org.smarti18n.api.UserApi;
+import org.smarti18n.vaadin.security.SimpleUserDetails;
+import org.vaadin.spring.http.HttpService;
+import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
+import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
+import org.vaadin.spring.security.shared.VaadinAuthenticationSuccessHandler;
+import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
+import org.vaadin.spring.security.shared.VaadinUrlAuthenticationSuccessHandler;
+import org.vaadin.spring.security.web.VaadinRedirectStrategy;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

@@ -12,7 +12,7 @@ import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 @UIScope
 @SpringView(name = UsersView.VIEW_NAME)
