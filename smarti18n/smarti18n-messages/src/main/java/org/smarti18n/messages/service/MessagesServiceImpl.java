@@ -1,5 +1,14 @@
 package org.smarti18n.messages.service;
 
+import org.smarti18n.api.Message;
+import org.smarti18n.api.MessageImpl;
+import org.smarti18n.messages.entities.MessageEntity;
+import org.smarti18n.messages.entities.ProjectEntity;
+import org.smarti18n.messages.repositories.MessageRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,32 +17,22 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.smarti18n.api.Message;
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.messages.entities.MessageEntity;
-import org.smarti18n.messages.entities.ProjectEntity;
-import org.smarti18n.messages.repositories.MessageRepository;
-
 import static org.smarti18n.messages.service.IdentifierUtils.clean;
 
 @Service
 public class MessagesServiceImpl implements MessagesService {
 
-    private final Logger logger = LoggerFactory.getLogger(MessagesServiceImpl.class);
-
+    private final MessageCache messageCache;
     private final MessageRepository messageRepository;
     private final EntityLoader entityLoader;
 
 
     public MessagesServiceImpl(
+            final MessageCache messageCache,
             final MessageRepository messageRepository,
             final EntityLoader entityLoader) {
 
+        this.messageCache = messageCache;
         this.messageRepository = messageRepository;
         this.entityLoader = entityLoader;
     }
@@ -42,9 +41,12 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     public Collection<Message> findAll(final String username, final String projectId) {
 
-        final ProjectEntity project = this.entityLoader.findProject(username, projectId);
+        final Collection<MessageEntity> messages = this.messageCache.findByUsernameAndProjectId(
+                username,
+                projectId
+        );
 
-        return findByIdProject(project).stream().map(messageEntity -> new MessageImpl(
+        return messages.stream().map(messageEntity -> new MessageImpl(
                 messageEntity.getKey(),
                 messageEntity.getTranslations()
         ))
@@ -181,9 +183,8 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
-        final ProjectEntity project = this.entityLoader.findProject(projectId);
+        final Collection<MessageEntity> messages = this.messageCache.findByProjectId(projectId);
 
-        final Collection<MessageEntity> messages = findByIdProject(project);
         final Map<String, Map<Locale, String>> map = new HashMap<>();
 
         for (final MessageEntity message : messages) {
@@ -196,9 +197,7 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) {
-        final ProjectEntity project = this.entityLoader.findProject(projectId);
-
-        final Collection<MessageEntity> messages = findByIdProject(project);
+        final Collection<MessageEntity> messages = this.messageCache.findByProjectId(projectId);
 
         final Map<String, String> map = new HashMap<>();
 
@@ -213,17 +212,5 @@ public class MessagesServiceImpl implements MessagesService {
         }
 
         return map;
-    }
-
-    private Collection<MessageEntity> findByIdProject(final ProjectEntity project) {
-        final Long startTime = System.currentTimeMillis();
-
-        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
-
-        final Long endTime = System.currentTimeMillis();
-
-        this.logger.info("find messages by project in " + (endTime - startTime) + "ms");
-
-        return messages;
     }
 }
