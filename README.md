@@ -30,22 +30,31 @@ SmartI18N kann selbst betrieben werden. Mehr Informationen findest du im [Docker
 
 Für den Betrieb von SmartI18N benötigst du eine MongoDB. Du kannst eine extern gehostete Instance verwenden oder einen [Docker Container](https://hub.docker.com/_/mongo/). 
 
+```
 docker run -d --name smarti18n-mongo mongo
+```
 
 ### smarti18n-messages
 
+```
 docker run -d --name smarti18n-messages --link smarti18n-mongo:mongo -p 30001:8080 -e MONGODB_URL=mongodb://mongo/smarti18n-messages  smarti18n/messages
+```
 
 ### smarti18n-editor
 
+```
 docker run -d --name smarti18n-editor -p 30002:8080 -e "SMARTI18N_MESSAGES_HOST=http://localhost:30001" smarti18n/editor
+```
 
 ### First Login
 
 Jetzt kannst du das initiale Admin Passwort aus dem smarti18n-messages Container suchen. 
 
+```
 docker logs smarti18n-messages
+```
 
+```
 #######################################################################
 Initializing Application
 Opened connection \[connectionId{localValue:2, serverValue:2}\] to mongo:27017
@@ -53,8 +62,9 @@ Create Default User \[default@smarti18n.com\] with Password \[PASSWORD\]
 create default project \[default\] with secret \[SECRET\]
 Initializing Application finished
 #######################################################################
+```
 
-Mit dem Passwort kannst du dich im Editor unter http://localhost:30002 einloggen.
+Mit dem Passwort und der E-Mail default@smarti18n.com kannst du dich im Editor unter http://localhost:30002 einloggen.
 
 ## License
 
