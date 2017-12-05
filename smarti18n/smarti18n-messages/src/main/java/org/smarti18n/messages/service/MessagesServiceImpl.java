@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessageImpl;
 import org.smarti18n.messages.entities.MessageEntity;
@@ -21,6 +23,8 @@ import static org.smarti18n.messages.service.IdentifierUtils.clean;
 
 @Service
 public class MessagesServiceImpl implements MessagesService {
+
+    private final Logger logger = LoggerFactory.getLogger(MessagesServiceImpl.class);
 
     private final MessageRepository messageRepository;
     private final EntityLoader entityLoader;
@@ -40,7 +44,7 @@ public class MessagesServiceImpl implements MessagesService {
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
-        return this.messageRepository.findByIdProject(project).stream().map(messageEntity -> new MessageImpl(
+        return findByIdProject(project).stream().map(messageEntity -> new MessageImpl(
                 messageEntity.getKey(),
                 messageEntity.getTranslations()
         ))
@@ -179,7 +183,7 @@ public class MessagesServiceImpl implements MessagesService {
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
         final ProjectEntity project = this.entityLoader.findProject(projectId);
 
-        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
+        final Collection<MessageEntity> messages = findByIdProject(project);
         final Map<String, Map<Locale, String>> map = new HashMap<>();
 
         for (final MessageEntity message : messages) {
@@ -194,7 +198,8 @@ public class MessagesServiceImpl implements MessagesService {
     public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) {
         final ProjectEntity project = this.entityLoader.findProject(projectId);
 
-        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
+        final Collection<MessageEntity> messages = findByIdProject(project);
+
         final Map<String, String> map = new HashMap<>();
 
         for (final MessageEntity message : messages) {
@@ -208,5 +213,17 @@ public class MessagesServiceImpl implements MessagesService {
         }
 
         return map;
+    }
+
+    private Collection<MessageEntity> findByIdProject(final ProjectEntity project) {
+        final Long startTime = System.currentTimeMillis();
+
+        final Collection<MessageEntity> messages = this.messageRepository.findByIdProject(project);
+
+        final Long endTime = System.currentTimeMillis();
+
+        this.logger.info("find messages by project in " + (endTime - startTime) + "ms");
+
+        return messages;
     }
 }
