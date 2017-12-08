@@ -3,6 +3,7 @@ package org.smarti18n.editor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
-
 import org.vaadin.spring.http.HttpService;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
@@ -45,6 +45,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserApi userApi;
+
+    @Autowired
+    private Environment environment;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -66,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         final LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint("/login");
-        authenticationEntryPoint.setForceHttps(true);
+        authenticationEntryPoint.setForceHttps(environment.acceptsProfiles("locale"));
         http.exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 

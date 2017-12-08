@@ -1,28 +1,27 @@
 package org.smarti18n.editor.views;
 
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.function.Consumer;
+
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.grid.ColumnResizeMode;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupView;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
+import javax.annotation.PostConstruct;
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.components.LabelField;
-
-import com.vaadin.data.Binder;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextArea;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.Locale;
+import org.smarti18n.vaadin.utils.I18N;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -35,19 +34,19 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
 
     private final MessagesApi messagesApi;
 
-    private ListIterator<? extends Message> messageIterator;
+    private Grid<Message> grid;
 
-    private final Binder<Message> binder;
-
-    private ComboBox<Locale> sourceLocaleComboBox;
-    private ComboBox<Locale> targetLocaleComboBox;
+    private Locale[] locales = new Locale[]{
+            Locale.GERMAN,
+            Locale.ENGLISH,
+            Locale.ITALIAN,
+            new Locale("pt")
+    };
 
     public ProjectTranslatorView(final MessagesApi messagesApi, final ProjectsApi projectsApi) {
         super(projectsApi);
 
         this.messagesApi = messagesApi;
-
-        this.binder = new Binder<>(Message.class);
     }
 
     @PostConstruct
@@ -55,100 +54,45 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
         super.init(translate("smarti18n.editor.message-overview.caption"));
         setSizeFull();
 
-        this.sourceLocaleComboBox = new ComboBox<>();
-        this.targetLocaleComboBox = new ComboBox<>();
+        grid = new Grid<>(Message.class);
+        grid.setColumns();
 
-        final Label c = new Label("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
-        c.setSizeFull();
+        addMessageColumn(locales[0]);
+        addMessageColumn(locales[2]);
+        addMessageColumn(locales[3]);
 
-        final LabelField keyField = new LabelField();
-        keyField.setSizeFull();
+        grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
+        grid.setSizeFull();
 
-        final LabelField sourceField = new LabelField();
-        sourceField.setSizeFull();
-
-        final TextArea targetField = new TextArea();
-        targetField.setSizeFull();
-
-        this.binder.forField(keyField).bind("key");
-        this.binder.forField(sourceField).bind(
-                message -> message.getTranslation(getSourceLocale()),
-                (message, translation) -> message.setTranslation(getSourceLocale(), translation)
-        );
-        this.binder.forField(targetField).bind(
-                message -> message.getTranslation(getTargetLocale()),
-                (message, translation) -> message.setTranslation(getTargetLocale(), translation)
-        );
-        this.binder.bindInstanceFields(this);
-
-        final FormLayout layout = new FormLayout(
-                sourceLocaleComboBox,
-                targetLocaleComboBox,
-                keyField,
-                sourceField,
-                targetField
-        );
-        layout.setSizeFull();
-        layout.setMargin(true);
-
-        final Panel panel = new Panel(layout);
-        panel.setSizeFull();
-
-        addComponent(panel);
-        setExpandRatio(panel, 1f);
+        addComponent(grid);
+        setExpandRatio(grid, 1);
     }
 
-    private Locale getSourceLocale() {
-        return this.sourceLocaleComboBox.getValue();
-    }
-
-    private Locale getTargetLocale() {
-        return this.targetLocaleComboBox.getValue();
+    private void addMessageColumn(final Locale locale) {
+        grid.addComponentColumn(message -> new MessagePopup(locale, message, (translation) -> {
+            this.messagesApi.update(projectId(), message.getKey(), locale, translation);
+            reloadGrid();
+        })).setCaption(locale.toString()).setExpandRatio(1);
     }
 
     @Override
     protected HorizontalLayout createButtonBar() {
-        final Button previousButton = new Button("<");
-        final Button nextButton = new Button(">");
-
-        previousButton.addClickListener((e) -> {
-            if (this.messageIterator.hasPrevious()) {
-                this.binder.readBean(this.messageIterator.previous());
-
-                nextButton.setEnabled(this.messageIterator.hasNext());
-                previousButton.setEnabled(this.messageIterator.hasPrevious());
-            }
-        });
-
-        nextButton.addClickListener((e) -> {
-            if (this.messageIterator.hasNext()) {
-                this.binder.readBean(this.messageIterator.next());
-
-                nextButton.setEnabled(this.messageIterator.hasNext());
-                previousButton.setEnabled(this.messageIterator.hasPrevious());
-            }
-        });
-
-        return new HorizontalLayout(previousButton, nextButton);
+        return null;
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         super.enter(viewChangeEvent);
 
-        final Project project = project();
-
-        this.messageIterator = new ArrayList<>(this.messagesApi.findAll(project.getId())).listIterator();
-
-        this.sourceLocaleComboBox.setItems(project.getLocales());
-        this.targetLocaleComboBox.setItems(project.getLocales());
-
-        if (this.messageIterator.hasNext()) {
-            this.binder.readBean(this.messageIterator.next());
-        }
+        reloadGrid();
     }
 
-
+    private void reloadGrid() {
+        grid.setItems(
+                new ArrayList<>(this.messagesApi.findAll(projectId()))
+        );
+    }
 
     private String projectId() {
         return project().getId();
@@ -156,6 +100,49 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
 
     private Project project() {
         return this.projectContext.getProject();
+    }
+
+    private static class MessagePopup extends PopupView {
+
+        private MessagePopup(final Locale locale, final Message message, final Consumer<String> consumer) {
+            super(new MessageContent(locale, message, consumer));
+        }
+    }
+
+    private static class MessageContent implements PopupView.Content {
+        private final Locale locale;
+        private final Message message;
+        private final Consumer<String> consumer;
+
+        private MessageContent(final Locale locale, final Message message, final Consumer<String> consumer) {
+            this.locale = locale;
+            this.message = message;
+            this.consumer = consumer;
+        }
+
+        @Override
+        public String getMinimizedValueAsHTML() {
+            return message.getTranslation(locale);
+        }
+
+        @Override
+        public Component getPopupComponent() {
+            final TextArea textArea = new TextArea(
+                    message.getKey(),
+                    message.getTranslation(locale)
+            );
+            textArea.setSizeFull();
+            final Button button = new Button(
+                    I18N.translate("common.save"),
+                    e -> consumer.accept(textArea.getValue())
+            );
+
+            final VerticalLayout verticalLayout = new VerticalLayout(
+                    textArea,
+                    button
+            );
+            return verticalLayout;
+        }
     }
 
 }
