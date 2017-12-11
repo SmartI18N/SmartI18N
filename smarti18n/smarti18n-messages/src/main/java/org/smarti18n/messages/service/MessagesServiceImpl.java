@@ -75,7 +75,6 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    @CacheEvict({MessageCache.CACHE_FIND_BY_USERNAME_AND_PROJECT_ID, MessageCache.CACHE_FIND_BY_PROJECT_ID})
     public Message insert(
             final String username,
             final String projectId,
@@ -96,7 +95,6 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    @CacheEvict({MessageCache.CACHE_FIND_BY_USERNAME_AND_PROJECT_ID, MessageCache.CACHE_FIND_BY_PROJECT_ID})
     public Message update(
             final String username, final String projectId,
             final String key,
@@ -123,7 +121,6 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    @CacheEvict({MessageCache.CACHE_FIND_BY_USERNAME_AND_PROJECT_ID, MessageCache.CACHE_FIND_BY_PROJECT_ID})
     public Message update(final String username, final String projectId, final Message message) {
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
@@ -142,7 +139,6 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    @CacheEvict({MessageCache.CACHE_FIND_BY_USERNAME_AND_PROJECT_ID, MessageCache.CACHE_FIND_BY_PROJECT_ID})
     public Message copy(
             final String username, final String projectId,
             final String sourceKey,
@@ -176,7 +172,6 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    @CacheEvict({MessageCache.CACHE_FIND_BY_USERNAME_AND_PROJECT_ID, MessageCache.CACHE_FIND_BY_PROJECT_ID})
     public void remove(
             final String username, final String projectId,
             final String key) {

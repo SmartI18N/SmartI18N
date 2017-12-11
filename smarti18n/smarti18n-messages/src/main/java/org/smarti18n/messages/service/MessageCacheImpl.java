@@ -1,16 +1,14 @@
 package org.smarti18n.messages.service;
 
-import org.smarti18n.messages.entities.MessageEntity;
-import org.smarti18n.messages.entities.ProjectEntity;
-import org.smarti18n.messages.repositories.MessageRepository;
+import java.util.Collection;
+
+import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
-
-import java.util.Collection;
+import org.smarti18n.messages.entities.MessageEntity;
+import org.smarti18n.messages.entities.ProjectEntity;
+import org.smarti18n.messages.repositories.MessageRepository;
 
 @Component
 public class MessageCacheImpl implements MessageCache {
@@ -26,7 +24,6 @@ public class MessageCacheImpl implements MessageCache {
     }
 
 
-    @Cacheable(CACHE_FIND_BY_PROJECT_ID)
     @Override
     public Collection<MessageEntity> findByProjectId(
             final String projectId) {
@@ -36,7 +33,6 @@ public class MessageCacheImpl implements MessageCache {
         return findByProject(project);
     }
 
-    @Cacheable(CACHE_FIND_BY_USERNAME_AND_PROJECT_ID)
     @Override
     public Collection<MessageEntity> findByUsernameAndProjectId(
             final String username,
