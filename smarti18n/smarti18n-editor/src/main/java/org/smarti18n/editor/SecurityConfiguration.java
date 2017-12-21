@@ -69,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         final LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint("/login");
-        authenticationEntryPoint.setForceHttps(environment.acceptsProfiles("locale"));
+        authenticationEntryPoint.setForceHttps(!environment.acceptsProfiles("locale"));
         http.exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 
