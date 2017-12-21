@@ -1,0 +1,31 @@
+admin:
+  image: 'smarti18n/admin:latest'
+  ports:
+    - '26404:8080'
+  restart: always
+
+com:
+  image: 'smarti18n/com:latest'
+  ports:
+    - '26403:8000'
+  restart: always
+
+editor:
+  image: 'smarti18n/editor:latest'
+  ports:
+    - '26402:8080'
+  restart: always
+
+messages:
+  environment:
+    - MONGODB_URL=mongodb://localhost/smarti18n-messages
+  image: 'smarti18n/messages:latest'
+  links:
+    - mongo
+  ports:
+    - '26401:8080'
+  restart: always
+
+mongo:
+  image: 'mongo:latest'
+  restart: always
