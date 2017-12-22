@@ -2,14 +2,20 @@ package org.smarti18n.editor.views;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.springframework.util.StringUtils;
+
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -21,6 +27,9 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
 import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.vaadin.components.CancelButton;
+import org.smarti18n.vaadin.components.FormWindow;
+import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
 
 /**
@@ -36,12 +45,8 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
 
     private Grid<Message> grid;
 
-    private Locale[] locales = new Locale[]{
-            Locale.GERMAN,
-            Locale.ENGLISH,
-            Locale.ITALIAN,
-            new Locale("pt")
-    };
+    private Locale locale1;
+    private Locale locale2;
 
     public ProjectTranslatorView(final MessagesApi messagesApi, final ProjectsApi projectsApi) {
         super(projectsApi);
@@ -51,15 +56,23 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
 
     @PostConstruct
     void init() {
-        super.init(translate("smarti18n.editor.message-overview.caption"));
+        super.init(translate("smarti18n.editor.translator.caption"));
         setSizeFull();
 
         grid = new Grid<>(Message.class);
         grid.setColumns();
 
-        addMessageColumn(locales[0]);
-        addMessageColumn(locales[2]);
-        addMessageColumn(locales[3]);
+        grid.addComponentColumn(message1 -> new MessagePopup(locale1, message1, (translation1) -> {
+            this.messagesApi.update(projectId(), message1.getKey(), locale1, translation1);
+
+            message1.getTranslations().put(locale1, translation1);
+        })).setExpandRatio(1);
+
+        grid.addComponentColumn(message -> new MessagePopup(locale2, message, (translation) -> {
+            this.messagesApi.update(projectId(), message.getKey(), locale2, translation);
+
+            message.getTranslations().put(locale2, translation);
+        })).setExpandRatio(1);
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
@@ -69,21 +82,40 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
         setExpandRatio(grid, 1);
     }
 
-    private void addMessageColumn(final Locale locale) {
-        grid.addComponentColumn(message -> new MessagePopup(locale, message, (translation) -> {
-            this.messagesApi.update(projectId(), message.getKey(), locale, translation);
-            reloadGrid();
-        })).setCaption(locale.toString()).setExpandRatio(1);
-    }
-
     @Override
     protected HorizontalLayout createButtonBar() {
-        return null;
+
+        final IconButton reloadButton = new IconButton(
+                translate("smarti18n.editor.translator.reload"),
+                VaadinIcons.SHIFT_ARROW,
+                clickEvent -> reloadGrid()
+        );
+
+        final IconButton languageButton = new IconButton(
+                translate("smarti18n.editor.translator.update-languages"),
+                VaadinIcons.FILE_ADD,
+                clickEvent -> {
+                    this.getUI().addWindow(new LanguageWindow(
+                            project().getLocales(),
+                            (locale1, locale2) -> navigateTo(VIEW_NAME, projectId(), locale1.toString(), locale2.toString())
+                    ));
+                });
+
+        return new HorizontalLayout(reloadButton, languageButton);
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        super.enter(viewChangeEvent);
+        final String[] parameters = viewChangeEvent.getParameters().split("/");
+        loadProjectContext(parameters[0]);
+
+        if (parameters.length == 3) {
+            this.locale1 = Locale.forLanguageTag(parameters[1]);
+            this.locale2 = Locale.forLanguageTag(parameters[2]);
+        } else {
+            this.locale1 = Locale.ENGLISH;
+            this.locale2 = Locale.GERMAN;
+        }
 
         reloadGrid();
     }
@@ -122,7 +154,9 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
 
         @Override
         public String getMinimizedValueAsHTML() {
-            return message.getTranslation(locale);
+            final String translation = message.getTranslation(locale);
+
+            return StringUtils.isEmpty(translation) ? "???" : translation;
         }
 
         @Override
@@ -132,6 +166,7 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
                     message.getTranslation(locale)
             );
             textArea.setSizeFull();
+
             final Button button = new Button(
                     I18N.translate("common.save"),
                     e -> consumer.accept(textArea.getValue())
@@ -141,7 +176,49 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
                     textArea,
                     button
             );
+            verticalLayout.setWidth(500, Unit.PIXELS);
+
             return verticalLayout;
+        }
+    }
+
+    private static class LanguageWindow extends FormWindow {
+
+        LanguageWindow(
+                final Set<Locale> locales,
+                final BiConsumer<Locale, Locale> consumer) {
+
+            super(I18N.translate("smarti18n.editor.translator.update-languages"));
+
+            final ComboBox<Locale> locale1Field = new ComboBox<>(
+                    I18N.translate("smarti18n.editor.translator.language-one"),
+                    locales
+            );
+            addFormComponent(
+                    locale1Field
+            );
+
+            final ComboBox<Locale> locale2Field = new ComboBox<>(
+                    I18N.translate("smarti18n.editor.translator.language-two"),
+                    locales
+            );
+            addFormComponent(locale2Field);
+
+            addFormButtons(
+                    new IconButton(
+                            I18N.translate("common.save"),
+                            VaadinIcons.SHIFT_ARROW,
+                            clickEvent -> {
+                                consumer.accept(
+                                        locale1Field.getValue(),
+                                        locale2Field.getValue()
+                                );
+                                close();
+                            }),
+                    new CancelButton(
+                            clickEvent -> close()
+                    )
+            );
         }
     }
 
