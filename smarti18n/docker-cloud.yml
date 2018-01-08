@@ -35,7 +35,7 @@ messages:
   ports:
     - '26401:8080'
   environment:
-    - MONGODB_URL=mongodb://localhost/smarti18n-messages
+    - MONGODB_URL=mongodb://mongo/smarti18n-messages
   restart: always
   depends_on:
     - mongo
