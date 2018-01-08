@@ -37,7 +37,8 @@ services:
     ports:
       - '26401:8080'
     deploy:
-      replic
+      mode: replicated
+      replicas: 3
     environment:
       - MONGODB_URL=mongodb://localhost/smarti18n-messages
     restart: always
