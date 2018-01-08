@@ -8,7 +8,7 @@ services:
       - '26404:8080'
     restart: always
     depends_on:
-          - messages
+      - messages
 
   com:
     image: 'smarti18n/com:latest'
@@ -28,20 +28,24 @@ services:
       - '26402:8080'
     restart: always
     depends_on:
-          - messages
+      - messages
 
   messages:
-    environment:
-      - MONGODB_URL=mongodb://mongo/smarti18n-messages
     image: 'smarti18n/messages:latest'
     links:
       - mongo
     ports:
       - '26401:8080'
+    deploy:
+      replic
+    environment:
+      - MONGODB_URL=mongodb://localhost/smarti18n-messages
     restart: always
     depends_on:
-          - mongo
+      - mongo
 
   mongo:
     image: 'mongo:latest'
+    volumes:
+      - "/var/lib/mongo_data:/data/db"
     restart: always

@@ -1,31 +1,47 @@
 admin:
   image: 'smarti18n/admin:latest'
+  links:
+    - messages
   ports:
     - '26404:8080'
   restart: always
+  depends_on:
+    - messages
 
 com:
   image: 'smarti18n/com:latest'
+  links:
+    - messages
   ports:
     - '26403:8000'
   restart: always
+  depends_on:
+    - messages
 
 editor:
   image: 'smarti18n/editor:latest'
+  links:
+    - messages
   ports:
     - '26402:8080'
   restart: always
+  depends_on:
+    - messages
 
 messages:
-  environment:
-    - MONGODB_URL=mongodb://localhost/smarti18n-messages
   image: 'smarti18n/messages:latest'
   links:
     - mongo
   ports:
     - '26401:8080'
+  environment:
+    - MONGODB_URL=mongodb://localhost/smarti18n-messages
   restart: always
+  depends_on:
+    - mongo
 
 mongo:
   image: 'mongo:latest'
+    volumes:
+      - "/var/lib/mongo_data:/data/db"
   restart: always
