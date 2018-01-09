@@ -2,6 +2,8 @@ package org.smarti18n.admin.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import org.smarti18n.vaadin.utils.I18N;
@@ -17,11 +19,15 @@ abstract class AbstractView extends VerticalLayout implements View {
     }
 
     void init(final String caption) {
-
         final Label captionLabel = new Label("<h2>" + caption + "</h2>", ContentMode.HTML);
         captionLabel.setPrimaryStyleName("view-caption");
         addComponent(captionLabel);
+    }
 
+    void init(final String caption, final Button button) {
+        final Label captionLabel = new Label("<h2>" + caption + "</h2>", ContentMode.HTML);
+        captionLabel.setPrimaryStyleName("view-caption");
+        addComponent(new HorizontalLayout(captionLabel, button));
     }
 
     String translate(final String code, final String... args) {

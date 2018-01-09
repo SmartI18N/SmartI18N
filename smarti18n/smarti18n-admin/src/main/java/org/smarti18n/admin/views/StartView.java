@@ -17,8 +17,7 @@ public class StartView extends AbstractView implements View {
 
     @PostConstruct
     void init() {
-        super.init(translate("smarti18n.admin.projects.caption"));
-
+        super.init(translate("smarti18n.admin.start.caption"));
     }
 
     @Override

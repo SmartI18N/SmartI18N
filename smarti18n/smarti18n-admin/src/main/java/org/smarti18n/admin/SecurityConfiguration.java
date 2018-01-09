@@ -1,5 +1,8 @@
 package org.smarti18n.admin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +15,13 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
@@ -22,7 +30,6 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserSimplified;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
@@ -133,8 +140,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    PasswordEncoder encoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder encoder() {
+        final String idForEncode = "bcrypt";
+        final Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put(idForEncode, new BCryptPasswordEncoder());
+        encoders.put(null, NoOpPasswordEncoder.getInstance());
+        encoders.put("noop", NoOpPasswordEncoder.getInstance());
+        encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
+        encoders.put("scrypt", new SCryptPasswordEncoder());
+        encoders.put("sha256", new StandardPasswordEncoder());
+
+        return new DelegatingPasswordEncoder(idForEncode, encoders);
     }
 
 }
