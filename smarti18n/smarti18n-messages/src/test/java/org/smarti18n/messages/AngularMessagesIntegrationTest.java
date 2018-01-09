@@ -12,6 +12,7 @@ import org.smarti18n.api.AngularMessagesApiImpl;
 import org.smarti18n.api.ApiException;
 import org.smarti18n.api.MessagesApiImpl;
 import org.smarti18n.api.UserCredentials;
+import org.smarti18n.api.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -35,7 +36,7 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void standardWorkflowSpringMessages() throws Exception {
-        final MessagesApiImpl messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), port, () -> UserCredentials.TEST);
+        final MessagesApiImpl messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), port, new UserCredentialsSupplier(UserCredentials.TEST));
         messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
         messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 

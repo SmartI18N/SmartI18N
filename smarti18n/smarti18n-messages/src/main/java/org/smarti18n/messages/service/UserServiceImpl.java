@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +18,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(final UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -45,7 +49,9 @@ public class UserServiceImpl implements UserService {
         final boolean firstUser = this.userRepository.count() == 0;
         final UserRole role = firstUser ? UserRole.SUPERUSER : UserRole.USER;
 
-        return this.userRepository.insert(new UserEntity(mail, password, role));
+        final String encodedPassword = this.passwordEncoder.encode(password);
+
+        return this.userRepository.insert(new UserEntity(mail, encodedPassword, role));
     }
 
     @Override

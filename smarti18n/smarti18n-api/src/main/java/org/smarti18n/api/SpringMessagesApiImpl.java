@@ -28,9 +28,7 @@ public class SpringMessagesApiImpl extends AbstractApiImpl implements SpringMess
             final String projectId,
             final String projectSecret) {
 
-        super(restTemplate, host, () -> {
-            throw new UnsupportedOperationException();
-        });
+        super(restTemplate, host, new UserCredentialsSupplier());
 
         this.projectId = projectId;
         this.projectSecret = projectSecret;
@@ -42,9 +40,7 @@ public class SpringMessagesApiImpl extends AbstractApiImpl implements SpringMess
             final String projectId,
             final String projectSecret) {
 
-        super(restTemplate, port, () -> {
-            throw new UnsupportedOperationException();
-        });
+        super(restTemplate, port, new UserCredentialsSupplier());
 
         this.projectId = projectId;
         this.projectSecret = projectSecret;

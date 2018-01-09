@@ -1,11 +1,8 @@
 package org.smarti18n.api;
 
+import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
@@ -28,15 +25,9 @@ public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
     @Override
     public List<Project> findAll() {
-        final ResponseEntity<List<Project>> exchange = this.restTemplate.exchange(
-                uri(ProjectsApi.PATH_PROJECTS_FIND_ALL).build().encode().toUri(),
-                HttpMethod.GET,
-                new HttpEntity<>(headers()),
-                new ParameterizedTypeReference<List<Project>>() {
-                }
+        return Arrays.asList(
+                get(uri(ProjectsApi.PATH_PROJECTS_FIND_ALL), Project[].class)
         );
-
-        return handleResponse(exchange);
     }
 
     @Override

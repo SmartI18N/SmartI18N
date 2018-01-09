@@ -13,6 +13,7 @@ import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
 import org.smarti18n.api.UserCredentials;
+import org.smarti18n.api.UserCredentialsSupplier;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -32,7 +33,7 @@ public abstract class AbstractIntegrationTest {
     protected TestRestTemplate restTemplate;
 
     User insertTestUser(final String username, final String password) {
-        final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
+        final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
         return userApi.register(
                 username,
                 password

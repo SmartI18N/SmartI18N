@@ -74,9 +74,7 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
         final IconButton newMessageButton = new IconButton(
                 translate("smarti18n.editor.message-overview.add-new-message"),
                 VaadinIcons.FILE_ADD,
-                clickEvent -> {
-                    this.getUI().addWindow(new ProjectMessageCreateWindow(this.messagesApi, projectId()));
-                });
+                clickEvent -> getUI().addWindow(new ProjectMessageCreateWindow(this.messagesApi, projectId())));
 
         return new HorizontalLayout(newMessageButton);
     }

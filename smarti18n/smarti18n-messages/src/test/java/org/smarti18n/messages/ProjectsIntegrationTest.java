@@ -17,6 +17,7 @@ import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.UserCredentials;
+import org.smarti18n.api.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -37,7 +38,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
+        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
     }
 
     @Test
@@ -80,7 +81,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         final ProjectsApiImpl projectsApi2 = new ProjectsApiImpl(
                 this.restTemplate.getRestTemplate(),
                 this.port,
-                () -> new UserCredentials(test2User, test2User)
+                new UserCredentialsSupplier(new UserCredentials(test2User, test2User))
         );
 
         final List<? extends Project> projects = projectsApi2.findAll();

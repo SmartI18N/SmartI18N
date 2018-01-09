@@ -4,9 +4,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -16,7 +13,6 @@ import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
-import org.smarti18n.api.UserCredentials;
 import org.smarti18n.api.UserCredentialsSupplier;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 
@@ -58,18 +54,7 @@ public class VaadinConfiguration {
     @Bean
     @SessionScope
     UserCredentialsSupplier userCredentialsSupplier() {
-        return () -> {
-            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || authentication.getPrincipal() == null) {
-                return null;
-            }
-            final UserDetails principal = (UserDetails) authentication.getPrincipal();
-
-            return new UserCredentials(
-                    principal.getUsername(),
-                    principal.getPassword()
-            );
-        };
+        return new UserCredentialsSupplier();
     }
 
 }

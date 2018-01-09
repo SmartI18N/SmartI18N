@@ -17,6 +17,7 @@ import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.MessagesApiImpl;
 import org.smarti18n.api.UserCredentials;
+import org.smarti18n.api.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -36,7 +37,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
+        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
     }
 
     @Test
@@ -74,7 +75,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Test(expected = RestClientException.class)
     public void wrongProjectId() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST).findAll("irgendwas");
+        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST)).findAll("irgendwas");
     }
 
 //

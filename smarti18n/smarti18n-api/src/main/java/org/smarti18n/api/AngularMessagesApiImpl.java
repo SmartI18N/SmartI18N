@@ -18,18 +18,14 @@ public class AngularMessagesApiImpl extends AbstractApiImpl implements AngularMe
             final RestTemplate restTemplate,
             final String host) {
 
-        super(restTemplate, host, () -> {
-            throw new UnsupportedOperationException();
-        });
+        super(restTemplate, host, new UserCredentialsSupplier());
     }
 
     public AngularMessagesApiImpl(
             final RestTemplate restTemplate,
             final int port) {
 
-        super(restTemplate, port, () -> {
-            throw new UnsupportedOperationException();
-        });
+        super(restTemplate, port, new UserCredentialsSupplier());
     }
 
     @Override

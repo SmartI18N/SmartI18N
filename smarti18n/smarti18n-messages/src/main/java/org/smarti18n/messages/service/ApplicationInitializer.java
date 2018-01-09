@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
@@ -34,6 +35,8 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
     private final ProjectRepository projectRepository;
     private final MessageRepository messageRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final Environment environment;
 
     public ApplicationInitializer(
@@ -41,12 +44,14 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
             final UserRepository userRepository,
             final ProjectRepository projectRepository,
             final MessageRepository messageRepository,
+            final PasswordEncoder passwordEncoder,
             final Environment environment) {
 
         this.keyGenerator = keyGenerator;
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.messageRepository = messageRepository;
+        this.passwordEncoder = passwordEncoder;
         this.environment = environment;
     }
 
@@ -70,7 +75,9 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
 
             this.logger.info("Create Default User [" + DEFAULT_USER_MAIL + "] with Password [" + password + "]");
 
-            final UserEntity userEntity = new UserEntity(DEFAULT_USER_MAIL, password, UserRole.SUPERUSER);
+            final String encodedPassword = this.passwordEncoder.encode(password);
+
+            final UserEntity userEntity = new UserEntity(DEFAULT_USER_MAIL, encodedPassword, UserRole.SUPERUSER);
             userEntity.setVorname("Default");
             userEntity.setNachname("Default");
             userEntity.setCompany("Default");
@@ -104,6 +111,9 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
             this.userRepository.save(user);
         });
 
+        /*
+         * ACTIVE PROFILE test
+         */
         if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
 
             this.logger.info("");
@@ -112,11 +122,12 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
             this.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             this.logger.info("");
 
-            final UserEntity userEntity = new UserEntity(
-                    UserCredentials.TEST.getUsername(),
-                    UserCredentials.TEST.getPassword(),
-                    UserRole.SUPERUSER
-            );
+            final String username = UserCredentials.TEST.getUsername();
+            final String password = UserCredentials.TEST.getPassword();
+
+            final String encodedPassword = this.passwordEncoder.encode(password);
+
+            final UserEntity userEntity = new UserEntity(username, encodedPassword, UserRole.SUPERUSER);
             userEntity.setVorname("TEST");
             userEntity.setNachname("TEST");
             userEntity.setCompany("TEST");
