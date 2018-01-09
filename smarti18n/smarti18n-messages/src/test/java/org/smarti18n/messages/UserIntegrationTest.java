@@ -13,6 +13,7 @@ import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
 import org.smarti18n.api.UserCredentials;
+import org.smarti18n.api.UserSimplified;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -25,11 +26,11 @@ import static org.junit.Assert.assertThat;
  */
 public class UserIntegrationTest extends AbstractIntegrationTest {
 
-    private static final String MAIL = UserCredentials.TEST.getUsername();
-    private static final String PASSWORD = UserCredentials.TEST.getPassword();
-    private static final String VORNAME = "testVORNAME";
-    private static final String NACHNAME = "testNACHNAME";
-    private static final String COMPANY = "testCOMPANY";
+    private static final String NEW_USER_MAIL = "testMail";
+    private static final String NEW_USER_PASSWORD = "testPassword";
+    private static final String NEW_USER_VORNAME = "testVORNAME";
+    private static final String NEW_USER_NACHNAME = "testNACHNAME";
+    private static final String NEW_USER_COMPANY = "testCOMPANY";
 
     private UserApi userApi;
 
@@ -43,38 +44,45 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
         assertRegisterNewUser();
         assertFindUser();
         assertUpdateUser();
-//        assertFindAllUser();
+        assertFindAllUser();
     }
 
-    // TODO Nur SUPERUSER dürfen das
+    @Test
+    public void findUserWithoutLogin() throws Exception {
+        final UserSimplified user = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> new UserCredentials("ignore", "ignore"))
+                .findOneSimplified(UserCredentials.TEST.getUsername());
+
+        assertThat(user, notNullValue());
+    }
+
     private void assertFindAllUser() {
         final List<User> users = this.userApi.findAll();
 
-        assertThat(users, hasSize(2));
-        assertThat(users, hasItem(userWith(MAIL, PASSWORD)));
+        assertThat(users, hasSize(3));
+        assertThat(users, hasItem(userWith(NEW_USER_MAIL, NEW_USER_PASSWORD)));
     }
 
     private void assertUpdateUser() {
-        final User user = this.userApi.findOne(MAIL);
+        final User user = this.userApi.findOne(NEW_USER_MAIL);
 
-        user.setVorname(VORNAME);
-        user.setNachname(NACHNAME);
-        user.setCompany(COMPANY);
+        user.setVorname(NEW_USER_VORNAME);
+        user.setNachname(NEW_USER_NACHNAME);
+        user.setCompany(NEW_USER_COMPANY);
 
         this.userApi.update(user);
 
-        assertThat(this.userApi.findOne(MAIL), is(userWith(VORNAME, NACHNAME, COMPANY)));
+        assertThat(this.userApi.findOne(NEW_USER_MAIL), is(userWith(NEW_USER_VORNAME, NEW_USER_NACHNAME, NEW_USER_COMPANY)));
     }
 
     private void assertFindUser() {
-        final User user = this.userApi.findOne(MAIL);
+        final User user = this.userApi.findOne(NEW_USER_MAIL);
 
         assertThat(user, is(notNullValue()));
-        assertThat(user, is(userWith(MAIL, PASSWORD)));
+        assertThat(user, is(userWith(NEW_USER_MAIL, NEW_USER_PASSWORD)));
     }
 
     private void assertRegisterNewUser() {
-        assertThat(this.userApi.register(MAIL, PASSWORD), is(notNullValue()));
+        assertThat(this.userApi.register(NEW_USER_MAIL, NEW_USER_PASSWORD), is(notNullValue()));
     }
 
     private TypeSafeMatcher<User> userWith(final String mail, final String password) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
+import org.smarti18n.api.UserSimplified;
 import org.smarti18n.messages.service.UserService;
 
 @RestController
@@ -33,6 +34,16 @@ public class UserEndpoint implements UserApi {
             @RequestParam("mail") final String mail) {
 
         return userService.findOne(mail);
+    }
+
+    @Override
+    @GetMapping(PATH_USERS_FIND_ONE_SIMPLIFIED)
+    public UserSimplified findOneSimplified(
+            @RequestParam("mail") final String mail) {
+
+        return new UserSimplified(
+                userService.findOne(mail)
+        );
     }
 
     @Override

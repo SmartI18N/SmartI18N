@@ -22,15 +22,11 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
     private static final String MESSAGE_KEY = "message.key";
     private static final String TRANSLATION = "ÜBERSETZUNG";
     private static final Locale LOCALE = Locale.GERMAN;
-    private static final String PROJECT_ID = "test";
 
     private AngularMessagesApi angularMessagesApi;
 
     @Before
     public void setUp() throws Exception {
-        insertTestUser(UserCredentials.TEST.getUsername(), UserCredentials.TEST.getPassword());
-        insertTestProject(PROJECT_ID);
-
         this.angularMessagesApi = new AngularMessagesApiImpl(
                 new TestRestTemplate().getRestTemplate(),
                 this.port

@@ -6,7 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-public class SecurityUtils {
+public final class SecurityUtils {
+
+    private SecurityUtils() {
+    }
 
     public static String getUserId() {
         final UserPrincipal principal = (UserPrincipal) authentication().getPrincipal();

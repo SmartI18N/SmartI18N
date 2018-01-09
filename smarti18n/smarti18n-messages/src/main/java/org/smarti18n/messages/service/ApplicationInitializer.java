@@ -1,11 +1,15 @@
 package org.smarti18n.messages.service;
 
+import java.util.Arrays;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smarti18n.api.UserCredentials;
 import org.smarti18n.api.UserRole;
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.entities.UserEntity;
@@ -30,16 +34,20 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
     private final ProjectRepository projectRepository;
     private final MessageRepository messageRepository;
 
+    private final Environment environment;
+
     public ApplicationInitializer(
             final SmartKeyGenerator keyGenerator,
             final UserRepository userRepository,
             final ProjectRepository projectRepository,
-            final MessageRepository messageRepository) {
+            final MessageRepository messageRepository,
+            final Environment environment) {
 
         this.keyGenerator = keyGenerator;
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.messageRepository = messageRepository;
+        this.environment = environment;
     }
 
     @Override
@@ -95,6 +103,32 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
             user.setRole(UserRole.SUPERUSER);
             this.userRepository.save(user);
         });
+
+        if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
+
+            this.logger.info("");
+            this.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            this.logger.info("!!!!!!!!!!!!!!!!!!!!!! TEST INITIALIZATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            this.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            this.logger.info("");
+
+            final UserEntity userEntity = new UserEntity(
+                    UserCredentials.TEST.getUsername(),
+                    UserCredentials.TEST.getPassword(),
+                    UserRole.SUPERUSER
+            );
+            userEntity.setVorname("TEST");
+            userEntity.setNachname("TEST");
+            userEntity.setCompany("TEST");
+            this.userRepository.insert(userEntity);
+
+
+            final ProjectEntity projectEntity = new ProjectEntity("test", "test", defaultUser);
+            projectEntity.setName("Test Project");
+            projectEntity.setDescription("Test Project");
+
+            this.projectRepository.insert(projectEntity);
+        }
 
         this.logger.info("Initializing Application finished");
         this.logger.info("#######################################################################");

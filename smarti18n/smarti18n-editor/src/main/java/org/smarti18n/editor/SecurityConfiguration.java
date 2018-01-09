@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
+import org.smarti18n.api.UserSimplified;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.vaadin.spring.http.HttpService;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
@@ -121,7 +122,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
             logger.info("try " + username);
-            final User user = this.userApi.findOne(username);
+            final UserSimplified user = this.userApi.findOneSimplified(username);
 
             if (user == null) {
                 logger.info("no user found");

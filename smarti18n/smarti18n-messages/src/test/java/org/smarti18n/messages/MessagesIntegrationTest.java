@@ -1,7 +1,6 @@
 package org.smarti18n.messages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -32,15 +31,11 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
     private static final String TRANSLATION = "ÜBERSETZUNG";
     private static final Locale LOCALE = Locale.GERMAN;
     private static final String SECOND_MESSAGE_KEY = "message.second-key";
-    private static final String PROJECT_ID = "test";
 
     private MessagesApi messagesApi;
 
     @Before
     public void setUp() throws Exception {
-        insertTestUser(UserCredentials.TEST.getUsername(), UserCredentials.TEST.getPassword());
-        insertTestProject(PROJECT_ID);
-
         this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, () -> UserCredentials.TEST);
     }
 

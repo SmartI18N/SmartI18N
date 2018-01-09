@@ -15,8 +15,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 abstract class AbstractApiImpl {
 
-    public static final String DEFAULT_HOST = "https://messages.smarti18n.com";
-
     final RestTemplate restTemplate;
 
     private final String host;

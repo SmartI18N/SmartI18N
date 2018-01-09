@@ -40,11 +40,19 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
         final UriComponentsBuilder uri = uri(PATH_USERS_FIND_ONE)
                 .queryParam("mail", mail);
 
-        final ResponseEntity<User> exchange = this.restTemplate.exchange(
+        return get(uri, User.class);
+    }
+
+    @Override
+    public UserSimplified findOneSimplified(final String mail) {
+        final UriComponentsBuilder uri = uri(PATH_USERS_FIND_ONE_SIMPLIFIED)
+                .queryParam("mail", mail);
+
+        final ResponseEntity<UserSimplified> exchange = this.restTemplate.exchange(
                 uri.build().encode().toUri(),
                 HttpMethod.GET,
                 null,
-                User.class
+                UserSimplified.class
         );
 
         return handleResponse(exchange);
@@ -55,14 +63,7 @@ public class UserApiImpl extends AbstractApiImpl implements UserApi {
         final UriComponentsBuilder uri = uri(PATH_USERS_REGISTER)
                 .queryParam("mail", mail).queryParam("password", password);
 
-        final ResponseEntity<User> exchange = this.restTemplate.exchange(
-                uri.build().encode().toUri(),
-                HttpMethod.GET,
-                null,
-                User.class
-        );
-
-        return handleResponse(exchange);
+        return get(uri, User.class);
     }
 
     @Override

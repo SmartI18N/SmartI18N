@@ -62,16 +62,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         ProjectsApi.PATH_PROJECTS_INSERT,
                         ProjectsApi.PATH_PROJECTS_UPDATE,
                         ProjectsApi.PATH_PROJECTS_REMOVE,
+                        UserApi.PATH_USERS_FIND_ONE,
                         UserApi.PATH_USERS_UPDATE
                 ).hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
 
                 .antMatchers(
-                        UserApi.PATH_USERS_FIND_ALL
+                        UserApi.PATH_USERS_FIND_ALL,
+                        UserApi.PATH_USERS_REGISTER
                 ).hasAuthority(ROLE_SUPERUSER)
 
                 .antMatchers(
-                        UserApi.PATH_USERS_FIND_ONE,
-                        UserApi.PATH_USERS_REGISTER,
+                        UserApi.PATH_USERS_FIND_ONE_SIMPLIFIED,
                         AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR
                 ).permitAll()
 

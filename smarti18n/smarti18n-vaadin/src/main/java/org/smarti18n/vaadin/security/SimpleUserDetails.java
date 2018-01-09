@@ -1,6 +1,5 @@
 package org.smarti18n.vaadin.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -9,15 +8,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
-import org.smarti18n.api.User;
+import org.smarti18n.api.UserSimplified;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public class SimpleUserDetails implements UserDetails {
-    private final User user;
+    private final UserSimplified user;
 
-    public SimpleUserDetails(final User user) {
+    public SimpleUserDetails(final UserSimplified user) {
         Assert.notNull(user, "user");
         
         this.user = user;
