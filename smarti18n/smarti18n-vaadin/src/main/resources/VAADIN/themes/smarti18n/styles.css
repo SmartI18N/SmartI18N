@@ -16379,7 +16379,11 @@ body:not(.v-touch) .card-hoverable:hover, body.v-touch .card-hoverable:active {
 	padding-top: 20px;
 }
 
-.smarti18n h2 {
+.smarti18n .view-caption h2 {
 	margin-top: 0.77em;
 	margin-bottom: 0.77em;
+}
+
+.smarti18n .v-grid-wrappable .v-grid-cell {
+	white-space: normal;
 }

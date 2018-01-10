@@ -1,28 +1,24 @@
 package org.smarti18n.editor.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import com.vaadin.shared.ui.grid.ColumnResizeMode;
+import com.vaadin.ui.*;
 import org.springframework.util.StringUtils;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.PopupView;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
+
 import javax.annotation.PostConstruct;
+
 import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.Project;
@@ -45,9 +41,6 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
 
     private Grid<Message> grid;
 
-    private Locale locale1;
-    private Locale locale2;
-
     public ProjectTranslatorView(final MessagesApi messagesApi, final ProjectsApi projectsApi) {
         super(projectsApi);
 
@@ -59,71 +52,52 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
         super.init(translate("smarti18n.editor.translator.caption"));
         setSizeFull();
 
-        grid = new Grid<>(Message.class);
-        grid.setColumns();
+        this.grid = new Grid<>();
 
-        grid.addComponentColumn(message1 -> new MessagePopup(locale1, message1, (translation1) -> {
-            this.messagesApi.update(projectId(), message1.getKey(), locale1, translation1);
+        this.grid.addItemClickListener(itemClick -> {
+            final String key = itemClick.getItem().getKey();
+            navigateTo(ProjectMessageEditView.VIEW_NAME, projectId(), key);
+        });
 
-            message1.getTranslations().put(locale1, translation1);
-        })).setExpandRatio(1);
+        this.grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
+        this.grid.setColumnReorderingAllowed(true);
+        this.grid.setSelectionMode(Grid.SelectionMode.NONE);
+        this.grid.setSizeFull();
+        this.grid.addStyleName("wrappable");
 
-        grid.addComponentColumn(message -> new MessagePopup(locale2, message, (translation) -> {
-            this.messagesApi.update(projectId(), message.getKey(), locale2, translation);
-
-            message.getTranslations().put(locale2, translation);
-        })).setExpandRatio(1);
-
-        grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
-        grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.setSizeFull();
-
-        addComponent(grid);
-        setExpandRatio(grid, 1);
+        addComponent(this.grid);
+        setExpandRatio(this.grid, 1);
     }
 
     @Override
     protected HorizontalLayout createButtonBar() {
-
-        final IconButton reloadButton = new IconButton(
-                translate("smarti18n.editor.translator.reload"),
-                VaadinIcons.SHIFT_ARROW,
-                clickEvent -> reloadGrid()
-        );
-
-        final IconButton languageButton = new IconButton(
-                translate("smarti18n.editor.translator.update-languages"),
-                VaadinIcons.FILE_ADD,
-                clickEvent -> {
-                    this.getUI().addWindow(new LanguageWindow(
-                            project().getLocales(),
-                            (locale1, locale2) -> navigateTo(VIEW_NAME, projectId(), locale1.toString(), locale2.toString())
-                    ));
-                });
-
-        return new HorizontalLayout(reloadButton, languageButton);
+        return null;
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        final String[] parameters = viewChangeEvent.getParameters().split("/");
-        loadProjectContext(parameters[0]);
-
-        if (parameters.length == 3) {
-            this.locale1 = Locale.forLanguageTag(parameters[1]);
-            this.locale2 = Locale.forLanguageTag(parameters[2]);
-        } else {
-            this.locale1 = Locale.ENGLISH;
-            this.locale2 = Locale.GERMAN;
-        }
+        super.enter(viewChangeEvent);
 
         reloadGrid();
     }
 
     private void reloadGrid() {
-        grid.setItems(
-                new ArrayList<>(this.messagesApi.findAll(projectId()))
-        );
+        final Project project = project();
+
+        final ArrayList<Locale> locales = new ArrayList<>(project.getLocales());
+        final Collection<Message> messages = this.messagesApi.findAll(projectId());
+
+        this.grid.setColumns();
+
+        int columnNumber = 0;
+        for (final Locale locale : locales) {
+            this.grid.addColumn((message -> message.getTranslation(locale)))
+                    .setCaption(locale.toString())
+                    .setHidable(true)
+                    .setHidden(columnNumber++ > 2);
+        }
+
+        this.grid.setItems(messages);
     }
 
     private String projectId() {
@@ -133,6 +107,7 @@ public class ProjectTranslatorView extends AbstractProjectView implements View {
     private Project project() {
         return this.projectContext.getProject();
     }
+
 
     private static class MessagePopup extends PopupView {
 

@@ -50,4 +50,9 @@ $v-focus-color: $primary;
     margin-bottom: 0.77em;
   }
 
+  .v-grid-wrappable {
+    .v-grid-cell {
+      white-space: normal;
+    }
+  }
 }
