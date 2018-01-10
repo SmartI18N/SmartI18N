@@ -12,7 +12,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.smarti18n.vaadin.utils.I18N;
@@ -26,10 +26,8 @@ public class StartView extends AbstractView implements View {
 
     public static final String VIEW_NAME = "";
 
-    private final ProjectsApi projectsApi;
-
-    public StartView(final ProjectsApi projectsApi) {
-        this.projectsApi = projectsApi;
+    public StartView(final EditorController editorController) {
+        super(editorController);
     }
 
     @PostConstruct
@@ -57,7 +55,7 @@ public class StartView extends AbstractView implements View {
                 new IconButton(
                         translate("smarti18n.editor.project-overview.add-new-project"),
                         VaadinIcons.FILE_ADD,
-                        clickEvent -> this.getUI().addWindow(new ProjectCreateWindow(this.projectsApi))
+                        clickEvent -> this.getUI().addWindow(new ProjectCreateWindow(this.editorController))
                 )
         ));
         addComponent(newProject);

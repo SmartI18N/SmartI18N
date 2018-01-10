@@ -1,15 +1,5 @@
 package org.smarti18n.messages.service;
 
-import org.smarti18n.api.Message;
-import org.smarti18n.api.MessageImpl;
-import org.smarti18n.messages.entities.MessageEntity;
-import org.smarti18n.messages.entities.ProjectEntity;
-import org.smarti18n.messages.repositories.MessageRepository;
-
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,6 +7,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.smarti18n.exceptions.MessageExistException;
+import org.smarti18n.exceptions.MessageUnknownException;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.messages.entities.MessageEntity;
+import org.smarti18n.messages.entities.ProjectEntity;
+import org.smarti18n.messages.repositories.MessageRepository;
+import org.smarti18n.models.Message;
+import org.smarti18n.models.MessageImpl;
 
 import static org.smarti18n.messages.service.IdentifierUtils.clean;
 
@@ -27,6 +33,7 @@ public class MessagesServiceImpl implements MessagesService {
     private final MessageRepository messageRepository;
     private final EntityLoader entityLoader;
 
+    private final Logger logger = LoggerFactory.getLogger(MessagesServiceImpl.class);
 
     public MessagesServiceImpl(
             final MessageCache messageCache,
@@ -40,7 +47,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Collection<Message> findAll(final String username, final String projectId) {
+    public Collection<Message> findAll(final String username, final String projectId) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         final Collection<MessageEntity> messages = this.messageCache.findByUsernameAndProjectId(
                 username,
@@ -57,7 +64,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Message findOne(final String username, final String projectId, final String key) {
+    public Message findOne(final String username, final String projectId, final String key) throws ProjectUnknownException, UserUnknownException, UserRightsException {
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> messageEntity = this.messageRepository.findById(
@@ -78,14 +85,16 @@ public class MessagesServiceImpl implements MessagesService {
     public Message insert(
             final String username,
             final String projectId,
-            final String key) {
+            final String key) throws MessageExistException, ProjectUnknownException, UserUnknownException, UserRightsException {
 
         final String cleanKey = clean(key.trim());
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         if (this.messageRepository.findById(new MessageEntity.MessageId(cleanKey, project)).isPresent()) {
-            throw new IllegalStateException("Message with key [" + cleanKey + "] already exist.");
+            this.logger.error("Message with key [" + cleanKey + "] already exist.");
+
+            throw new MessageExistException();
         }
 
         return new MessageImpl(
@@ -98,7 +107,7 @@ public class MessagesServiceImpl implements MessagesService {
     public Message update(
             final String username, final String projectId,
             final String key,
-            final Locale locale, final String translation) {
+            final Locale locale, final String translation) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         final String cleanKey = clean(key);
 
@@ -121,16 +130,19 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Message update(final String username, final String projectId, final Message message) {
+    public Message update(final String username, final String projectId, final Message message) throws MessageUnknownException, ProjectUnknownException, UserUnknownException, UserRightsException {
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(
                 new MessageEntity.MessageId(message.getKey(), project)
         );
 
-        final MessageEntity messageEntity = optional.orElseThrow(() -> new IllegalStateException(
-                "Message with key [" + message.getKey() + "] and Project [" + projectId + "] doesn't exist!"
-        ));
+        if (!optional.isPresent()) {
+            this.logger.error("Message with key [" + message.getKey() + "] and Project [" + projectId + "] doesn't exist!");
+
+            throw new MessageUnknownException();
+        }
+        final MessageEntity messageEntity = optional.get();
 
         messageEntity.setTranslations(message.getTranslations());
 
@@ -142,20 +154,24 @@ public class MessagesServiceImpl implements MessagesService {
     public Message copy(
             final String username, final String projectId,
             final String sourceKey,
-            final String targetKey) {
+            final String targetKey) throws MessageExistException, MessageUnknownException, ProjectUnknownException, UserUnknownException, UserRightsException {
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
         final Optional<MessageEntity> optional = this.messageRepository.findById(new MessageEntity.MessageId(clean(sourceKey), project));
 
         if (!optional.isPresent()) {
-            throw new IllegalStateException("Message with key [" + clean(sourceKey) + "] doesn't exist.");
+            this.logger.error("Message with key [" + sourceKey + "] and Project [" + projectId + "] doesn't exist!");
+
+            throw new MessageUnknownException();
         }
 
         final String cleanedTargetKey = clean(targetKey);
 
         if (this.messageRepository.findById(new MessageEntity.MessageId(cleanedTargetKey, project)).isPresent()) {
-            throw new IllegalStateException("Message with key [" + cleanedTargetKey + "] already exist.");
+            this.logger.error("Message with key [" + cleanedTargetKey + "] already exist.");
+
+            throw new MessageExistException();
         }
 
         final MessageEntity messageEntity = optional.get();
@@ -174,7 +190,7 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     public void remove(
             final String username, final String projectId,
-            final String key) {
+            final String key) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 
@@ -183,7 +199,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) {
+    public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) throws ProjectUnknownException {
         final Collection<MessageEntity> messages = this.messageCache.findByProjectId(projectId);
 
         final Map<String, Map<Locale, String>> map = new HashMap<>();
@@ -197,7 +213,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     @Transactional
-    public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) {
+    public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) throws ProjectUnknownException {
         final Collection<MessageEntity> messages = this.messageCache.findByProjectId(projectId);
 
         final Map<String, String> map = new HashMap<>();

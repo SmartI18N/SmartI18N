@@ -1,4 +1,4 @@
-package org.smarti18n.api;
+package org.smarti18n.models;
 
 public class UserImpl implements User {
 

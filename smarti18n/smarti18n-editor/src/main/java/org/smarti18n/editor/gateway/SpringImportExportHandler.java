@@ -1,8 +1,10 @@
 package org.smarti18n.editor.gateway;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -12,15 +14,19 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Window;
-import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.Project;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.Message;
+import org.smarti18n.models.Project;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.components.LocaleComboBox;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.PropertiesExportStreamSource;
 import org.smarti18n.vaadin.utils.PropertiesImportStreamReceiver;
+import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
 
 @Component
 public class SpringImportExportHandler implements ImportExportHandler {
@@ -66,8 +72,20 @@ public class SpringImportExportHandler implements ImportExportHandler {
                 I18N.translate("smarti18n.editor.message-import.import", "0"),
                 VaadinIcons.UPLOAD,
                 event -> {
-                    messages.forEach(
-                            (key, value) -> messagesApi.update(project.getId(), key, localeComboBox.getValue(), value)
+                    messages.forEach((key, value) -> {
+                                try {
+                                    messagesApi.update(project.getId(), key, localeComboBox.getValue(), value);
+                                } catch (ProjectUnknownException e) {
+                                    VaadinExceptionHandler.handleProjectUnknownException();
+                                    throw new IllegalStateException(e);
+                                } catch (UserUnknownException e) {
+                                    VaadinExceptionHandler.handleUserUnknownException();
+                                    throw new IllegalStateException(e);
+                                } catch (UserRightsException e) {
+                                    VaadinExceptionHandler.handleUserRightsException();
+                                    throw new IllegalStateException(e);
+                                }
+                            }
                     );
                     formWindow.close();
                 }
@@ -99,9 +117,8 @@ public class SpringImportExportHandler implements ImportExportHandler {
         formWindow.addFormComponent(localeComboBox);
 
         final StreamResource streamResource = new StreamResource(
-                new PropertiesExportStreamSource(() -> messagesApi.findAll(projectId).stream()
-                        .sorted(Comparator.comparing(Message::getKey))
-                        .collect(Collectors.toList()),
+                new PropertiesExportStreamSource(
+                        findAllMessages(projectId),
                         localeComboBox::getValue
                 ),
                 "smarti18n-" + projectId + ".properties"
@@ -123,6 +140,25 @@ public class SpringImportExportHandler implements ImportExportHandler {
         formWindow.addFormButtons(downloadButton);
 
         return formWindow;
+    }
+
+    private Supplier<Collection<? extends Message>> findAllMessages(final String projectId) {
+        return () -> {
+            try {
+                return messagesApi.findAll(projectId).stream()
+                        .sorted(Comparator.comparing(Message::getKey))
+                        .collect(Collectors.toList());
+            } catch (ProjectUnknownException e) {
+                VaadinExceptionHandler.handleProjectUnknownException();
+                throw new IllegalStateException(e);
+            } catch (UserUnknownException e) {
+                VaadinExceptionHandler.handleUserUnknownException();
+                throw new IllegalStateException(e);
+            } catch (UserRightsException e) {
+                VaadinExceptionHandler.handleUserRightsException();
+                throw new IllegalStateException(e);
+            }
+        };
     }
 
 }

@@ -1,8 +1,6 @@
 package org.smarti18n.editor.views;
 
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.editor.gateway.ImportExportHandler;
-import org.smarti18n.vaadin.utils.I18N;
+import java.util.List;
 
 import com.vaadin.navigator.View;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
@@ -12,9 +10,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-
 import javax.annotation.PostConstruct;
-import java.util.List;
+import org.smarti18n.editor.controller.EditorController;
+import org.smarti18n.editor.gateway.ImportExportHandler;
+import org.smarti18n.vaadin.utils.I18N;
 
 @UIScope
 @SpringView(name = ProjectImportExportView.VIEW_NAME)
@@ -26,8 +25,9 @@ public class ProjectImportExportView extends AbstractProjectView implements View
 
     private final List<ImportExportHandler> importExportHandlerList;
 
-    ProjectImportExportView(final ProjectsApi projectsApi, final List<ImportExportHandler> importExportHandlerList) {
-        super(projectsApi);
+    ProjectImportExportView(final EditorController editorController, final List<ImportExportHandler> importExportHandlerList) {
+        super(editorController);
+
         this.importExportHandlerList = importExportHandlerList;
     }
 

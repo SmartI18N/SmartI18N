@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import org.smarti18n.api.Project;
+import org.smarti18n.models.Project;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

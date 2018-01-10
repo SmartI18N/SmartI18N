@@ -9,9 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.smarti18n.api.Project;
-import org.smarti18n.api.User;
-import org.smarti18n.api.UserRole;
+import org.smarti18n.models.Project;
+import org.smarti18n.models.User;
+import org.smarti18n.models.UserRole;
 
 @Document(collection = "projects")
 public class ProjectEntity implements Project {

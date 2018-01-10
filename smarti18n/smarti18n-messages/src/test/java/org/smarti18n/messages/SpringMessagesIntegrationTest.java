@@ -3,7 +3,6 @@ package org.smarti18n.messages;
 import java.util.Locale;
 import java.util.Map;
 
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestClientException;
 
 import org.junit.Before;
@@ -11,8 +10,8 @@ import org.junit.Test;
 import org.smarti18n.api.MessagesApiImpl;
 import org.smarti18n.api.SpringMessagesApi;
 import org.smarti18n.api.SpringMessagesApiImpl;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -30,7 +29,7 @@ public class SpringMessagesIntegrationTest extends AbstractIntegrationTest {
     @Before
     public void setUp() throws Exception {
         this.springMessagesApi = new SpringMessagesApiImpl(
-                new TestRestTemplate().getRestTemplate(),
+                this.restTemplate.getRestTemplate(),
                 this.port,
                 "test",
                 "test"
@@ -39,7 +38,7 @@ public class SpringMessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void standardWorkflowSpringMessages() throws Exception {
-        final MessagesApiImpl messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), port, new UserCredentialsSupplier(UserCredentials.TEST));
+        final MessagesApiImpl messagesApi = new MessagesApiImpl(this.restTemplate.getRestTemplate(), port, new UserCredentialsSupplier(UserCredentials.TEST));
         messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
         messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 
@@ -51,14 +50,14 @@ public class SpringMessagesIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test(expected = RestClientException.class)
-    public void wrongProjectId() {
-        new SpringMessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, "irgendwas", "irgendwas")
+    public void wrongProjectId() throws Exception  {
+        new SpringMessagesApiImpl(this.restTemplate.getRestTemplate(), this.port, "irgendwas", "irgendwas")
                 .findForSpringMessageSource();
     }
 
     @Test(expected = RestClientException.class)
-    public void wrongProjectSecret() {
-        new SpringMessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, PROJECT_ID, "irgendwas")
+    public void wrongProjectSecret() throws Exception {
+        new SpringMessagesApiImpl(this.restTemplate.getRestTemplate(), this.port, PROJECT_ID, "irgendwas")
                 .findForSpringMessageSource();
     }
 }

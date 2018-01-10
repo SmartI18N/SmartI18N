@@ -11,8 +11,8 @@ import com.vaadin.ui.LoginForm;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 import org.smarti18n.vaadin.utils.I18N;
 import org.vaadin.spring.security.shared.VaadinSharedSecurity;
 

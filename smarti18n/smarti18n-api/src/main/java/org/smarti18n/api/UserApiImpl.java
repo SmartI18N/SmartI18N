@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import org.smarti18n.models.User;
+import org.smarti18n.models.UserCredentialsSupplier;
+import org.smarti18n.models.UserSimplified;
+
 public class UserApiImpl extends AbstractApiImpl implements UserApi {
 
     public UserApiImpl(

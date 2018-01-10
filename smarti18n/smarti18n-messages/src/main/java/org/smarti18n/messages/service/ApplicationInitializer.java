@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserRole;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserRole;
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.entities.UserEntity;
 import org.smarti18n.messages.repositories.MessageRepository;

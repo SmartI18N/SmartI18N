@@ -1,7 +1,6 @@
 package org.smarti18n.editor.views;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationException;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -14,8 +13,8 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.controller.EditorController;
+import org.smarti18n.models.Project;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
 
@@ -30,8 +29,8 @@ class ProjectGeneralView extends AbstractProjectView implements View {
 
     private final Binder<Project> binder;
 
-    ProjectGeneralView(final ProjectsApi projectsApi) {
-        super(projectsApi);
+    ProjectGeneralView(final EditorController editorController) {
+        super(editorController);
 
         this.binder = new Binder<>(Project.class);
     }
@@ -75,21 +74,18 @@ class ProjectGeneralView extends AbstractProjectView implements View {
 
     @Override
     protected HorizontalLayout createButtonBar() {
-        final IconButton saveButton = new IconButton(I18N.translate("common.save"), VaadinIcons.SAFE, clickEvent -> {
-            try {
-                final Project project = projectContext.getProject();
-                binder.writeBean(project);
+        final IconButton saveButton = new IconButton(
+                I18N.translate("common.save"),
+                VaadinIcons.SAFE,
+                this.editorController.clickSaveProject(this.binder, this.projectContext, () -> navigateTo(ProjectMessagesView.VIEW_NAME, projectContext.getProjectId()))
+        );
 
-                projectsApi.update(project);
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
-        });
+        final IconButton removeProjectButton = new IconButton(
+                I18N.translate("smarti18n.editor.project-general.remove-project.button"),
+                VaadinIcons.FOLDER_REMOVE,
+                this.editorController.clickRemoveProject(this.projectContext, () -> navigateTo(StartView.VIEW_NAME))
+        );
 
-        final IconButton removeProjectButton = new IconButton(I18N.translate("smarti18n.editor.project-general.remove-project.button"), VaadinIcons.FOLDER_REMOVE, clickEvent -> {
-                projectsApi.remove(projectContext.getProjectId());
-                navigateTo(StartView.VIEW_NAME);
-        });
         removeProjectButton.addStyleName(ValoTheme.BUTTON_DANGER);
 
         return new HorizontalLayout(
@@ -102,8 +98,9 @@ class ProjectGeneralView extends AbstractProjectView implements View {
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         super.enter(viewChangeEvent);
 
-        final Project project = projectContext.getProject();
-        this.binder.readBean(project);
+        this.binder.readBean(
+                projectContext.getProject()
+        );
     }
 
 }

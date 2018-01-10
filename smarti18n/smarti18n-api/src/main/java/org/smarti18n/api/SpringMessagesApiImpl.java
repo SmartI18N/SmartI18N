@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import org.smarti18n.models.UserCredentialsSupplier;
+
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */

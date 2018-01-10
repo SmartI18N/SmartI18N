@@ -3,7 +3,6 @@ package org.smarti18n.messages;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.util.StringUtils;
 
 import org.hamcrest.Description;
@@ -11,13 +10,17 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.ApiException;
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectImpl;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ProjectsApiImpl;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.exceptions.ApiException;
+import org.smarti18n.exceptions.ProjectExistException;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.Project;
+import org.smarti18n.models.ProjectImpl;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -38,7 +41,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.projectsApi = new ProjectsApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
+        this.projectsApi = new ProjectsApiImpl(this.restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
     }
 
     @Test
@@ -71,7 +74,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testFindOnlyOwnProjects() {
+    public void testFindOnlyOwnProjects() throws Exception {
         this.projectsApi.insert(NEW_PROJECT_ID);
 
         final String test2User = "test2";
@@ -92,7 +95,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 //    ASSERTS
 //
 
-    private void assertRemoveProject() {
+    private void assertRemoveProject() throws ProjectUnknownException, UserUnknownException, UserRightsException {
         this.projectsApi.remove(NEW_PROJECT_ID);
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
@@ -100,7 +103,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         assertThat(projects, hasItem(not(projectWith(NEW_PROJECT_ID))));
     }
 
-    private void assertUpdateProject() {
+    private void assertUpdateProject() throws UserUnknownException, UserRightsException, ProjectUnknownException {
         final Project project = this.projectsApi.findOne(NEW_PROJECT_ID);
 
         project.setName(NEW2_PROJECT_NAME);
@@ -113,14 +116,14 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         assertThat(projects, hasItem(projectWith(NEW_PROJECT_ID, NEW2_PROJECT_NAME, NEW2_PROJECT_DESCRIPTION)));
     }
 
-    private void assertMessageFind() {
+    private void assertMessageFind() throws UserUnknownException, UserRightsException {
         final Project project = this.projectsApi.findOne(NEW_PROJECT_ID);
 
         assertThat(project, is(notNullValue()));
         assertThat(project, is(projectWith(NEW_PROJECT_ID)));
     }
 
-    private void assertCreateNewProject() {
+    private void assertCreateNewProject() throws UserUnknownException, ProjectExistException {
         this.projectsApi.insert(NEW_PROJECT_ID);
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
@@ -128,7 +131,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
         assertThat(projects, hasItem(projectWith(NEW_PROJECT_ID)));
     }
 
-    private void assertOnlyDefaultProjectsFound() {
+    private void assertOnlyDefaultProjectsFound() throws UserUnknownException {
         final List<Project> projects = this.projectsApi.findAll();
 
         assertThat(projects, hasSize(2));

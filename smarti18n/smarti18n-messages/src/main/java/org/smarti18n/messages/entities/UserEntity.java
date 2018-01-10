@@ -3,8 +3,8 @@ package org.smarti18n.messages.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.smarti18n.api.User;
-import org.smarti18n.api.UserRole;
+import org.smarti18n.models.User;
+import org.smarti18n.models.UserRole;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

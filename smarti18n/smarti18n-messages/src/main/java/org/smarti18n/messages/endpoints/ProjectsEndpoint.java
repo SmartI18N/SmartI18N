@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.smarti18n.api.Project;
+import org.smarti18n.exceptions.ProjectExistException;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.Project;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.messages.security.SecurityUtils;
 import org.smarti18n.messages.service.ProjectsService;
@@ -24,7 +28,7 @@ public class ProjectsEndpoint implements ProjectsApi {
 
     @Override
     @GetMapping(PATH_PROJECTS_FIND_ALL)
-    public List<Project> findAll() {
+    public List<Project> findAll() throws UserUnknownException {
 
         return projectsService.findAll(
                 SecurityUtils.getUserId()
@@ -34,7 +38,8 @@ public class ProjectsEndpoint implements ProjectsApi {
     @Override
     @GetMapping(PATH_PROJECTS_FIND_ONE)
     public Project findOne(
-            @RequestParam("projectId") final String projectId) {
+            @RequestParam("projectId") final String projectId
+    ) throws UserUnknownException, UserRightsException {
 
         return projectsService.findOne(
                 SecurityUtils.getUserId(),
@@ -45,7 +50,8 @@ public class ProjectsEndpoint implements ProjectsApi {
     @Override
     @GetMapping(PATH_PROJECTS_INSERT)
     public Project insert(
-            @RequestParam("projectId") final String projectId) {
+            @RequestParam("projectId") final String projectId
+    ) throws UserUnknownException, ProjectExistException {
 
         return projectsService.insert(
                 SecurityUtils.getUserId(),
@@ -56,7 +62,8 @@ public class ProjectsEndpoint implements ProjectsApi {
     @Override
     @PostMapping(PATH_PROJECTS_UPDATE)
     public Project update(
-            @RequestBody final Project project) {
+            @RequestBody final Project project
+    ) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return projectsService.update(
                 SecurityUtils.getUserId(),
@@ -67,7 +74,8 @@ public class ProjectsEndpoint implements ProjectsApi {
     @Override
     @GetMapping(PATH_PROJECTS_REMOVE)
     public void remove(
-            @RequestParam("projectId") final String projectId) {
+            @RequestParam("projectId") final String projectId
+    ) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         this.projectsService.remove(
                 SecurityUtils.getUserId(),

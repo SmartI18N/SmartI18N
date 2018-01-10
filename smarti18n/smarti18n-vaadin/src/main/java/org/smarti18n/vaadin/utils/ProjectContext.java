@@ -2,7 +2,7 @@ package org.smarti18n.vaadin.utils;
 
 import org.springframework.util.Assert;
 
-import org.smarti18n.api.Project;
+import org.smarti18n.models.Project;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

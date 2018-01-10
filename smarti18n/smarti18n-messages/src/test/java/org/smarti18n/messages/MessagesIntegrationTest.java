@@ -4,20 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.web.client.RestClientException;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.ApiException;
-import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.MessagesApiImpl;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.exceptions.ApiException;
+import org.smarti18n.exceptions.MessageExistException;
+import org.smarti18n.exceptions.MessageUnknownException;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.Message;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -37,7 +39,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
+        this.messagesApi = new MessagesApiImpl(this.restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
     }
 
     @Test
@@ -73,16 +75,16 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         this.messagesApi.copy(PROJECT_ID, MESSAGE_KEY, MESSAGE_KEY);
     }
 
-    @Test(expected = RestClientException.class)
+    @Test(expected = ProjectUnknownException.class)
     public void wrongProjectId() {
-        new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST)).findAll("irgendwas");
+        new MessagesApiImpl(this.restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST)).findAll("irgendwas");
     }
 
 //
 //    ASSERTS
 //
 
-    private void assertMessageDelete() {
+    private void assertMessageDelete() throws ProjectUnknownException, UserUnknownException, UserRightsException {
         this.messagesApi.remove(PROJECT_ID, SECOND_MESSAGE_KEY);
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
@@ -90,7 +92,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
-    private void assertMessageCopy() {
+    private void assertMessageCopy() throws UserRightsException, MessageExistException, UserUnknownException, MessageUnknownException, ProjectUnknownException {
         this.messagesApi.copy(PROJECT_ID, MESSAGE_KEY, SECOND_MESSAGE_KEY);
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
@@ -99,14 +101,14 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertThat(messages, hasItem(messageWith(SECOND_MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
-    private void assertMessageFind() {
+    private void assertMessageFind() throws ProjectUnknownException, UserUnknownException, UserRightsException {
         final Message message = this.messagesApi.findOne(PROJECT_ID, MESSAGE_KEY);
 
         assertThat(message, is(notNullValue()));
         assertThat(message, is(messageWith(MESSAGE_KEY, LOCALE, TRANSLATION)));
     }
 
-    private void assertMessageUpdate() {
+    private void assertMessageUpdate() throws ProjectUnknownException, UserUnknownException, UserRightsException, MessageUnknownException {
         this.messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
@@ -116,7 +118,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         this.messagesApi.update(PROJECT_ID, messages.stream().findFirst().get());
     }
 
-    private void assertMessageInsert() {
+    private void assertMessageInsert() throws UserRightsException, MessageExistException, UserUnknownException, ProjectUnknownException {
         this.messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
 
         final Collection<Message> messages = new ArrayList<>(this.messagesApi.findAll(PROJECT_ID));
@@ -124,7 +126,7 @@ public class MessagesIntegrationTest extends AbstractIntegrationTest {
         assertThat(messages, hasItem(messageWith(MESSAGE_KEY)));
     }
 
-    private void assertNoMessagesFound() {
+    private void assertNoMessagesFound() throws ProjectUnknownException, UserUnknownException, UserRightsException {
         assertThat(this.messagesApi.findAll(PROJECT_ID), is(empty()));
     }
 

@@ -2,6 +2,11 @@ package org.smarti18n.api;
 
 import java.util.List;
 
+import org.smarti18n.exceptions.UserExistException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.User;
+import org.smarti18n.models.UserSimplified;
+
 public interface UserApi {
 
     String PATH_USERS_FIND_ALL = "/api/1/users/findAll";
@@ -14,7 +19,7 @@ public interface UserApi {
 
     User findOne(
             String mail
-    );
+    ) throws UserUnknownException;
 
     UserSimplified findOneSimplified(
             String mail
@@ -23,9 +28,9 @@ public interface UserApi {
     User register(
             String mail,
             String password
-    );
+    ) throws UserExistException;
 
     User update(
             User user
-    );
+    ) throws UserUnknownException;
 }

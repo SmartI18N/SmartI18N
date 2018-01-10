@@ -1,6 +1,6 @@
 package org.smarti18n.editor.gateway;
 
-import org.smarti18n.api.Project;
+import org.smarti18n.models.Project;
 
 import com.vaadin.ui.Window;
 

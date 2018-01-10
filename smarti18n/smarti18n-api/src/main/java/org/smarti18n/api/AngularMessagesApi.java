@@ -3,6 +3,8 @@ package org.smarti18n.api;
 import java.util.Locale;
 import java.util.Map;
 
+import org.smarti18n.exceptions.ProjectUnknownException;
+
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
@@ -13,5 +15,5 @@ public interface AngularMessagesApi {
     Map<String, String> getMessages(
             String projectId,
             Locale locale
-    );
+    ) throws ProjectUnknownException;
 }

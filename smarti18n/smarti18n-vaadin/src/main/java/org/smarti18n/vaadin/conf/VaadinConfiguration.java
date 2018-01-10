@@ -13,7 +13,7 @@ import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.ProjectsApiImpl;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.models.UserCredentialsSupplier;
 import org.smarti18n.api.spring.Smarti18nMessageSource;
 
 /**

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
-import org.smarti18n.api.UserSimplified;
+import org.smarti18n.exceptions.UserExistException;
+import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.messages.service.UserService;
+import org.smarti18n.models.User;
+import org.smarti18n.models.UserSimplified;
 
 @RestController
 public class UserEndpoint implements UserApi {
@@ -31,7 +33,8 @@ public class UserEndpoint implements UserApi {
     @Override
     @GetMapping(PATH_USERS_FIND_ONE)
     public User findOne(
-            @RequestParam("mail") final String mail) {
+            @RequestParam("mail") final String mail
+    ) throws UserUnknownException {
 
         return userService.findOne(mail);
     }
@@ -41,16 +44,15 @@ public class UserEndpoint implements UserApi {
     public UserSimplified findOneSimplified(
             @RequestParam("mail") final String mail) {
 
-        return new UserSimplified(
-                userService.findOne(mail)
-        );
+        return userService.findOneSimplified(mail);
     }
 
     @Override
     @GetMapping(PATH_USERS_REGISTER)
     public User register(
             @RequestParam("mail") final String mail,
-            @RequestParam("password") final String password) {
+            @RequestParam("password") final String password
+    ) throws UserExistException {
 
         return userService.register(mail, password);
     }
@@ -58,7 +60,8 @@ public class UserEndpoint implements UserApi {
     @Override
     @PostMapping(PATH_USERS_UPDATE)
     public User update(
-            @RequestBody final User user) {
+            @RequestBody final User user
+    ) throws UserUnknownException {
 
         return this.userService.update(user);
     }

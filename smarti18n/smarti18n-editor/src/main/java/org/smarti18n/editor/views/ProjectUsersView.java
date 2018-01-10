@@ -1,6 +1,5 @@
 package org.smarti18n.editor.views;
 
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
@@ -9,10 +8,9 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.User;
-import org.smarti18n.vaadin.components.IconButton;
+import org.smarti18n.editor.controller.EditorController;
+import org.smarti18n.models.Project;
+import org.smarti18n.models.User;
 import org.smarti18n.vaadin.utils.I18N;
 
 /**
@@ -26,8 +24,8 @@ public class ProjectUsersView extends AbstractProjectView implements View {
 
     private Grid<User> grid;
 
-    ProjectUsersView(final ProjectsApi projectsApi) {
-        super(projectsApi);
+    ProjectUsersView(final EditorController editorController) {
+        super(editorController);
     }
 
     @PostConstruct
@@ -41,10 +39,6 @@ public class ProjectUsersView extends AbstractProjectView implements View {
         grid.getColumn("company")
                 .setExpandRatio(1);
 
-        grid.addComponentColumn(messageTranslations -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
-            reloadGrid();
-        }));
-
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.setSizeFull();
@@ -55,20 +49,7 @@ public class ProjectUsersView extends AbstractProjectView implements View {
 
     @Override
     protected HorizontalLayout createButtonBar() {
-        final IconButton newLocaleButton = new IconButton(
-                translate("smarti18n.editor.project-owner.add-new-owner"),
-                VaadinIcons.FILE_ADD,
-                clickEvent -> {
-                    final ProjectUserAddWindow window = new ProjectUserAddWindow(
-                            this.projectsApi,
-                            this.projectContext.getProjectId()
-                    );
-                    window.addCloseListener(closeEvent -> reloadGrid());
-
-                    this.getUI().addWindow(window);
-                });
-
-        return new HorizontalLayout(newLocaleButton);
+        return null;
     }
 
     @Override

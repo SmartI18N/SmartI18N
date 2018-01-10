@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
-import org.smarti18n.api.UserSimplified;
+import org.smarti18n.models.UserSimplified;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

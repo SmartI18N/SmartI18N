@@ -1,6 +1,6 @@
 package org.smarti18n.vaadin.utils;
 
-import org.smarti18n.api.Message;
+import org.smarti18n.models.Message;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

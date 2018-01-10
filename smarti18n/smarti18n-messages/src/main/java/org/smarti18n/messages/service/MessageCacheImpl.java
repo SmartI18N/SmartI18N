@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.messages.entities.MessageEntity;
 import org.smarti18n.messages.entities.ProjectEntity;
 import org.smarti18n.messages.repositories.MessageRepository;
@@ -26,7 +29,7 @@ public class MessageCacheImpl implements MessageCache {
 
     @Override
     public Collection<MessageEntity> findByProjectId(
-            final String projectId) {
+            final String projectId) throws ProjectUnknownException {
 
         final ProjectEntity project = this.entityLoader.findProject(projectId);
 
@@ -36,7 +39,7 @@ public class MessageCacheImpl implements MessageCache {
     @Override
     public Collection<MessageEntity> findByUsernameAndProjectId(
             final String username,
-            final String projectId) {
+            final String projectId) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         final ProjectEntity project = this.entityLoader.findProject(username, projectId);
 

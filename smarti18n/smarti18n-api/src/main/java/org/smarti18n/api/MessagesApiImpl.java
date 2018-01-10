@@ -1,12 +1,16 @@
 package org.smarti18n.api;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
+import org.smarti18n.models.Message;
+import org.smarti18n.models.MessageImpl;
+import org.smarti18n.models.UserCredentialsSupplier;
 
 /**
  * @author Marc Bellmann &lt;marc@smarti18n.com&gt;

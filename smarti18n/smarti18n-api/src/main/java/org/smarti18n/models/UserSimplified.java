@@ -1,7 +1,7 @@
-package org.smarti18n.api;
+package org.smarti18n.models;
 
 /**
- * @author Marc Bellmann &lt;marc.bellmann@saxess.ag&gt;
+ * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public class UserSimplified {
 

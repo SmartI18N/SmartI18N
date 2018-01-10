@@ -32,7 +32,7 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smarti18n.api.UserApi;
-import org.smarti18n.api.UserSimplified;
+import org.smarti18n.models.UserSimplified;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.vaadin.spring.http.HttpService;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;

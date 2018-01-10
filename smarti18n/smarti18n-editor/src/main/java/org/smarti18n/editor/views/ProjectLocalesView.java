@@ -11,8 +11,8 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.controller.EditorController;
+import org.smarti18n.models.Project;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
 
@@ -27,8 +27,8 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
 
     private Grid<Locale> grid;
 
-    ProjectLocalesView(final ProjectsApi projectsApi) {
-        super(projectsApi);
+    ProjectLocalesView(final EditorController editorController) {
+        super(editorController);
     }
 
     @PostConstruct
@@ -38,13 +38,10 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
 
         grid = new Grid<>(Locale.class);
         grid.setColumns("displayLanguage", "language", "displayCountry", "country");
-        grid.addComponentColumn(locale -> new IconButton(VaadinIcons.MINUS, clickEvent -> {
-            final Project project = projectsApi.findOne(this.projectContext.getProjectId());
-            project.getLocales().remove(locale);
-            projectsApi.update(project);
-
-            reloadGrid();
-        }));
+        grid.addComponentColumn(locale -> new IconButton(
+                VaadinIcons.MINUS,
+                this.editorController.clickRemoveLocale(projectContext, locale, this::reloadGrid)
+        ));
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
@@ -61,7 +58,7 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
                 VaadinIcons.FILE_ADD,
                 clickEvent -> {
                     final ProjectLocaleAddWindow window = new ProjectLocaleAddWindow(
-                            this.projectsApi,
+                            this.editorController,
                             this.projectContext.getProjectId()
                     );
                     window.addCloseListener(closeEvent -> reloadGrid());
@@ -80,7 +77,7 @@ public class ProjectLocalesView extends AbstractProjectView implements View {
     }
 
     private void reloadGrid() {
-        final Project project = this.projectsApi.findOne(
+        final Project project = this.editorController.getProject(
                 this.projectContext.getProjectId()
         );
 

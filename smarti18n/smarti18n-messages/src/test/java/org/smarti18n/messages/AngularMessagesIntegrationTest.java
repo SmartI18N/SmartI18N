@@ -3,16 +3,14 @@ package org.smarti18n.messages;
 import java.util.Locale;
 import java.util.Map;
 
-import org.springframework.boot.test.web.client.TestRestTemplate;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.smarti18n.api.AngularMessagesApi;
 import org.smarti18n.api.AngularMessagesApiImpl;
-import org.smarti18n.api.ApiException;
 import org.smarti18n.api.MessagesApiImpl;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -28,15 +26,12 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.angularMessagesApi = new AngularMessagesApiImpl(
-                new TestRestTemplate().getRestTemplate(),
-                this.port
-        );
+        this.angularMessagesApi = new AngularMessagesApiImpl(this.restTemplate.getRestTemplate(), this.port);
     }
 
     @Test
     public void standardWorkflowSpringMessages() throws Exception {
-        final MessagesApiImpl messagesApi = new MessagesApiImpl(new TestRestTemplate().getRestTemplate(), port, new UserCredentialsSupplier(UserCredentials.TEST));
+        final MessagesApiImpl messagesApi = new MessagesApiImpl(this.restTemplate.getRestTemplate(), port, new UserCredentialsSupplier(UserCredentials.TEST));
         messagesApi.insert(PROJECT_ID, MESSAGE_KEY);
         messagesApi.update(PROJECT_ID, MESSAGE_KEY, LOCALE, TRANSLATION);
 
@@ -46,8 +41,8 @@ public class AngularMessagesIntegrationTest extends AbstractIntegrationTest {
         assertThat(messages.get(MESSAGE_KEY), is(TRANSLATION));
     }
 
-    @Test(expected = ApiException.class)
-    public void wrongProjectId() {
+    @Test(expected = ProjectUnknownException.class)
+    public void wrongProjectId() throws Exception {
         this.angularMessagesApi.getMessages("irgendwas", LOCALE);
     }
 }

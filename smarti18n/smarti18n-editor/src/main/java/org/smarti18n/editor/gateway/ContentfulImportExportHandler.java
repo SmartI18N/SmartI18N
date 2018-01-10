@@ -13,10 +13,14 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.Project;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.Project;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
+import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
 
 @Component
 public class ContentfulImportExportHandler implements ImportExportHandler {
@@ -95,7 +99,18 @@ public class ContentfulImportExportHandler implements ImportExportHandler {
                             final String key = cdaEntry.getField(keyIdentifierField.getValue());
                             final String value = cdaEntry.getField(valueIdentifierField.getValue());
 
-                            this.messagesApi.update(project.getId(), key, locale, value);
+                            try {
+                                this.messagesApi.update(project.getId(), key, locale, value);
+                            } catch (ProjectUnknownException e) {
+                                VaadinExceptionHandler.handleProjectUnknownException();
+                                throw new IllegalStateException(e);
+                            } catch (UserUnknownException e) {
+                                VaadinExceptionHandler.handleUserUnknownException();
+                                throw new IllegalStateException(e);
+                            } catch (UserRightsException e) {
+                                VaadinExceptionHandler.handleUserRightsException();
+                                throw new IllegalStateException(e);
+                            }
                         }
                     });
 

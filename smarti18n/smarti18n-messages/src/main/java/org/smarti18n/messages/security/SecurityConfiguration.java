@@ -30,7 +30,7 @@ import org.smarti18n.api.MessagesApi;
 import org.smarti18n.api.ProjectsApi;
 import org.smarti18n.api.SpringMessagesApi;
 import org.smarti18n.api.UserApi;
-import org.smarti18n.api.UserRole;
+import org.smarti18n.models.UserRole;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

@@ -12,9 +12,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.User;
-import org.smarti18n.api.UserApi;
-import org.smarti18n.api.UserImpl;
+import org.smarti18n.editor.controller.EditorController;
+import org.smarti18n.models.User;
 import org.smarti18n.vaadin.components.SaveButton;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.smarti18n.vaadin.utils.I18N;
@@ -28,12 +27,11 @@ public class ProfileView extends AbstractView implements View {
 
     public static final String VIEW_NAME = "profile";
 
-    private final UserApi userApi;
-
     private final Binder<User> binder;
 
-    public ProfileView(final UserApi userApi) {
-        this.userApi = userApi;
+    public ProfileView(final EditorController editorController) {
+        super(editorController);
+
         this.binder = new Binder<>(User.class);
     }
 
@@ -80,13 +78,9 @@ public class ProfileView extends AbstractView implements View {
 
     private HorizontalLayout createButtonBar() {
 
-        final SaveButton buttonSave = new SaveButton(clickEvent -> {
-            final User user = new UserImpl();
-            binder.writeBeanIfValid(user);
-            this.userApi.update(user);
-
-            navigateTo(StartView.VIEW_NAME);
-        });
+        final SaveButton buttonSave = new SaveButton(
+                this.editorController.clickSaveUser(this.binder, () -> navigateTo(StartView.VIEW_NAME))
+        );
 
         return new HorizontalLayout(
                 buttonSave
@@ -96,12 +90,11 @@ public class ProfileView extends AbstractView implements View {
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         final SimpleUserDetails principal = (SimpleUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final String username = principal.getUsername();
 
-        final User user = this.userApi.findOne(
-                principal.getUsername()
+        this.binder.readBean(
+                this.editorController.getUser(username)
         );
-
-        this.binder.readBean(user);
 
     }
 

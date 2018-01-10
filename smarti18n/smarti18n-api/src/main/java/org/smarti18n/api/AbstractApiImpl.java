@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import org.smarti18n.exceptions.UnexpectedApiException;
+import org.smarti18n.models.UserCredentialsSupplier;
+
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
@@ -74,13 +77,13 @@ abstract class AbstractApiImpl {
 
     <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {
         if (exchange.getStatusCode().isError()) {
-            throw new ApiException("SmartI18N Message API: " + exchange.getStatusCode().getReasonPhrase());
+            throw new UnexpectedApiException("SmartI18N Message API: " + exchange.getStatusCode().getReasonPhrase());
         }
 
         return exchange.getBody();
     }
 
-    protected HttpHeaders headers() {
+    private HttpHeaders headers() {
         final String base64Credentials = this.userCredentialsSupplier.getBase64Credentials();
 
         final HttpHeaders headers = new HttpHeaders();

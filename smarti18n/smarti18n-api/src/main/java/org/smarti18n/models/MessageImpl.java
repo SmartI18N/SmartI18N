@@ -1,4 +1,4 @@
-package org.smarti18n.api;
+package org.smarti18n.models;
 
 import java.util.HashMap;
 import java.util.Locale;

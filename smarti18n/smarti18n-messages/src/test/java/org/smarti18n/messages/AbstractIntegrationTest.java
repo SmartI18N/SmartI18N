@@ -8,12 +8,15 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.smarti18n.api.User;
+import org.smarti18n.api.ApiExceptionHandler;
+import org.smarti18n.exceptions.UserExistException;
+import org.smarti18n.models.User;
 import org.smarti18n.api.UserApi;
 import org.smarti18n.api.UserApiImpl;
-import org.smarti18n.api.UserCredentials;
-import org.smarti18n.api.UserCredentialsSupplier;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -32,8 +35,14 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected TestRestTemplate restTemplate;
 
-    User insertTestUser(final String username, final String password) {
-        final UserApi userApi = new UserApiImpl(new TestRestTemplate().getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
+    @Before
+    public void setUpRestTemplate() throws Exception {
+        this.restTemplate.getRestTemplate().setErrorHandler(new ApiExceptionHandler());
+    }
+
+    User insertTestUser(final String username, final String password) throws UserExistException {
+        final UserApi userApi = new UserApiImpl(restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
+
         return userApi.register(
                 username,
                 password

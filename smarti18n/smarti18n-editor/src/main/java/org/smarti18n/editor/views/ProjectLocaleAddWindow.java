@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import com.vaadin.ui.ComboBox;
-
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.vaadin.components.AddButton;
 import org.smarti18n.vaadin.components.CancelButton;
 import org.smarti18n.vaadin.components.FormWindow;
@@ -17,7 +15,7 @@ import org.smarti18n.vaadin.utils.I18N;
  */
 class ProjectLocaleAddWindow extends FormWindow {
 
-    ProjectLocaleAddWindow(final ProjectsApi projectsApi, final String projectId) {
+    ProjectLocaleAddWindow(final EditorController editorController, final String projectId) {
         super(I18N.translate("smarti18n.editor.locale-add.caption"));
 
         final ComboBox<Locale> localeComboBox = new ComboBox<>(
@@ -26,13 +24,7 @@ class ProjectLocaleAddWindow extends FormWindow {
         );
         addFormComponent(localeComboBox);
 
-        final AddButton addButton = new AddButton(clickEvent -> {
-            final Project project = projectsApi.findOne(projectId);
-            project.getLocales().add(localeComboBox.getValue());
-            projectsApi.update(project);
-
-            close();
-        });
+        final AddButton addButton = new AddButton(editorController.clickAddLocale(projectId, localeComboBox, this::close));
         final CancelButton cancelButton = new CancelButton(clickEvent -> close());
 
         addFormButtons(addButton, cancelButton);

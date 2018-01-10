@@ -5,6 +5,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.VaadinUtils;
 
@@ -13,16 +14,20 @@ import org.smarti18n.vaadin.utils.VaadinUtils;
  */
 abstract class AbstractView extends VerticalLayout implements View {
 
-    AbstractView() {
+    protected final EditorController editorController;
+
+    AbstractView(final EditorController editorController) {
+        this.editorController = editorController;
+
         setPrimaryStyleName("view");
     }
 
     void init(final String caption) {
-
         final Label captionLabel = new Label("<h2>" + caption + "</h2>", ContentMode.HTML);
-        captionLabel.setPrimaryStyleName("view-caption");
-        addComponent(captionLabel);
 
+        captionLabel.setPrimaryStyleName("view-caption");
+
+        addComponent(captionLabel);
     }
 
     String translate(final String code, final String... args) {

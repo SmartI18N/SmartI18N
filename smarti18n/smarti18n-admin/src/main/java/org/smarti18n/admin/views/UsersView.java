@@ -1,22 +1,23 @@
 package org.smarti18n.admin.views;
 
-import java.util.List;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import javax.annotation.PostConstruct;
-import org.smarti18n.api.User;
 import org.smarti18n.api.UserApi;
+import org.smarti18n.exceptions.UserExistException;
+import org.smarti18n.models.User;
 import org.smarti18n.vaadin.components.AddButton;
 import org.smarti18n.vaadin.components.CancelButton;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
+import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -67,12 +68,7 @@ public class UsersView extends AbstractView implements View {
                     final TextField textFieldPassword = new TextField(I18N.translate("smarti18n.admin.users.new-user-password"));
                     window.addFormComponent(textFieldPassword);
 
-                    final AddButton addButton = new AddButton(clickEvent -> {
-                        this.userApi.register(textFieldMail.getValue(), textFieldPassword.getValue());
-
-                        enter(null);
-                        window.close();
-                    });
+                    final AddButton addButton = new AddButton(registerUser(window, textFieldMail, textFieldPassword));
                     final CancelButton cancelButton = new CancelButton(clickEvent -> window.close());
 
                     window.addFormButtons(addButton, cancelButton);
@@ -82,10 +78,28 @@ public class UsersView extends AbstractView implements View {
         );
     }
 
+    private Button.ClickListener registerUser(final FormWindow window, final TextField textFieldMail, final TextField textFieldPassword) {
+        return clickEvent -> {
+            try {
+                this.userApi.register(textFieldMail.getValue(), textFieldPassword.getValue());
+            } catch (UserExistException e) {
+                VaadinExceptionHandler.handleUserExistException();
+            }
+
+            reloadGrid();
+
+            window.close();
+        };
+    }
+
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        final List<User> users = this.userApi.findAll();
+        reloadGrid();
+    }
 
-        this.grid.setItems(users);
+    private void reloadGrid() {
+        this.grid.setItems(
+                this.userApi.findAll()
+        );
     }
 }

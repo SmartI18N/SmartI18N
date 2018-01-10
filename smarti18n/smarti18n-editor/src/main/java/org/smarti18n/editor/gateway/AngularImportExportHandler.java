@@ -1,6 +1,8 @@
 package org.smarti18n.editor.gateway;
 
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -9,14 +11,18 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Window;
-import org.smarti18n.api.Message;
 import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.Project;
+import org.smarti18n.exceptions.ProjectUnknownException;
+import org.smarti18n.exceptions.UserRightsException;
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.models.Message;
+import org.smarti18n.models.Project;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.components.LocaleComboBox;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.JsonExportStreamSource;
+import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
 
 @Component
 public class AngularImportExportHandler implements ImportExportHandler {
@@ -60,9 +66,8 @@ public class AngularImportExportHandler implements ImportExportHandler {
         formWindow.addFormComponent(localeComboBox);
 
         final StreamResource streamResource = new StreamResource(
-                new JsonExportStreamSource(() -> messagesApi.findAll(projectId).stream()
-                        .sorted(Comparator.comparing(Message::getKey))
-                        .collect(Collectors.toList()),
+                new JsonExportStreamSource(
+                        findMessages(projectId),
                         localeComboBox::getValue
                 ),
                 "smarti18n-" + projectId + ".json"
@@ -84,5 +89,25 @@ public class AngularImportExportHandler implements ImportExportHandler {
         formWindow.addFormButtons(downloadButton);
 
         return formWindow;
+    }
+
+    private Supplier<Collection<? extends Message>> findMessages(final String projectId) {
+        return () -> {
+            try {
+                return messagesApi.findAll(projectId).stream()
+                        .sorted(Comparator.comparing(Message::getKey))
+                        .collect(Collectors.toList());
+
+            } catch (ProjectUnknownException e) {
+                VaadinExceptionHandler.handleProjectUnknownException();
+                throw new IllegalStateException(e);
+            } catch (UserUnknownException e) {
+                VaadinExceptionHandler.handleUserUnknownException();
+                throw new IllegalStateException(e);
+            } catch (UserRightsException e) {
+                VaadinExceptionHandler.handleUserRightsException();
+                throw new IllegalStateException(e);
+            }
+        };
     }
 }

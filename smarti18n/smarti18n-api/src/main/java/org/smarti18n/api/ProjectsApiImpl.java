@@ -5,6 +5,10 @@ import java.util.List;
 
 import org.springframework.web.client.RestTemplate;
 
+import org.smarti18n.models.Project;
+import org.smarti18n.models.ProjectImpl;
+import org.smarti18n.models.UserCredentialsSupplier;
+
 public class ProjectsApiImpl extends AbstractApiImpl implements ProjectsApi {
 
     public ProjectsApiImpl(

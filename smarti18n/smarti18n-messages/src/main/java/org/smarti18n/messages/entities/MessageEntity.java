@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.smarti18n.api.Message;
+import org.smarti18n.models.Message;
 
 @Document(collection = "messages")
 public class MessageEntity implements Message {

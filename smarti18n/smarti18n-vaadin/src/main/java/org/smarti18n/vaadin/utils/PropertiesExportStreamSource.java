@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.function.Supplier;
 
 import com.vaadin.server.StreamResource;
-import org.smarti18n.api.Message;
+import org.smarti18n.models.Message;
 
 public class PropertiesExportStreamSource implements StreamResource.StreamSource {
 

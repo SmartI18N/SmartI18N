@@ -3,18 +3,15 @@ package org.smarti18n.editor.views;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
-import org.smarti18n.api.Project;
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.vaadin.utils.ProjectContext;
 
 abstract class AbstractProjectView extends AbstractView {
 
     final ProjectContext projectContext = new ProjectContext();
 
-    protected final ProjectsApi projectsApi;
-
-    AbstractProjectView(final ProjectsApi projectsApi) {
-        this.projectsApi = projectsApi;
+    AbstractProjectView(final EditorController editorController) {
+        super(editorController);
     }
 
     @Override
@@ -43,18 +40,16 @@ abstract class AbstractProjectView extends AbstractView {
         return selectedItem -> navigateTo(viewName, this.projectContext.getProjectId());
     }
 
-    protected abstract HorizontalLayout createButtonBar();
+    protected HorizontalLayout createButtonBar() {
+        return null;
+    }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
         final String projectId = event.getParameters();
 
-        loadProjectContext(projectId);
-    }
-
-    void loadProjectContext(final String projectId) {
-        final Project project = this.projectsApi.findOne(projectId);
-
-        this.projectContext.setProject(project);
+        this.projectContext.setProject(
+                this.editorController.getProject(projectId)
+        );
     }
 }

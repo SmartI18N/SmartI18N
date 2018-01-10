@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.smarti18n.api.AngularMessagesApi;
+import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.messages.service.MessagesService;
 
 /**
@@ -26,7 +27,8 @@ public class AngularMessagesEndpoint implements AngularMessagesApi {
     @GetMapping(PATH_MESSAGES_FIND_ANGULAR)
     public Map<String, String> getMessages(
             @RequestParam("projectId") final String projectId,
-            @RequestParam("locale") final Locale locale) {
+            @RequestParam("locale") final Locale locale
+    ) throws ProjectUnknownException {
 
         return this.messagesService.findForAngularMessageSource(projectId, locale);
     }

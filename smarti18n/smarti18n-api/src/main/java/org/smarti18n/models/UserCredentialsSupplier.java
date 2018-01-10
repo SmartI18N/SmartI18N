@@ -1,4 +1,4 @@
-package org.smarti18n.api;
+package org.smarti18n.models;
 
 import java.io.Serializable;
 
@@ -18,7 +18,7 @@ public class UserCredentialsSupplier implements Serializable {
         this.userCredentials = userCredentials;
     }
 
-    String getBase64Credentials() {
+    public String getBase64Credentials() {
         Assert.notNull(userCredentials, "UserCredentials");
 
         return userCredentials.getBase64Credentials();
