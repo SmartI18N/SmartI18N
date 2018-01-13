@@ -11,7 +11,7 @@
     <groupId>org.smarti18n</groupId>
     <artifactId>smarti18n</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-PRE1</version>
+    <version>1.0-PRE2-SNAPSHOT</version>
 
     <modules>
         <module>smarti18n-api</module>
@@ -62,7 +62,7 @@
         <url>https://github.com/SmartI18N/SmartI18N</url>
         <connection>scm:git:git@github.com:SmartI18N/SmartI18N.git</connection>
         <developerConnection>scm:git:git@github.com:SmartI18N/SmartI18N.git</developerConnection>
-        <tag>smarti18n-1.0-PRE1</tag>
+        <tag>smarti18n-${project.version}</tag>
     </scm>
 
     <distributionManagement>
