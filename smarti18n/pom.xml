@@ -218,23 +218,23 @@
         <profile>
             <id>release</id>
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>com.spotify</groupId>
-                            <artifactId>docker-maven-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <phase>post-integration-test</phase>
-                                    <goals>
-                                        <goal>build</goal>
-                                        <goal>push</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
+                <!--<pluginManagement>-->
+                    <!--<plugins>-->
+                        <!--<plugin>-->
+                            <!--<groupId>com.spotify</groupId>-->
+                            <!--<artifactId>docker-maven-plugin</artifactId>-->
+                            <!--<executions>-->
+                                <!--<execution>-->
+                                    <!--<phase>post-integration-test</phase>-->
+                                    <!--<goals>-->
+                                        <!--<goal>build</goal>-->
+                                        <!--<goal>push</goal>-->
+                                    <!--</goals>-->
+                                <!--</execution>-->
+                            <!--</executions>-->
+                        <!--</plugin>-->
+                    <!--</plugins>-->
+                <!--</pluginManagement>-->
 
                 <plugins>
                     <plugin>
