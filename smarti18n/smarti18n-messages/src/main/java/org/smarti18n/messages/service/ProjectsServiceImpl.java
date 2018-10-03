@@ -20,6 +20,7 @@ import org.smarti18n.messages.repositories.ProjectRepository;
 import org.smarti18n.models.Project;
 import org.smarti18n.models.ProjectImpl;
 import org.smarti18n.models.UserRole;
+import org.springframework.util.StringUtils;
 
 import static org.smarti18n.messages.service.IdentifierUtils.clean;
 
@@ -78,7 +79,7 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional
-    public Project insert(final String username, final String projectId) throws ProjectExistException, UserUnknownException {
+    public Project insert(final String username, final String projectId, final String parentProjectId) throws ProjectExistException, UserUnknownException {
 
         final String cleanedProjectId = clean(projectId);
 
@@ -89,11 +90,22 @@ public class ProjectsServiceImpl implements ProjectsService {
 
             throw new ProjectExistException();
         }
+
         final String secret = this.smartKeyGenerator.generateKey();
 
-        final ProjectEntity projectEntity = this.projectRepository.insert(
-                new ProjectEntity(cleanedProjectId, secret, this.entityLoader.findUser(username))
+        final ProjectEntity newProject = new ProjectEntity(
+                cleanedProjectId,
+                secret,
+                this.entityLoader.findUser(username)
         );
+
+        if (!StringUtils.isEmpty(parentProjectId)) {
+            final ProjectEntity parentProject = this.entityLoader.findProject(username, parentProjectId);
+
+            newProject.setParentProject(parentProject);
+        }
+
+        final ProjectEntity projectEntity = this.projectRepository.insert(newProject);
 
         return new ProjectImpl(
                 projectEntity

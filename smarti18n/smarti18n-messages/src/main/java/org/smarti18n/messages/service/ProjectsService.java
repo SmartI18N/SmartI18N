@@ -12,13 +12,13 @@ import org.smarti18n.models.Project;
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public interface ProjectsService {
-    List<Project> findAll(final String username) throws UserUnknownException;
+    List<Project> findAll(String username) throws UserUnknownException;
 
-    Project findOne(final String username, String projectId) throws UserRightsException, UserUnknownException;
+    Project findOne(String username, String projectId) throws UserRightsException, UserUnknownException;
 
-    Project insert(final String username, String projectId) throws ProjectExistException, UserUnknownException;
+    Project insert(String username, String projectId, String parentProjectId) throws ProjectExistException, UserUnknownException;
 
-    Project update(final String username, Project project) throws ProjectUnknownException, UserUnknownException, UserRightsException;
+    Project update(String username, Project project) throws ProjectUnknownException, UserUnknownException, UserRightsException;
 
-    void remove(final String username, String projectId) throws ProjectUnknownException, UserUnknownException, UserRightsException;
+    void remove(String username, String projectId) throws ProjectUnknownException, UserUnknownException, UserRightsException;
 }

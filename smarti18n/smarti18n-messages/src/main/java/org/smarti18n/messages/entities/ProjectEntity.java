@@ -28,6 +28,9 @@ public class ProjectEntity implements Project {
     @DBRef
     private Set<UserEntity> owners = new HashSet<>();
 
+    @DBRef
+    private ProjectEntity parentProject;
+
     ProjectEntity() {
     }
 
@@ -103,6 +106,14 @@ public class ProjectEntity implements Project {
 
     public boolean hasOwner(final UserEntity user) {
         return user.getRole() == UserRole.SUPERUSER || this.owners.contains(user);
+    }
+
+    public ProjectEntity getParentProject() {
+        return parentProject;
+    }
+
+    public void setParentProject(final ProjectEntity parentProject) {
+        this.parentProject = parentProject;
     }
 
     @Override

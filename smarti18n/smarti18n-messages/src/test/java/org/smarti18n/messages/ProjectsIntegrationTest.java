@@ -57,8 +57,8 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
     public void existInsertProject() throws Exception {
         assertOnlyDefaultProjectsFound();
 
-        this.projectsApi.insert(NEW_PROJECT_ID);
-        this.projectsApi.insert(NEW_PROJECT_ID);
+        this.projectsApi.insert(NEW_PROJECT_ID, null);
+        this.projectsApi.insert(NEW_PROJECT_ID, null);
     }
 
     @Test(expected = ApiException.class)
@@ -75,7 +75,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testFindOnlyOwnProjects() throws Exception {
-        this.projectsApi.insert(NEW_PROJECT_ID);
+        this.projectsApi.insert(NEW_PROJECT_ID, null);
 
         final String test2User = "test2";
 
@@ -124,7 +124,7 @@ public class ProjectsIntegrationTest extends AbstractIntegrationTest {
     }
 
     private void assertCreateNewProject() throws UserUnknownException, ProjectExistException {
-        this.projectsApi.insert(NEW_PROJECT_ID);
+        this.projectsApi.insert(NEW_PROJECT_ID, null);
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
         assertThat(projects, hasSize(3));

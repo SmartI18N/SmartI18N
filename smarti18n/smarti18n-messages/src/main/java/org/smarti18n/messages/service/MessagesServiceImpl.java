@@ -3,6 +3,7 @@ package org.smarti18n.messages.service;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -200,7 +201,7 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Map<String, Map<Locale, String>> findForSpringMessageSource(final String projectId) throws ProjectUnknownException {
-        final Collection<MessageEntity> messages = this.messageCache.findByProjectId(projectId);
+        final Collection<MessageEntity> messages = getMessagesForSource(projectId);
 
         final Map<String, Map<Locale, String>> map = new HashMap<>();
 
@@ -214,7 +215,7 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     @Transactional
     public Map<String, String> findForAngularMessageSource(final String projectId, final Locale locale) throws ProjectUnknownException {
-        final Collection<MessageEntity> messages = this.messageCache.findByProjectId(projectId);
+        final Collection<MessageEntity> messages = getMessagesForSource(projectId);
 
         final Map<String, String> map = new HashMap<>();
 
@@ -230,4 +231,18 @@ public class MessagesServiceImpl implements MessagesService {
 
         return map;
     }
+
+    private Collection<MessageEntity> getMessagesForSource(final String projectId) {
+        final ProjectEntity project = this.entityLoader.findProject(projectId);
+
+        final LinkedHashSet<MessageEntity> messages = new LinkedHashSet<>();
+
+        if (project.getParentProject() != null) {
+            messages.addAll(this.messageCache.findByProjectId(project.getParentProject().getId()));
+        }
+
+        messages.addAll(this.messageCache.findByProjectId(projectId));
+        return messages;
+    }
+
 }

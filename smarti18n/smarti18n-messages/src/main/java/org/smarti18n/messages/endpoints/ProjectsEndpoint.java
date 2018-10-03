@@ -50,12 +50,14 @@ public class ProjectsEndpoint implements ProjectsApi {
     @Override
     @GetMapping(PATH_PROJECTS_INSERT)
     public Project insert(
-            @RequestParam("projectId") final String projectId
+            @RequestParam("projectId") final String projectId,
+            @RequestParam(value = "parentProjectId", required = false) final String parentProjectId
     ) throws UserUnknownException, ProjectExistException {
 
         return projectsService.insert(
                 SecurityUtils.getUserId(),
-                projectId
+                projectId,
+                parentProjectId
         );
     }
 

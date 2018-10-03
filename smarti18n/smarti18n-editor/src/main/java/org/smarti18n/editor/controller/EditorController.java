@@ -2,6 +2,7 @@ package org.smarti18n.editor.controller;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.springframework.stereotype.Service;
@@ -85,10 +86,12 @@ public class EditorController {
 
     }
 
-    public Button.ClickListener clickAddProject(final TextField textFieldId, final ClickSuccessListener clickSuccessListener) {
+    public Button.ClickListener clickAddProject(final TextField textFieldId, final ComboBox<Project> parentProjectComboBox, final ClickSuccessListener clickSuccessListener) {
         return clickEvent -> {
             try {
-                final Project project = this.projectsApi.insert(textFieldId.getValue());
+                final Optional<Project> parentProject = Optional.ofNullable(parentProjectComboBox.getValue());
+
+                final Project project = this.projectsApi.insert(textFieldId.getValue(), parentProject.map(Project::getId).orElse(null));
 
                 navigateTo(ProjectMessagesView.VIEW_NAME, project.getId());
 

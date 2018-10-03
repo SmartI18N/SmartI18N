@@ -23,7 +23,8 @@ public interface ProjectsApi {
     ) throws UserUnknownException, UserRightsException;
 
     Project insert(
-            String projectId
+            String projectId,
+            String parentProjectId
     ) throws UserUnknownException, ProjectExistException;
 
     Project update(

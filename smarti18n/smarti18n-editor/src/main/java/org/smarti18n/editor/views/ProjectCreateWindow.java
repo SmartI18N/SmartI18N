@@ -1,7 +1,9 @@
 package org.smarti18n.editor.views;
 
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 import org.smarti18n.editor.controller.EditorController;
+import org.smarti18n.models.Project;
 import org.smarti18n.vaadin.components.AddButton;
 import org.smarti18n.vaadin.components.CancelButton;
 import org.smarti18n.vaadin.components.FormWindow;
@@ -20,8 +22,14 @@ public class ProjectCreateWindow extends FormWindow {
         final TextField textFieldId = new TextField(I18N.translate("smarti18n.editor.project-create.id"));
         addFormComponent(textFieldId);
 
+        final ComboBox<Project> parentProjectComboBox = new ComboBox<>(
+                I18N.translate("smarti18n.editor.project-create.parent-project"),
+                editorController.getProjects()
+        );
+        addFormComponent(parentProjectComboBox);
+
         final AddButton addButton = new AddButton(
-                editorController.clickAddProject(textFieldId, () -> {
+                editorController.clickAddProject(textFieldId, parentProjectComboBox, () -> {
                     navigateTo(ProjectMessagesView.VIEW_NAME, textFieldId.getValue());
                     close();
                 })

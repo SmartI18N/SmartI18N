@@ -6,6 +6,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import javax.annotation.PostConstruct;
@@ -87,7 +88,7 @@ public class ProjectsView extends AbstractView implements View {
     private Button.ClickListener addProject(final FormWindow window, final TextField textFieldKey) {
         return clickEvent -> {
             try {
-                this.projectsApi.insert(textFieldKey.getValue());
+                this.projectsApi.insert(textFieldKey.getValue(), null);
             } catch (UserUnknownException e) {
                 VaadinExceptionHandler.handleUserUnknownException();
             } catch (ProjectExistException e) {
