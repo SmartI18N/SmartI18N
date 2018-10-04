@@ -22,6 +22,8 @@
         <module>smarti18n-vaadin</module>
         <module>smarti18n-editor</module>
         <module>smarti18n-admin</module>
+
+        <module>smarti18n-com</module>
     </modules>
 
     <properties>
