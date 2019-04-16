@@ -1,12 +1,6 @@
 package org.smarti18n.messages.service;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -235,10 +229,20 @@ public class MessagesServiceImpl implements MessagesService {
     private Collection<MessageEntity> getMessagesForSource(final String projectId) {
         final ProjectEntity project = this.entityLoader.findProject(projectId);
 
+        return getMessagesForSource(project, new HashSet<>());
+    }
+
+    private Collection<MessageEntity> getMessagesForSource(ProjectEntity project, Set<String> circleControl) {
+        String projectId = project.getId();
+        if (circleControl.contains(projectId)) {
+            throw new IllegalStateException("Circle detected! => " + circleControl);
+        }
+        circleControl.add(projectId);
+
         final LinkedHashSet<MessageEntity> messages = new LinkedHashSet<>();
 
         if (project.getParentProject() != null) {
-            messages.addAll(this.messageCache.findByProjectId(project.getParentProject().getId()));
+            messages.addAll(getMessagesForSource(project.getParentProject(), circleControl));
         }
 
         messages.addAll(this.messageCache.findByProjectId(projectId));
