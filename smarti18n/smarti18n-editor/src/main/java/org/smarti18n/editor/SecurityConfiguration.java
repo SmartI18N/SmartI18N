@@ -126,16 +126,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(username -> {
-            final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
-
-            logger.info("try " + username);
             final UserSimplified user = this.userApi.findOneSimplified(username);
 
             if (user == null) {
-                logger.info("no user found");
                 throw new UsernameNotFoundException("Username [" + username + "] not found!");
             }
-            logger.info("found " + user);
 
             return new SimpleUserDetails(user);
         });

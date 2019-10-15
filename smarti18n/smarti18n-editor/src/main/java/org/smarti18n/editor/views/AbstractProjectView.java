@@ -21,10 +21,9 @@ abstract class AbstractProjectView extends AbstractView {
         menuBar.setWidth(100, Unit.PERCENTAGE);
 
         menuBar.addItem(translate("smarti18n.editor.project-menu.messages"), navigateToProjectView(ProjectMessagesView.VIEW_NAME));
-        menuBar.addItem(translate("smarti18n.editor.project-menu.translator"), navigateToProjectView(ProjectTranslatorView.VIEW_NAME));
-        menuBar.addItem(translate("smarti18n.editor.project-menu.import-export"), navigateToProjectView(ProjectImportExportView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.locales"), navigateToProjectView(ProjectLocalesView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.users"), navigateToProjectView(ProjectUsersView.VIEW_NAME));
+        menuBar.addItem(translate("smarti18n.editor.project-menu.import-export"), navigateToProjectView(ProjectImportExportView.VIEW_NAME));
         menuBar.addItem(translate("smarti18n.editor.project-menu.settings"), navigateToProjectView(ProjectGeneralView.VIEW_NAME));
         addComponent(menuBar);
 

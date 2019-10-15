@@ -6,9 +6,13 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+
 import javax.annotation.PostConstruct;
+
+import com.vaadin.ui.VerticalLayout;
 import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.models.Message;
 import org.smarti18n.vaadin.components.IconButton;
@@ -43,14 +47,20 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
         grid.getColumn("localesAsString")
                 .setCaption(translate("smarti18n.editor.message-overview.locales"));
 
-        grid.addComponentColumn(messageTranslations -> new IconButton(
-                VaadinIcons.MINUS,
-                this.editorController.clickRemoveMessage(messageTranslations, projectId(), this::reloadGrid)
+        grid.addComponentColumn(message -> new HorizontalLayout(
+                new IconButton(
+                        VaadinIcons.MINUS,
+                        this.editorController.clickRemoveMessage(message, projectId(), this::reloadGrid)
+                ),
+                new IconButton(
+                        VaadinIcons.OPEN_BOOK,
+                        clickEvent -> navigateTo(ProjectMessageEditView.VIEW_NAME, projectId(), message.getKey())
+                )
         ));
 
         grid.addItemClickListener(itemClick -> {
             final String key = itemClick.getItem().getKey();
-            navigateTo(ProjectMessageEditView.VIEW_NAME, projectId(), key);
+            getUI().addWindow(new ProjectMessageEditWindow(this.editorController, projectId(), key));
         });
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);

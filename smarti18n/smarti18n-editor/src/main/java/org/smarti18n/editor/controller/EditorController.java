@@ -2,9 +2,11 @@ package org.smarti18n.editor.controller;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.data.Binder;
@@ -199,25 +201,36 @@ public class EditorController {
     public Button.ClickListener clickSaveTranslation(final Binder<Message> binder, final ProjectContext projectContext, final ClickSuccessListener clickSuccessListener) {
 
         return clickEvent -> {
-            try {
-                final String projectId = projectContext.getProjectId();
+            final String projectId = projectContext.getProjectId();
 
-                final Message message = new MessageImpl();
-                binder.writeBeanIfValid(message);
+            final Message message = new MessageImpl();
+            binder.writeBeanIfValid(message);
 
-                messagesApi.update(projectId, message);
-
-                clickSuccessListener.success();
-            } catch (UserUnknownException e) {
-                VaadinExceptionHandler.handleUserUnknownException();
-            } catch (MessageUnknownException e) {
-                VaadinExceptionHandler.handleMessageUnknownException();
-            } catch (UserRightsException e) {
-                VaadinExceptionHandler.handleUserRightsException();
-            } catch (ProjectUnknownException e) {
-                VaadinExceptionHandler.handleProjectUnknownException();
-            }
+            saveMessage(clickSuccessListener, projectId, message);
         };
+    }
+
+    public Button.ClickListener clickSaveTranslation(final String projectId, final String messageKey, final Map<Locale, String> translations, final ClickSuccessListener clickSuccessListener) {
+
+        return clickEvent -> {
+            saveMessage(clickSuccessListener, projectId, new MessageImpl(messageKey, translations));
+        };
+    }
+
+    private void saveMessage(ClickSuccessListener clickSuccessListener, String projectId, Message message) {
+        try {
+            messagesApi.update(projectId, message);
+
+            clickSuccessListener.success();
+        } catch (UserUnknownException e) {
+            VaadinExceptionHandler.handleUserUnknownException();
+        } catch (MessageUnknownException e) {
+            VaadinExceptionHandler.handleMessageUnknownException();
+        } catch (UserRightsException e) {
+            VaadinExceptionHandler.handleUserRightsException();
+        } catch (ProjectUnknownException e) {
+            VaadinExceptionHandler.handleProjectUnknownException();
+        }
     }
 
     public Button.ClickListener clickRemoveMessage(final Message messageTranslations, final String projectId, final ClickSuccessListener clickSuccessListener) {
