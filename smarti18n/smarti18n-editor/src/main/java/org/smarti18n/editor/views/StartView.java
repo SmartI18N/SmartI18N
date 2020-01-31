@@ -1,8 +1,5 @@
 package org.smarti18n.editor.views;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -11,11 +8,14 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import javax.annotation.PostConstruct;
 import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.smarti18n.vaadin.utils.I18N;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
