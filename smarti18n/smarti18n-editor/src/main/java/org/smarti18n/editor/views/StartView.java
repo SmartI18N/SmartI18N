@@ -41,7 +41,7 @@ public class StartView extends AbstractView implements View {
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final SimpleUserDetails principal = (SimpleUserDetails) authentication.getPrincipal();
-        final String username = principal.getName();
+        final String username = principal.getUsername();
 
         final Panel welcome = new Panel(translate("smarti18n.editor.welcome.caption", username));
         welcome.setContent(new VerticalLayout(
