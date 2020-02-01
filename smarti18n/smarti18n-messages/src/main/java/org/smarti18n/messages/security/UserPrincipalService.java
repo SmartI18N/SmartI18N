@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import org.smarti18n.messages.entities.UserEntity;
-import org.smarti18n.messages.repositories.UserRepository;
+import org.smarti18n.messages.users.UserEntity;
+import org.smarti18n.messages.users.UserRepository;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;

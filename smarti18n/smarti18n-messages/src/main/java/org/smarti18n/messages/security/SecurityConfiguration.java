@@ -1,8 +1,11 @@
 package org.smarti18n.messages.security;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.smarti18n.api.AngularMessagesApi;
+import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.api.SpringMessagesApi;
+import org.smarti18n.api.UserApi;
+import org.smarti18n.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +28,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import org.smarti18n.api.AngularMessagesApi;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.SpringMessagesApi;
-import org.smarti18n.api.UserApi;
-import org.smarti18n.models.UserRole;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -83,6 +82,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         UserApi.PATH_USERS_FIND_ONE_SIMPLIFIED,
                         AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR
                 ).permitAll()
+
+                .antMatchers("/api/2/projects/**").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(HttpMethod.GET, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
+                .antMatchers(HttpMethod.GET, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(HttpMethod.POST, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
+                .antMatchers(HttpMethod.PUT, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(HttpMethod.GET, "/api/2/simple-users/**").permitAll()
 
                 .anyRequest().denyAll()
 

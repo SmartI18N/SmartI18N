@@ -1,7 +1,7 @@
 package org.smarti18n.api;
 
-import java.util.Collections;
-
+import org.smarti18n.exceptions.UnexpectedApiException;
+import org.smarti18n.models.UserCredentialsSupplier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,20 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.smarti18n.exceptions.UnexpectedApiException;
-import org.smarti18n.models.UserCredentialsSupplier;
+import java.util.Collections;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
-abstract class AbstractApiImpl {
+public abstract class AbstractApiImpl {
 
     final RestTemplate restTemplate;
 
     private final String host;
     private final UserCredentialsSupplier userCredentialsSupplier;
 
-    AbstractApiImpl(
+    public AbstractApiImpl(
             final RestTemplate restTemplate,
             final String host,
             final UserCredentialsSupplier userCredentialsSupplier) {
@@ -33,7 +32,7 @@ abstract class AbstractApiImpl {
         this.userCredentialsSupplier = userCredentialsSupplier;
     }
 
-    AbstractApiImpl(
+    public AbstractApiImpl(
             final RestTemplate restTemplate,
             final int port,
             final UserCredentialsSupplier userCredentialsSupplier) {
@@ -43,39 +42,51 @@ abstract class AbstractApiImpl {
         this.userCredentialsSupplier = userCredentialsSupplier;
     }
 
-    <OUT, IN> OUT post(final UriComponentsBuilder uri, final IN project, final Class<OUT> responseType) {
-        final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
-                uri.build().encode().toUri(),
-                HttpMethod.POST,
-                new HttpEntity<>(project, headers()),
-                responseType
+    public <OUT> OUT get(final UriComponentsBuilder uri, Class<OUT> responseType) {
+        return handleResponse(
+                send(HttpMethod.GET, uri, null, responseType)
         );
-
-        return handleResponse(exchange);
     }
 
-    <OUT> OUT get(final UriComponentsBuilder uri, Class<OUT> responseType) {
-        final ResponseEntity<OUT> exchange = this.restTemplate.exchange(
-                uri.build().encode().toUri(),
-                HttpMethod.GET,
-                new HttpEntity<>(headers()),
-                responseType
+    public <OUT, IN> OUT post(final UriComponentsBuilder uri, final IN dto, final Class<OUT> responseType) {
+        return handleResponse(
+                send(HttpMethod.POST, uri, dto, responseType)
         );
-
-        return handleResponse(exchange);
     }
 
-    UriComponentsBuilder uri(final String path) {
+    public <OUT, IN> OUT put(final UriComponentsBuilder uri, final IN dto, final Class<OUT> responseType) {
+        return handleResponse(
+                send(HttpMethod.PUT, uri, dto, responseType)
+        );
+    }
+
+    public <OUT> OUT delete(final UriComponentsBuilder uri, Class<OUT> responseType) {
+        return handleResponse(
+                send(HttpMethod.DELETE, uri, null, responseType)
+        );
+    }
+
+    private <OUT> ResponseEntity<OUT> send(HttpMethod method, UriComponentsBuilder uri, Object body, Class<OUT> responseType) {
+        return this.restTemplate.exchange(
+                uri.build().encode().toUri(),
+                method,
+                new HttpEntity<>(body, headers()),
+                responseType
+        );
+    }
+
+    public UriComponentsBuilder uri(final String path) {
         return UriComponentsBuilder.fromHttpUrl(this.host)
                 .path(path);
     }
 
-    UriComponentsBuilder uri(final String path, final String projectId) {
+    @Deprecated
+    public UriComponentsBuilder uri(final String path, final String projectId) {
         return uri(path)
                 .queryParam("projectId", projectId);
     }
 
-    <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {
+    public <OUT> OUT handleResponse(final ResponseEntity<OUT> exchange) {
         if (exchange.getStatusCode().isError()) {
             throw new UnexpectedApiException("SmartI18N Message API: " + exchange.getStatusCode().getReasonPhrase());
         }
