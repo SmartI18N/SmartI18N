@@ -107,7 +107,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
                 .antMatchers(POST, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
                 .antMatchers(PUT, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(GET, "/api/2/simple-users/*").permitAll()
+                .antMatchers(GET, "/api/2/simple-users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
 
                 .anyRequest().denyAll()
 
