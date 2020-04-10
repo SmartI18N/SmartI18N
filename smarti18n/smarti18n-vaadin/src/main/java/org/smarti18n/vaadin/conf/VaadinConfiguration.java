@@ -8,6 +8,7 @@ import org.smarti18n.api2.ProjectsApiImpl;
 import org.smarti18n.api2.UsersApi;
 import org.smarti18n.api2.UsersApiImpl;
 import org.smarti18n.models.UserCredentialsSupplier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,24 +22,22 @@ import org.springframework.web.context.annotation.SessionScope;
 @Configuration
 public class VaadinConfiguration {
 
+    @Autowired
+    RestTemplate restTemplate;
+
     @Bean
     MessagesApi messagesApi(final Environment environment) {
-        return new MessagesApiImpl(restTemplate(), environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
+        return new MessagesApiImpl(restTemplate, environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
     }
 
     @Bean
     ProjectsApi projectsApi(final Environment environment) {
-        return new ProjectsApiImpl(restTemplate(), environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
+        return new ProjectsApiImpl(restTemplate, environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
     }
 
     @Bean
     UsersApi usersApi(final Environment environment) {
-        return new UsersApiImpl(restTemplate(), environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
-    }
-
-    @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplateBuilder().build();
+        return new UsersApiImpl(restTemplate, environment.getProperty("smarti18n.messages.host"), userCredentialsSupplier());
     }
 
     @Bean
