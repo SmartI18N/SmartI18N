@@ -29,9 +29,7 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.smarti18n.api.UserApi;
+import org.smarti18n.api2.UsersApi;
 import org.smarti18n.models.UserSimplified;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.vaadin.spring.http.HttpService;
@@ -52,7 +50,7 @@ import org.vaadin.spring.security.web.VaadinRedirectStrategy;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserApi userApi;
+    private UsersApi usersApi;
 
     @Autowired
     private Environment environment;
@@ -126,7 +124,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(username -> {
-            final UserSimplified user = this.userApi.findOneSimplified(username);
+            final UserSimplified user = this.usersApi.findOneSimplified(username);
 
             if (user == null) {
                 throw new UsernameNotFoundException("Username [" + username + "] not found!");

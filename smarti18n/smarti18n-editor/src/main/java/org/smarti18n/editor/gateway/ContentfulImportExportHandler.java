@@ -1,9 +1,5 @@
 package org.smarti18n.editor.gateway;
 
-import java.util.Locale;
-
-import org.springframework.stereotype.Component;
-
 import com.contentful.java.cda.CDAArray;
 import com.contentful.java.cda.CDAClient;
 import com.contentful.java.cda.CDAEntry;
@@ -12,15 +8,19 @@ import com.contentful.java.cda.CDASpace;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
-import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api2.MessagesApi;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.models.Project;
+import org.smarti18n.models.SingleMessageUpdateDTO;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
+import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Component
 public class ContentfulImportExportHandler implements ImportExportHandler {
@@ -79,7 +79,7 @@ public class ContentfulImportExportHandler implements ImportExportHandler {
         final IconButton importButton = new IconButton(
                 I18N.translate("smarti18n.editor.message-import.import", ""),
                 VaadinIcons.UPLOAD,
-                event ->{
+                event -> {
                     final CDAClient cdaClient = CDAClient.builder()
                             .setSpace(spaceKeyField.getValue())
                             .setToken(accessTokenField.getValue())
@@ -100,7 +100,7 @@ public class ContentfulImportExportHandler implements ImportExportHandler {
                             final String value = cdaEntry.getField(valueIdentifierField.getValue());
 
                             try {
-                                this.messagesApi.update(project.getId(), key, locale, value);
+                                this.messagesApi.update(project.getId(), key, locale.toString(), new SingleMessageUpdateDTO(value));
                             } catch (ProjectUnknownException e) {
                                 VaadinExceptionHandler.handleProjectUnknownException();
                                 throw new IllegalStateException(e);

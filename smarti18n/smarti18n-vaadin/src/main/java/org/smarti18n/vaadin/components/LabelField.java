@@ -1,4 +1,4 @@
-package org.smarti18n.editor.components;
+package org.smarti18n.vaadin.components;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;

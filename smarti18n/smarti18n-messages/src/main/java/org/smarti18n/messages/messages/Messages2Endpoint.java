@@ -11,7 +11,6 @@ import org.smarti18n.models.Message;
 import org.smarti18n.models.MessageCreateDTO;
 import org.smarti18n.models.MessageUpdateDTO;
 import org.smarti18n.models.SingleMessageUpdateDTO;
-import org.springframework.cglib.core.Local;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +37,7 @@ public class Messages2Endpoint implements MessagesApi {
             @PathVariable("projectId") String projectId) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return messagesService.findAll(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId
         );
     }
@@ -50,7 +49,7 @@ public class Messages2Endpoint implements MessagesApi {
             @PathVariable("messageKey") String messageKey) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return messagesService.findOne(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 messageKey
         );
@@ -63,7 +62,7 @@ public class Messages2Endpoint implements MessagesApi {
             @RequestBody MessageCreateDTO dto) throws UserRightsException, MessageExistException, UserUnknownException, ProjectUnknownException {
 
         return messagesService.insert(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 dto
         );
@@ -77,7 +76,7 @@ public class Messages2Endpoint implements MessagesApi {
             @RequestBody MessageUpdateDTO dto) throws UserUnknownException, MessageUnknownException, UserRightsException, ProjectUnknownException {
 
         return messagesService.update(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 messageKey,
                 dto
@@ -93,7 +92,7 @@ public class Messages2Endpoint implements MessagesApi {
             @RequestBody SingleMessageUpdateDTO dto) throws UserUnknownException, MessageUnknownException, UserRightsException, ProjectUnknownException {
 
         return messagesService.update(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 messageKey,
                 Locale.forLanguageTag(locale),
@@ -108,7 +107,7 @@ public class Messages2Endpoint implements MessagesApi {
             @PathVariable("messageKey") String messageKey) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         messagesService.remove(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 messageKey
         );

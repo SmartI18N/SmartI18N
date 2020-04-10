@@ -1,25 +1,17 @@
 package org.smarti18n.editor.gateway;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Window;
-import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api2.MessagesApi;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.models.Message;
 import org.smarti18n.models.Project;
+import org.smarti18n.models.SingleMessageUpdateDTO;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.components.LocaleComboBox;
@@ -27,6 +19,14 @@ import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.PropertiesExportStreamSource;
 import org.smarti18n.vaadin.utils.PropertiesImportStreamReceiver;
 import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Component
 public class SpringImportExportHandler implements ImportExportHandler {
@@ -74,7 +74,7 @@ public class SpringImportExportHandler implements ImportExportHandler {
                 event -> {
                     messages.forEach((key, value) -> {
                                 try {
-                                    messagesApi.update(project.getId(), key, localeComboBox.getValue(), value);
+                                    messagesApi.update(project.getId(), key, localeComboBox.getValue().toString(), new SingleMessageUpdateDTO(value));
                                 } catch (ProjectUnknownException e) {
                                     VaadinExceptionHandler.handleProjectUnknownException();
                                     throw new IllegalStateException(e);

@@ -9,7 +9,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import javax.annotation.PostConstruct;
-import org.smarti18n.editor.components.LabelField;
+import org.smarti18n.vaadin.components.LabelField;
 import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.models.Message;
 import org.smarti18n.vaadin.components.CancelButton;

@@ -8,16 +8,18 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
-import javax.annotation.PostConstruct;
-import org.smarti18n.api.UserApi;
+import org.smarti18n.api2.UsersApi;
 import org.smarti18n.exceptions.UserExistException;
 import org.smarti18n.models.User;
+import org.smarti18n.models.UserCreateDTO;
 import org.smarti18n.vaadin.components.AddButton;
 import org.smarti18n.vaadin.components.CancelButton;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -28,12 +30,12 @@ public class UsersView extends AbstractView implements View {
 
     public static final String VIEW_NAME = "users";
 
-    private final UserApi userApi;
+    private final UsersApi usersApi;
 
     private Grid<User> grid;
 
-    public UsersView(final UserApi userApi) {
-        this.userApi = userApi;
+    public UsersView(final UsersApi usersApi) {
+        this.usersApi = usersApi;
     }
 
     @PostConstruct
@@ -81,7 +83,7 @@ public class UsersView extends AbstractView implements View {
     private Button.ClickListener registerUser(final FormWindow window, final TextField textFieldMail, final TextField textFieldPassword) {
         return clickEvent -> {
             try {
-                this.userApi.register(textFieldMail.getValue(), textFieldPassword.getValue());
+                this.usersApi.create(new UserCreateDTO(textFieldMail.getValue(), textFieldPassword.getValue()));
             } catch (UserExistException e) {
                 VaadinExceptionHandler.handleUserExistException();
             }
@@ -99,7 +101,7 @@ public class UsersView extends AbstractView implements View {
 
     private void reloadGrid() {
         this.grid.setItems(
-                this.userApi.findAll()
+                this.usersApi.findAll()
         );
     }
 }

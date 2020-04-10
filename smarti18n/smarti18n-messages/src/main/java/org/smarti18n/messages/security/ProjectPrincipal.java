@@ -1,13 +1,13 @@
 package org.smarti18n.messages.security;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import org.smarti18n.models.Project;
+import org.smarti18n.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import org.smarti18n.models.Project;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -16,10 +16,20 @@ public class ProjectPrincipal implements UserDetails {
 
     static final String ROLE_PROJECT = "PROJECT";
 
+    private final User user;
     private final Project project;
 
-    ProjectPrincipal(final Project project) {
+    ProjectPrincipal(final User user, final Project project) {
+        this.user = user;
         this.project = project;
+    }
+
+    public String getProjectId() {
+        return project.getId();
+    }
+
+    public String getUserMail() {
+        return user.getMail();
     }
 
     @Override

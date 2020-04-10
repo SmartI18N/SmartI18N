@@ -1,23 +1,26 @@
 package org.smarti18n.messages.security;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import org.smarti18n.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import org.smarti18n.messages.users.UserEntity;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
  */
 public class UserPrincipal implements UserDetails {
 
-    private final UserEntity user;
+    private final User user;
 
-    UserPrincipal(final UserEntity user) {
+    UserPrincipal(final User user) {
         this.user = user;
+    }
+
+    public String getUserMail() {
+        return user.getMail();
     }
 
     @Override

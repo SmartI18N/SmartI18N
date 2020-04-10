@@ -6,20 +6,21 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
-import javax.annotation.PostConstruct;
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.api2.ProjectsApi;
 import org.smarti18n.exceptions.ProjectExistException;
 import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.models.Project;
+import org.smarti18n.models.ProjectCreateDTO;
 import org.smarti18n.vaadin.components.AddButton;
 import org.smarti18n.vaadin.components.CancelButton;
 import org.smarti18n.vaadin.components.FormWindow;
 import org.smarti18n.vaadin.components.IconButton;
 import org.smarti18n.vaadin.utils.I18N;
 import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -88,7 +89,7 @@ public class ProjectsView extends AbstractView implements View {
     private Button.ClickListener addProject(final FormWindow window, final TextField textFieldKey) {
         return clickEvent -> {
             try {
-                this.projectsApi.insert(textFieldKey.getValue(), null);
+                this.projectsApi.create(new ProjectCreateDTO(textFieldKey.getValue(), null));
             } catch (UserUnknownException e) {
                 VaadinExceptionHandler.handleUserUnknownException();
             } catch (ProjectExistException e) {

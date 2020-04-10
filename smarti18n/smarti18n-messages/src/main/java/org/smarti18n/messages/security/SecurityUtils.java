@@ -11,16 +11,22 @@ public final class SecurityUtils {
     private SecurityUtils() {
     }
 
-    public static String getUserId() {
-        final UserPrincipal principal = (UserPrincipal) authentication().getPrincipal();
+    public static String getUserMail() {
+        final Object principal = authentication().getPrincipal();
 
-        return principal.getUsername();
+        if (principal instanceof UserPrincipal) {
+            return ((UserPrincipal) principal).getUserMail();
+        } else if (principal instanceof ProjectPrincipal) {
+            return ((ProjectPrincipal) principal).getUserMail();
+        } else {
+            throw new IllegalStateException("unknown principal [" + principal + "]");
+        }
     }
 
     public static String getProjectId() {
         final ProjectPrincipal principal = (ProjectPrincipal) authentication().getPrincipal();
 
-        return principal.getUsername();
+        return principal.getProjectId();
     }
 
     private static Authentication authentication() {

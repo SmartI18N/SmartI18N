@@ -9,7 +9,6 @@ import org.smarti18n.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +29,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.smarti18n.messages.security.ProjectPrincipal.ROLE_PROJECT;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.OPTIONS;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -55,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(
                         SpringMessagesApi.PATH_MESSAGES_FIND_SPRING
-                ).hasAuthority(ProjectPrincipal.ROLE_PROJECT)
+                ).hasAuthority(ROLE_PROJECT)
 
                 .antMatchers(
                         MessagesApi.PATH_MESSAGES_FIND_ALL,
@@ -83,12 +89,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR
                 ).permitAll()
 
-                .antMatchers("/api/2/projects/**").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(HttpMethod.GET, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
-                .antMatchers(HttpMethod.GET, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(HttpMethod.POST, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
-                .antMatchers(HttpMethod.PUT, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(HttpMethod.GET, "/api/2/simple-users/**").permitAll()
+                .antMatchers(GET, "/api/2/projects").hasAnyAuthority(ROLE_SUPERUSER)
+                .antMatchers(GET, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER, ROLE_PROJECT)
+                .antMatchers(POST, "/api/2/projects").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(PUT, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(PUT, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(DELETE, "/api/2/projects/*").hasAnyAuthority(ROLE_SUPERUSER)
+
+                .antMatchers(GET, "/api/2/projects/{projectId}/messages").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
+                .antMatchers(GET, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
+                .antMatchers(POST, "/api/2/projects/{projectId}/messages").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
+                .antMatchers(PUT, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
+                .antMatchers(PUT, "/api/2/projects/{projectId}/messages/*/locale/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
+                .antMatchers(DELETE, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
+
+                .antMatchers(GET, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
+                .antMatchers(GET, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(POST, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
+                .antMatchers(PUT, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
+                .antMatchers(GET, "/api/2/simple-users/*").permitAll()
 
                 .anyRequest().denyAll()
 
@@ -98,7 +117,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+        web.ignoring().antMatchers(OPTIONS, "/**");
     }
 
     @Override

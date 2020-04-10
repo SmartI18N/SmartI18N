@@ -6,16 +6,13 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.grid.ColumnResizeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-
-import javax.annotation.PostConstruct;
-
-import com.vaadin.ui.VerticalLayout;
 import org.smarti18n.editor.controller.EditorController;
 import org.smarti18n.models.Message;
 import org.smarti18n.vaadin.components.IconButton;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -60,7 +57,7 @@ public class ProjectMessagesView extends AbstractProjectView implements View {
 
         grid.addItemClickListener(itemClick -> {
             final String key = itemClick.getItem().getKey();
-            getUI().addWindow(new ProjectMessageEditWindow(this.editorController, projectId(), key));
+            getUI().addWindow(new ProjectMessageEditWindow(this.editorController, projectId(), key, this::reloadGrid));
         });
 
         grid.setColumnResizeMode(ColumnResizeMode.SIMPLE);

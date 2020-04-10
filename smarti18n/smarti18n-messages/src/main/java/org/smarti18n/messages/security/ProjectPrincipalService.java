@@ -1,13 +1,14 @@
 package org.smarti18n.messages.security;
 
-import java.util.Optional;
-
+import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.messages.projects.ProjectEntity;
+import org.smarti18n.messages.projects.ProjectRepository;
+import org.smarti18n.models.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import org.smarti18n.messages.projects.ProjectEntity;
-import org.smarti18n.messages.projects.ProjectRepository;
+import java.util.Optional;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -25,7 +26,10 @@ public class ProjectPrincipalService implements org.springframework.security.cor
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final Optional<ProjectEntity> byMail = this.projectRepository.findById(username);
         if (byMail.isPresent()) {
-            return new ProjectPrincipal(byMail.get());
+            final ProjectEntity project = byMail.get();
+            final User user = project.getOwners().stream().findFirst().orElseThrow(UserUnknownException::new);
+
+            return new ProjectPrincipal(user, project);
         }
         throw new UsernameNotFoundException(username);
     }

@@ -35,7 +35,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return messagesService.findAll(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId
         );
     }
@@ -48,7 +48,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return messagesService.findOne(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 key
         );
@@ -62,7 +62,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws UserRightsException, MessageExistException, UserUnknownException, ProjectUnknownException {
 
         return messagesService.insert(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 new MessageCreateDTO(key)
         );
@@ -78,7 +78,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return messagesService.update(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 key,
                 locale, translation
@@ -93,7 +93,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws UserUnknownException, MessageUnknownException, UserRightsException, ProjectUnknownException {
 
         return messagesService.update(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 message.getKey(),
                 new MessageUpdateDTO(message.getTranslations())
@@ -109,7 +109,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws UserRightsException, MessageExistException, MessageUnknownException, UserUnknownException, ProjectUnknownException {
 
         return messagesService.copy(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 sourceKey,
                 targetKey
@@ -124,7 +124,7 @@ public class MessagesEndpoint implements MessagesApi {
     ) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         messagesService.remove(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 key
         );

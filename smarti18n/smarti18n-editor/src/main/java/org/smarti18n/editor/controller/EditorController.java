@@ -1,22 +1,13 @@
 package org.smarti18n.editor.controller;
 
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-
-import org.apache.tomcat.jni.Local;
-import org.springframework.stereotype.Service;
-
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.UserApi;
+import org.smarti18n.api2.MessagesApi;
+import org.smarti18n.api2.ProjectsApi;
+import org.smarti18n.api2.UsersApi;
 import org.smarti18n.editor.views.ProjectMessagesView;
 import org.smarti18n.exceptions.MessageExistException;
 import org.smarti18n.exceptions.MessageUnknownException;
@@ -25,12 +16,23 @@ import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.models.Message;
+import org.smarti18n.models.MessageCreateDTO;
 import org.smarti18n.models.MessageImpl;
+import org.smarti18n.models.MessageUpdateDTO;
 import org.smarti18n.models.Project;
+import org.smarti18n.models.ProjectCreateDTO;
+import org.smarti18n.models.ProjectUpdateDTO;
 import org.smarti18n.models.User;
 import org.smarti18n.models.UserImpl;
+import org.smarti18n.models.UserUpdateDTO;
 import org.smarti18n.vaadin.utils.ProjectContext;
 import org.smarti18n.vaadin.utils.VaadinExceptionHandler;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import static org.smarti18n.vaadin.utils.VaadinUtils.navigateTo;
 
@@ -40,18 +42,18 @@ import static org.smarti18n.vaadin.utils.VaadinUtils.navigateTo;
 @Service
 public class EditorController {
 
-    private final UserApi userApi;
+    private final UsersApi usersApi;
     private final ProjectsApi projectsApi;
     private final MessagesApi messagesApi;
 
-    public EditorController(final UserApi userApi, final ProjectsApi projectsApi, final MessagesApi messagesApi) {
-        this.userApi = userApi;
+    public EditorController(final UsersApi usersApi, final ProjectsApi projectsApi, final MessagesApi messagesApi) {
+        this.usersApi = usersApi;
         this.projectsApi = projectsApi;
         this.messagesApi = messagesApi;
     }
 
     public User getUser(final String username) {
-        return this.userApi.findOne(username);
+        return this.usersApi.findOne(username);
     }
 
     public Collection<Project> getProjects() {
@@ -78,7 +80,7 @@ public class EditorController {
             try {
                 final User user = new UserImpl();
                 binder.writeBeanIfValid(user);
-                this.userApi.update(user);
+                this.usersApi.update(user.getMail(), new UserUpdateDTO(user.getVorname(), user.getNachname(), user.getCompany()));
 
                 clickSuccessListener.success();
             } catch (UserUnknownException e) {
@@ -93,7 +95,7 @@ public class EditorController {
             try {
                 final Optional<Project> parentProject = Optional.ofNullable(parentProjectComboBox.getValue());
 
-                final Project project = this.projectsApi.insert(textFieldId.getValue(), parentProject.map(Project::getId).orElse(null));
+                final Project project = this.projectsApi.create(new ProjectCreateDTO(textFieldId.getValue(), parentProject.map(Project::getId).orElse(null)));
 
                 navigateTo(ProjectMessagesView.VIEW_NAME, project.getId());
 
@@ -113,7 +115,7 @@ public class EditorController {
 
                 binder.writeBean(project);
 
-                projectsApi.update(project);
+                projectsApi.update(project.getId(), new ProjectUpdateDTO(project.getName(), project.getDescription(), project.getLocales()));
 
                 clickSuccessListener.success();
             } catch (ValidationException e) {
@@ -149,7 +151,7 @@ public class EditorController {
             try {
                 final Project project = projectsApi.findOne(projectId);
                 project.getLocales().add(localeComboBox.getValue());
-                projectsApi.update(project);
+                projectsApi.update(project.getId(), new ProjectUpdateDTO(project.getName(), project.getDescription(), project.getLocales()));
 
                 clickSuccessListener.success();
             } catch (UserRightsException e) {
@@ -167,7 +169,7 @@ public class EditorController {
             try {
                 final Project project = projectsApi.findOne(projectContext.getProjectId());
                 project.getLocales().remove(locale);
-                projectsApi.update(project);
+                projectsApi.update(project.getId(), new ProjectUpdateDTO(project.getName(), project.getDescription(), project.getLocales()));
 
                 clickSuccessListener.success();
             } catch (UserRightsException e) {
@@ -183,7 +185,7 @@ public class EditorController {
     public Button.ClickListener clickInsertMessage(final String projectId, final TextField textFieldKey, final Consumer<Message> clickSuccessListener) {
         return clickEvent -> {
             try {
-                final Message message = messagesApi.insert(projectId, textFieldKey.getValue());
+                final Message message = messagesApi.create(projectId, new MessageCreateDTO(textFieldKey.getValue()));
 
                 clickSuccessListener.accept(message);
             } catch (UserRightsException e) {
@@ -210,16 +212,19 @@ public class EditorController {
         };
     }
 
-    public Button.ClickListener clickSaveTranslation(final String projectId, final String messageKey, final Map<Locale, String> translations, final ClickSuccessListener clickSuccessListener) {
+    public Button.ClickListener clickSaveTranslation(final Binder<Message> binder, final String projectId, final ClickSuccessListener clickSuccessListener) {
 
         return clickEvent -> {
-            saveMessage(clickSuccessListener, projectId, new MessageImpl(messageKey, translations));
+            final Message message = new MessageImpl();
+            binder.writeBeanIfValid(message);
+
+            saveMessage(clickSuccessListener, projectId, message);
         };
     }
 
     private void saveMessage(ClickSuccessListener clickSuccessListener, String projectId, Message message) {
         try {
-            messagesApi.update(projectId, message);
+            messagesApi.update(projectId, message.getKey(), new MessageUpdateDTO(message.getTranslations()));
 
             clickSuccessListener.success();
         } catch (UserUnknownException e) {

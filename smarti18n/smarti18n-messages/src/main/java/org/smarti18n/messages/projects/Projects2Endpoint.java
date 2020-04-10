@@ -33,7 +33,7 @@ public class Projects2Endpoint implements ProjectsApi {
     public List<Project> findAll() throws UserUnknownException {
 
         return projectsService.findAll(
-                SecurityUtils.getUserId()
+                SecurityUtils.getUserMail()
         );
     }
 
@@ -43,7 +43,7 @@ public class Projects2Endpoint implements ProjectsApi {
             @PathVariable("projectId") String projectId) throws UserUnknownException, UserRightsException {
 
         return projectsService.findOne(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId
         );
     }
@@ -54,7 +54,7 @@ public class Projects2Endpoint implements ProjectsApi {
             @RequestBody ProjectCreateDTO dto) throws UserUnknownException, ProjectExistException {
 
         return projectsService.insert(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 dto
         );
     }
@@ -66,7 +66,7 @@ public class Projects2Endpoint implements ProjectsApi {
             @RequestBody ProjectUpdateDTO dto) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         return projectsService.update(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId,
                 dto
         );
@@ -78,7 +78,7 @@ public class Projects2Endpoint implements ProjectsApi {
             @PathVariable("projectId") String projectId) throws ProjectUnknownException, UserUnknownException, UserRightsException {
 
         projectsService.remove(
-                SecurityUtils.getUserId(),
+                SecurityUtils.getUserMail(),
                 projectId
         );
     }

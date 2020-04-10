@@ -1,14 +1,5 @@
 package org.smarti18n.api.spring;
 
-import java.text.MessageFormat;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -19,6 +10,16 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.MessageFormat;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  *
  */
@@ -27,7 +28,7 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
     /**
      * Path to load all Messages
      */
-    private static final String PATH_MESSAGES_SOURCE = "/api/1/messages/findForSpringMessageSource";
+    private static final String PATH_MESSAGES_SOURCE = "/api/2/projects/PROJECT_ID/messages";
 
     /**
      * Message Cache
@@ -123,17 +124,22 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
 
         @Override
         public void run() {
-            final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host).path(PATH_MESSAGES_SOURCE);
+            final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.host)
+                    .path(PATH_MESSAGES_SOURCE.replaceAll("PROJECT_ID", projectId));
 
-            final Map<String, Map<Locale, String>> messages = this.restTemplate.exchange(
+            final List<Smarti18nMessage> result = this.restTemplate.exchange(
                     builder.build().encode().toUri(),
                     HttpMethod.GET,
                     new HttpEntity<>(headers()),
-                    new ParameterizedTypeReference<Map<String, Map<Locale, String>>>() {
+                    new ParameterizedTypeReference<List<Smarti18nMessage>>() {
                     }
             ).getBody();
 
-            this.messages.putAll(messages);
+            if (result != null) {
+                for (Smarti18nMessage message : result) {
+                    this.messages.put(message.getKey(), message.getTranslations());
+                }
+            }
         }
 
         private HttpHeaders headers() {
@@ -147,4 +153,24 @@ public class Smarti18nMessageSource extends AbstractMessageSource {
         }
     }
 
+    private static class Smarti18nMessage {
+        private String key;
+        private Map<Locale, String> translations;
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public Map<Locale, String> getTranslations() {
+            return translations;
+        }
+
+        public void setTranslations(Map<Locale, String> translations) {
+            this.translations = translations;
+        }
+    }
 }
