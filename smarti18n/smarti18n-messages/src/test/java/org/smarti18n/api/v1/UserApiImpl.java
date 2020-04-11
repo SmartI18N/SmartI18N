@@ -1,8 +1,10 @@
-package org.smarti18n.api;
+package org.smarti18n.api.v1;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.smarti18n.api.AbstractApiImpl;
+import org.smarti18n.api.v1.UserApi;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;

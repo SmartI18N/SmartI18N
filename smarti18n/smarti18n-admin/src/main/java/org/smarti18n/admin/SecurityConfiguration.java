@@ -2,7 +2,7 @@ package org.smarti18n.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smarti18n.api2.UsersApi;
+import org.smarti18n.api.v2.UsersApi;
 import org.smarti18n.models.UserSimplified;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;

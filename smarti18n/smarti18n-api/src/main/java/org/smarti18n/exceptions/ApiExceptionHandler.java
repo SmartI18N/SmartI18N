@@ -1,4 +1,4 @@
-package org.smarti18n.api;
+package org.smarti18n.exceptions;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -1,4 +1,4 @@
-package org.smarti18n.api2;
+package org.smarti18n.api.v2;
 
 import org.smarti18n.exceptions.ProjectExistException;
 import org.smarti18n.exceptions.ProjectUnknownException;

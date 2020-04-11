@@ -1,18 +1,19 @@
-package org.smarti18n.messages;
+package org.smarti18n.messages.v2;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api2.MessagesApi;
-import org.smarti18n.api2.MessagesApiImpl;
+import org.smarti18n.api.v2.MessagesApi;
+import org.smarti18n.api.v2.MessagesApiImpl;
 import org.smarti18n.exceptions.ApiException;
 import org.smarti18n.exceptions.MessageExistException;
 import org.smarti18n.exceptions.MessageUnknownException;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.messages.AbstractIntegrationTest;
 import org.smarti18n.models.Message;
 import org.smarti18n.models.MessageCreateDTO;
 import org.smarti18n.models.MessageUpdateDTO;

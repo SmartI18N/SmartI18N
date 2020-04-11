@@ -30,7 +30,7 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 
-import org.smarti18n.api2.UsersApi;
+import org.smarti18n.api.v2.UsersApi;
 import org.smarti18n.models.UserSimplified;
 import org.smarti18n.vaadin.security.SimpleUserDetails;
 import org.vaadin.spring.http.HttpService;

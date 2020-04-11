@@ -1,26 +1,27 @@
-package org.smarti18n.messages;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.util.StringUtils;
+package org.smarti18n.messages.v2;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.ProjectsApiImpl;
+import org.smarti18n.api.v1.ProjectsApiImpl;
+import org.smarti18n.api.v2.ProjectsApi;
 import org.smarti18n.exceptions.ApiException;
 import org.smarti18n.exceptions.ProjectExistException;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.messages.AbstractIntegrationTest;
 import org.smarti18n.models.Project;
-import org.smarti18n.models.ProjectImpl;
+import org.smarti18n.models.ProjectCreateDTO;
+import org.smarti18n.models.ProjectUpdateDTO;
 import org.smarti18n.models.UserCredentials;
 import org.smarti18n.models.UserCredentialsSupplier;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -29,7 +30,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class Projects1IntegrationTest extends AbstractIntegrationTest {
+public class Projects2IntegrationTest extends AbstractIntegrationTest {
 
     private static final String NEW_PROJECT_ID = "NEW_PROJECT_ID".toLowerCase();
     private static final String NEW_PROJECT_NAME = "NEW_PROJECT_NAME";
@@ -41,7 +42,7 @@ public class Projects1IntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.projectsApi = new ProjectsApiImpl(this.restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
+        this.projectsApi = new org.smarti18n.api.v2.ProjectsApiImpl(this.restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
     }
 
     @Test
@@ -57,25 +58,24 @@ public class Projects1IntegrationTest extends AbstractIntegrationTest {
     public void existInsertProject() throws Exception {
         assertOnlyDefaultProjectsFound();
 
-        this.projectsApi.insert(NEW_PROJECT_ID, null);
-        this.projectsApi.insert(NEW_PROJECT_ID, null);
+        this.projectsApi.create(new ProjectCreateDTO(NEW_PROJECT_ID, null));
+        this.projectsApi.create(new ProjectCreateDTO(NEW_PROJECT_ID, null));
     }
 
     @Test(expected = ApiException.class)
     public void unknownSaveProject() throws Exception {
         assertOnlyDefaultProjectsFound();
 
-        final Project project = new ProjectImpl();
-        project.setId(NEW_PROJECT_NAME);
+        final ProjectUpdateDTO project = new ProjectUpdateDTO();
         project.setName(NEW_PROJECT_NAME);
         project.setDescription(NEW_PROJECT_DESCRIPTION);
 
-        this.projectsApi.update(project);
+        this.projectsApi.update(NEW_PROJECT_ID, project);
     }
 
     @Test
     public void testFindOnlyOwnProjects() throws Exception {
-        this.projectsApi.insert(NEW_PROJECT_ID, null);
+        this.projectsApi.create(new ProjectCreateDTO(NEW_PROJECT_ID, null));
 
         final String test2User = "test2";
 
@@ -104,12 +104,12 @@ public class Projects1IntegrationTest extends AbstractIntegrationTest {
     }
 
     private void assertUpdateProject() throws UserUnknownException, UserRightsException, ProjectUnknownException {
-        final Project project = this.projectsApi.findOne(NEW_PROJECT_ID);
+        final ProjectUpdateDTO project = new ProjectUpdateDTO();
 
         project.setName(NEW2_PROJECT_NAME);
         project.setDescription(NEW2_PROJECT_DESCRIPTION);
 
-        this.projectsApi.update(project);
+        this.projectsApi.update(NEW_PROJECT_ID, project);
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
         assertThat(projects, hasSize(3));
@@ -124,7 +124,7 @@ public class Projects1IntegrationTest extends AbstractIntegrationTest {
     }
 
     private void assertCreateNewProject() throws UserUnknownException, ProjectExistException {
-        this.projectsApi.insert(NEW_PROJECT_ID, null);
+        this.projectsApi.create(new ProjectCreateDTO(NEW_PROJECT_ID, null));
 
         final List<Project> projects = new ArrayList<>(this.projectsApi.findAll());
         assertThat(projects, hasSize(3));

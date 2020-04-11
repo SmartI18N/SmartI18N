@@ -1,6 +1,6 @@
 package org.smarti18n.messages.users;
 
-import org.smarti18n.api2.UsersApi;
+import org.smarti18n.api.v2.UsersApi;
 import org.smarti18n.exceptions.UserExistException;
 import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.models.User;

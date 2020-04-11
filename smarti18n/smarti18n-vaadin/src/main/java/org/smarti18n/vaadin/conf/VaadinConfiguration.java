@@ -1,15 +1,14 @@
 package org.smarti18n.vaadin.conf;
 
 import org.smarti18n.api.spring.Smarti18nMessageSource;
-import org.smarti18n.api2.MessagesApi;
-import org.smarti18n.api2.MessagesApiImpl;
-import org.smarti18n.api2.ProjectsApi;
-import org.smarti18n.api2.ProjectsApiImpl;
-import org.smarti18n.api2.UsersApi;
-import org.smarti18n.api2.UsersApiImpl;
+import org.smarti18n.api.v2.MessagesApi;
+import org.smarti18n.api.v2.MessagesApiImpl;
+import org.smarti18n.api.v2.ProjectsApi;
+import org.smarti18n.api.v2.ProjectsApiImpl;
+import org.smarti18n.api.v2.UsersApi;
+import org.smarti18n.api.v2.UsersApiImpl;
 import org.smarti18n.models.UserCredentialsSupplier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;

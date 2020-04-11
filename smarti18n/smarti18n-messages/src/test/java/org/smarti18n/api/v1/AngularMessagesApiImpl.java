@@ -1,8 +1,10 @@
-package org.smarti18n.api;
+package org.smarti18n.api.v1;
 
 import java.util.Locale;
 import java.util.Map;
 
+import org.smarti18n.api.AbstractApiImpl;
+import org.smarti18n.api.v1.AngularMessagesApi;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

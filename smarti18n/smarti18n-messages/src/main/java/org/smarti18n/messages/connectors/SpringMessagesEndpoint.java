@@ -7,7 +7,7 @@ import org.smarti18n.messages.messages.MessagesService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.smarti18n.api.SpringMessagesApi;
+import org.smarti18n.api.v1.SpringMessagesApi;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.messages.security.SecurityUtils;
 

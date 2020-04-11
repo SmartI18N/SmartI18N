@@ -8,7 +8,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
-import org.smarti18n.api2.ProjectsApi;
+import org.smarti18n.api.v2.ProjectsApi;
 import org.smarti18n.exceptions.ProjectExistException;
 import org.smarti18n.exceptions.UserUnknownException;
 import org.smarti18n.models.Project;

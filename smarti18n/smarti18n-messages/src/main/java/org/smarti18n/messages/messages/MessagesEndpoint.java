@@ -1,6 +1,6 @@
 package org.smarti18n.messages.messages;
 
-import org.smarti18n.api.MessagesApi;
+import org.smarti18n.api.v1.MessagesApi;
 import org.smarti18n.exceptions.MessageExistException;
 import org.smarti18n.exceptions.MessageUnknownException;
 import org.smarti18n.exceptions.ProjectUnknownException;

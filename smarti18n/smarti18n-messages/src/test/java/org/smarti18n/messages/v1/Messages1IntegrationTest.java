@@ -1,4 +1,4 @@
-package org.smarti18n.messages;
+package org.smarti18n.messages.v1;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,14 +9,15 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.MessagesApiImpl;
+import org.smarti18n.api.v1.MessagesApi;
+import org.smarti18n.api.v1.MessagesApiImpl;
 import org.smarti18n.exceptions.ApiException;
 import org.smarti18n.exceptions.MessageExistException;
 import org.smarti18n.exceptions.MessageUnknownException;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
+import org.smarti18n.messages.AbstractIntegrationTest;
 import org.smarti18n.models.Message;
 import org.smarti18n.models.UserCredentials;
 import org.smarti18n.models.UserCredentialsSupplier;

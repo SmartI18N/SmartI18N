@@ -1,9 +1,11 @@
-package org.smarti18n.api;
+package org.smarti18n.api.v1;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import org.smarti18n.api.AbstractApiImpl;
+import org.smarti18n.api.v1.MessagesApi;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,7 +17,6 @@ import org.smarti18n.models.UserCredentialsSupplier;
 /**
  * @author Marc Bellmann &lt;marc@smarti18n.com&gt;
  */
-@Service
 public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 
     public MessagesApiImpl(

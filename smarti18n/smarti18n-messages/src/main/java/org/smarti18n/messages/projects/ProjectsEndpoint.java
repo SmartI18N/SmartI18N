@@ -1,6 +1,6 @@
 package org.smarti18n.messages.projects;
 
-import org.smarti18n.api.ProjectsApi;
+import org.smarti18n.api.v1.ProjectsApi;
 import org.smarti18n.exceptions.ProjectExistException;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;

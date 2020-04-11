@@ -1,5 +1,15 @@
 package org.smarti18n.messages;
 
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.smarti18n.api.v2.UsersApi;
+import org.smarti18n.api.v2.UsersApiImpl;
+import org.smarti18n.exceptions.ApiExceptionHandler;
+import org.smarti18n.exceptions.UserExistException;
+import org.smarti18n.models.User;
+import org.smarti18n.models.UserCreateDTO;
+import org.smarti18n.models.UserCredentials;
+import org.smarti18n.models.UserCredentialsSupplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -7,16 +17,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.smarti18n.api.ApiExceptionHandler;
-import org.smarti18n.exceptions.UserExistException;
-import org.smarti18n.models.User;
-import org.smarti18n.api.UserApi;
-import org.smarti18n.api.UserApiImpl;
-import org.smarti18n.models.UserCredentials;
-import org.smarti18n.models.UserCredentialsSupplier;
 
 /**
  * @author Marc Bellmann &lt;marc.bellmann@googlemail.com&gt;
@@ -40,12 +40,9 @@ public abstract class AbstractIntegrationTest {
         this.restTemplate.getRestTemplate().setErrorHandler(new ApiExceptionHandler());
     }
 
-    User insertTestUser(final String username, final String password) throws UserExistException {
-        final UserApi userApi = new UserApiImpl(restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
+    protected User insertTestUser(final String username, final String password) throws UserExistException {
+        final UsersApi userApi = new UsersApiImpl(restTemplate.getRestTemplate(), this.port, new UserCredentialsSupplier(UserCredentials.TEST));
 
-        return userApi.register(
-                username,
-                password
-        );
+        return userApi.create(new UserCreateDTO(username, password));
     }
 }

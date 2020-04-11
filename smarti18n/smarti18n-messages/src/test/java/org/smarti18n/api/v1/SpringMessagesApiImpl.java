@@ -1,10 +1,12 @@
-package org.smarti18n.api;
+package org.smarti18n.api.v1;
 
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
+import org.smarti18n.api.AbstractApiImpl;
+import org.smarti18n.api.v1.SpringMessagesApi;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

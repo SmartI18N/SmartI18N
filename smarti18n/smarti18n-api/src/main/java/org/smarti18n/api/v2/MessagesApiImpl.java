@@ -1,4 +1,4 @@
-package org.smarti18n.api2;
+package org.smarti18n.api.v2;
 
 import org.smarti18n.api.AbstractApiImpl;
 import org.smarti18n.exceptions.MessageExistException;
@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Locale;
 
 public class MessagesApiImpl extends AbstractApiImpl implements MessagesApi {
 

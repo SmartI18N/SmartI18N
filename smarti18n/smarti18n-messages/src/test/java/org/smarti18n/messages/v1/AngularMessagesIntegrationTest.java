@@ -1,13 +1,14 @@
-package org.smarti18n.messages;
+package org.smarti18n.messages.v1;
 
 import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.AngularMessagesApi;
-import org.smarti18n.api.AngularMessagesApiImpl;
-import org.smarti18n.api.MessagesApiImpl;
+import org.smarti18n.api.v1.AngularMessagesApi;
+import org.smarti18n.api.v1.AngularMessagesApiImpl;
+import org.smarti18n.api.v1.MessagesApiImpl;
+import org.smarti18n.messages.AbstractIntegrationTest;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.models.UserCredentials;
 import org.smarti18n.models.UserCredentialsSupplier;

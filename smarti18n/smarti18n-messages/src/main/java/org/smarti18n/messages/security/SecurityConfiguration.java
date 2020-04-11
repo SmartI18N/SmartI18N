@@ -1,10 +1,10 @@
 package org.smarti18n.messages.security;
 
-import org.smarti18n.api.AngularMessagesApi;
-import org.smarti18n.api.MessagesApi;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.SpringMessagesApi;
-import org.smarti18n.api.UserApi;
+import org.smarti18n.api.v1.AngularMessagesApi;
+import org.smarti18n.api.v1.MessagesApi;
+import org.smarti18n.api.v1.ProjectsApi;
+import org.smarti18n.api.v1.SpringMessagesApi;
+import org.smarti18n.api.v1.UserApi;
 import org.smarti18n.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

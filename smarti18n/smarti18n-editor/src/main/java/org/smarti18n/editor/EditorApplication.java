@@ -1,6 +1,6 @@
 package org.smarti18n.editor;
 
-import org.smarti18n.api.ApiExceptionHandler;
+import org.smarti18n.exceptions.ApiExceptionHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

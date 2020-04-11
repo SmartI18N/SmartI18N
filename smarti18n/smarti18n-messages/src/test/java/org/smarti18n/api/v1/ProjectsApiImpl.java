@@ -1,8 +1,10 @@
-package org.smarti18n.api;
+package org.smarti18n.api.v1;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.smarti18n.api.AbstractApiImpl;
+import org.smarti18n.api.v1.ProjectsApi;
 import org.springframework.web.client.RestTemplate;
 
 import org.smarti18n.models.Project;

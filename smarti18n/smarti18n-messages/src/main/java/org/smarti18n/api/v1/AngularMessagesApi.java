@@ -1,4 +1,4 @@
-package org.smarti18n.api;
+package org.smarti18n.api.v1;
 
 import java.util.Locale;
 import java.util.Map;

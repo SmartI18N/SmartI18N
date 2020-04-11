@@ -1,15 +1,16 @@
-package org.smarti18n.messages;
+package org.smarti18n.messages.v1;
 
 import java.util.Locale;
 import java.util.Map;
 
+import org.smarti18n.api.v1.MessagesApiImpl;
+import org.smarti18n.api.v1.SpringMessagesApiImpl;
+import org.smarti18n.messages.AbstractIntegrationTest;
 import org.springframework.web.client.RestClientException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.MessagesApiImpl;
-import org.smarti18n.api.SpringMessagesApi;
-import org.smarti18n.api.SpringMessagesApiImpl;
+import org.smarti18n.api.v1.SpringMessagesApi;
 import org.smarti18n.models.UserCredentials;
 import org.smarti18n.models.UserCredentialsSupplier;
 

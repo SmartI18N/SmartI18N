@@ -1,18 +1,17 @@
-package org.smarti18n.messages;
+package org.smarti18n.messages.v1;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.smarti18n.api.AngularMessagesApi;
-import org.smarti18n.api.AngularMessagesApiImpl;
-import org.smarti18n.api.ProjectsApi;
-import org.smarti18n.api.ProjectsApiImpl;
-import org.smarti18n.api.SpringMessagesApi;
-import org.smarti18n.api.SpringMessagesApiImpl;
-import org.smarti18n.api2.MessagesApi;
-import org.smarti18n.api2.MessagesApiImpl;
-import org.smarti18n.models.MessageCreateDTO;
+import org.smarti18n.api.v1.AngularMessagesApi;
+import org.smarti18n.api.v1.AngularMessagesApiImpl;
+import org.smarti18n.api.v1.MessagesApi;
+import org.smarti18n.api.v1.MessagesApiImpl;
+import org.smarti18n.api.v1.ProjectsApi;
+import org.smarti18n.api.v1.ProjectsApiImpl;
+import org.smarti18n.api.v1.SpringMessagesApi;
+import org.smarti18n.api.v1.SpringMessagesApiImpl;
+import org.smarti18n.messages.AbstractIntegrationTest;
 import org.smarti18n.models.Project;
-import org.smarti18n.models.SingleMessageUpdateDTO;
 import org.smarti18n.models.UserCredentials;
 import org.smarti18n.models.UserCredentialsSupplier;
 
@@ -20,7 +19,7 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-public class ParentProject2IntegrationTest extends AbstractIntegrationTest {
+public class ParentProject1IntegrationTest extends AbstractIntegrationTest {
 
     private static final String PARENT_PROJECT_ID = "parent_project_id";
     private static final String CHILD_PROJECT_ID = "child_project_id";
@@ -45,8 +44,8 @@ public class ParentProject2IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void messagesInParent() {
-        this.messagesApi.create(PARENT_PROJECT_ID, new MessageCreateDTO(MESSAGE_KEY));
-        this.messagesApi.update(PARENT_PROJECT_ID, MESSAGE_KEY, Locale.GERMAN.toLanguageTag(), new SingleMessageUpdateDTO(MESSAGE_TRANSLATION));
+        this.messagesApi.insert(PARENT_PROJECT_ID, MESSAGE_KEY);
+        this.messagesApi.update(PARENT_PROJECT_ID, MESSAGE_KEY, Locale.GERMAN, MESSAGE_TRANSLATION);
 
         assertThat(this.messagesApi.findOne(CHILD_PROJECT_ID, MESSAGE_KEY)).isNull();
         assertThat(this.messagesApi.findAll(CHILD_PROJECT_ID)).isEmpty();

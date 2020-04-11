@@ -8,7 +8,7 @@ import com.contentful.java.cda.CDASpace;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
-import org.smarti18n.api2.MessagesApi;
+import org.smarti18n.api.v2.MessagesApi;
 import org.smarti18n.exceptions.ProjectUnknownException;
 import org.smarti18n.exceptions.UserRightsException;
 import org.smarti18n.exceptions.UserUnknownException;
