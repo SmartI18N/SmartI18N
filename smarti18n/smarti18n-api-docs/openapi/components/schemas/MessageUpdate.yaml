@@ -1,0 +1,11 @@
+type: object
+
+properties:
+  translations:
+    type: object
+    additionalProperties:
+      type: string
+    example:
+      en: 'Translation'
+      de: 'Übersetzung'
+      pt: 'Tradução'

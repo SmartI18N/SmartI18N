@@ -1,0 +1,43 @@
+tags:
+  - Messages
+
+summary: update message
+description:
+operationId: updateMessage
+
+parameters:
+  - name: projectId
+    in: path
+    description: project id
+    required: true
+    schema:
+      type: string
+
+  - name: messageKey
+    in: path
+    description: message key
+    required: true
+    schema:
+      type: string
+
+security:
+  - basic_auth_user: []
+  - basic_auth_superuser: []
+  - basic_auth_project: []
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: ../components/schemas/MessageUpdate.yaml
+  required: true
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/MessageUpdate.yaml
+  '403':
+    description: Forbidden

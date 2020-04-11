@@ -1,0 +1,29 @@
+tags:
+  - Projects
+
+summary: get project
+description:
+operationId: getProject
+
+parameters:
+  - name: projectId
+    in: path
+    description: project id
+    required: true
+    schema:
+      type: string
+
+security:
+  - basic_auth_user: []
+  - basic_auth_superuser: []
+  - basic_auth_project: []
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/Project.yaml
+  '403':
+    description: Forbidden

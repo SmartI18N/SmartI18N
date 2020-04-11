@@ -1,0 +1,36 @@
+tags:
+  - Projects
+
+summary: update project
+description:
+operationId: updateProject
+
+parameters:
+  - name: projectId
+    in: path
+    description: project id
+    required: true
+    schema:
+      type: string
+
+security:
+  - basic_auth_user: []
+  - basic_auth_superuser: []
+  - basic_auth_project: []
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: ../components/schemas/ProjectUpdate.yaml
+  required: true
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/Project.yaml
+  '403':
+    description: Forbidden

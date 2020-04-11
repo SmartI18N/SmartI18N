@@ -1,0 +1,7 @@
+type: object
+
+properties:
+  mail:
+    type: string
+  role:
+    type: string

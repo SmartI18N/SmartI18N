@@ -1,0 +1,15 @@
+type: object
+
+properties:
+  id:
+    type: string
+  mail:
+    type: string
+  firstName:
+    type: string
+  lastName:
+    type: string
+  company:
+    type: string
+  role:
+    type: string

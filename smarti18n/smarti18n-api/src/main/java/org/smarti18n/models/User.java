@@ -19,12 +19,20 @@ public interface User extends Serializable {
 
     void setPassword(String password);
 
+    // TODO: rename
+    @Deprecated
     String getVorname();
 
+    // TODO: rename
+    @Deprecated
     void setVorname(String vorname);
 
+    // TODO: rename
+    @Deprecated
     String getNachname();
 
+    // TODO: rename
+    @Deprecated
     void setNachname(String nachname);
 
     String getCompany();

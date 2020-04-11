@@ -1,0 +1,29 @@
+tags:
+  - Users
+
+summary: get user with details
+description: |
+  get an user
+operationId: getUser
+
+parameters:
+  - name: mail
+    in: path
+    description: user mail address
+    required: true
+    schema:
+      type: string
+
+security:
+  - basic_auth_user: []
+  - basic_auth_superuser: []
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/User.yaml
+  '403':
+    description: Forbidden

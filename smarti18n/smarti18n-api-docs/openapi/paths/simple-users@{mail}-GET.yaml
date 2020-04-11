@@ -1,0 +1,30 @@
+tags:
+  - Users
+
+summary: get user for authentication
+description: |
+  get an simplified user
+  this resource should be used for authentication
+operationId: getSimpleUser
+
+parameters:
+  - name: mail
+    in: path
+    description: user mail address
+    required: true
+    schema:
+      type: string
+
+security:
+  - basic_auth_user: []
+  - basic_auth_superuser: []
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UserSimple.yaml
+  '403':
+    description: Forbidden

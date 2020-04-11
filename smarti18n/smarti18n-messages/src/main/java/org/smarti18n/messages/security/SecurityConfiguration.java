@@ -89,23 +89,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         AngularMessagesApi.PATH_MESSAGES_FIND_ANGULAR
                 ).permitAll()
 
-                .antMatchers(GET, "/api/2/projects").hasAnyAuthority(ROLE_SUPERUSER)
-                .antMatchers(GET, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER, ROLE_PROJECT)
+                .antMatchers(GET, "/api/2/projects").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
                 .antMatchers(POST, "/api/2/projects").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(PUT, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(PUT, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
-                .antMatchers(DELETE, "/api/2/projects/*").hasAnyAuthority(ROLE_SUPERUSER)
+                .antMatchers(GET, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER, ROLE_PROJECT)
+                .antMatchers(PUT, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER, ROLE_PROJECT)
+                .antMatchers(PUT, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER, ROLE_PROJECT)
+                .antMatchers(DELETE, "/api/2/projects/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER, ROLE_PROJECT)
 
                 .antMatchers(GET, "/api/2/projects/{projectId}/messages").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
+                .antMatchers(POST, "/api/2/projects/{projectId}/messages").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
                 .antMatchers(GET, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
-                .antMatchers(POST, "/api/2/projects/{projectId}/messages").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
-                .antMatchers(PUT, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
-                .antMatchers(PUT, "/api/2/projects/{projectId}/messages/*/locale/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
-                .antMatchers(DELETE, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER)
+                .antMatchers(PUT, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
+                .antMatchers(PUT, "/api/2/projects/{projectId}/messages/*/locale/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
+                .antMatchers(DELETE, "/api/2/projects/{projectId}/messages/*").hasAnyAuthority(ROLE_SUPERUSER, ROLE_USER, ROLE_PROJECT)
 
                 .antMatchers(GET, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
-                .antMatchers(GET, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
                 .antMatchers(POST, "/api/2/users").hasAuthority(ROLE_SUPERUSER)
+                .antMatchers(GET, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
                 .antMatchers(PUT, "/api/2/users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
                 .antMatchers(GET, "/api/2/simple-users/*").hasAnyAuthority(ROLE_USER, ROLE_SUPERUSER)
 

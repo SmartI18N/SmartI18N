@@ -1,0 +1,3 @@
+type: http
+scheme: basic
+description: authentication with user mail and user password

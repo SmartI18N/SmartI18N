@@ -1,0 +1,34 @@
+tags:
+  - Users
+
+summary: update user
+description: |
+  update an user
+operationId: updateUser
+
+parameters:
+  - name: mail
+    in: path
+    description: user mail address
+    required: true
+    schema:
+      type: string
+
+security:
+  - basic_auth_user: []
+  - basic_auth_superuser: []
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: ../components/schemas/UserUpdate.yaml
+  required: true
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/User.yaml

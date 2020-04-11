@@ -1,0 +1,79 @@
+openapi: 3.0.2
+info:
+  version: 2.0.0-SNAPSHOT
+  title: SmartI18N API
+  contact:
+    email: mail@smarti18n.com
+    url: 'https://smarti18n.com'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://redocly.github.io/openapi-template/logo.png'
+
+tags:
+  - name: Users
+    description: users related endpoints
+  - name: Projects
+    description: projects related endpoints
+  - name: Messages
+    description: messages related endpoints
+
+servers:
+  - url: 'https://messages.smarti18n.com/api/2'
+
+paths:
+  '/users':
+    get:
+      $ref: 'paths/users-GET.yaml'
+    post:
+      $ref: 'paths/users-POST.yaml'
+  '/users/{mail}':
+    get:
+      $ref: 'paths/users@{mail}-GET.yaml'
+    put:
+      $ref: 'paths/users@{mail}-PUT.yaml'
+  '/simple-users/{mail}':
+    get:
+      $ref: 'paths/simple-users@{mail}-GET.yaml'
+
+
+  '/projects':
+    get:
+      $ref: 'paths/projects-GET.yaml'
+    post:
+      $ref: 'paths/projects-POST.yaml'
+  '/projects/{projectId}':
+    get:
+      $ref: 'paths/projects@{projectId}-GET.yaml'
+    put:
+      $ref: 'paths/projects@{projectId}-PUT.yaml'
+    delete:
+      $ref: 'paths/projects@{projectId}-DELETE.yaml'
+
+
+  '/projects/{projectId}/messages':
+    get:
+      $ref: 'paths/projects@{projectId}@messages-GET.yaml'
+    post:
+      $ref: 'paths/projects@{projectId}@messages-POST.yaml'
+  '/projects/{projectId}/messages/{messageKey}':
+    get:
+      $ref: 'paths/projects@{projectId}@messages@{messageKey}-GET.yaml'
+    put:
+      $ref: 'paths/projects@{projectId}@messages@{messageKey}-PUT.yaml'
+    delete:
+      $ref: 'paths/projects@{projectId}@messages@{messageKey}-DELETE.yaml'
+  '/projects/{projectId}/messages/{messageKey}/locale/{locale}':
+    put:
+      $ref: 'paths/projects@{projectId}@messages@{messageKey}@locale@{locale}-PUT.yaml'
+
+
+components:
+  securitySchemes:
+    basic_auth_user:
+      $ref: 'components/securitySchemes/basic_auth_user.yaml'
+    basic_auth_superuser:
+      $ref: 'components/securitySchemes/basic_auth_superuser.yaml'
+    basic_auth_project:
+      $ref: 'components/securitySchemes/basic_auth_project.yaml'

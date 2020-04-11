@@ -1,0 +1,14 @@
+type: object
+
+properties:
+  key:
+    type: string
+    example: 'message.key'
+  translations:
+    type: object
+    additionalProperties:
+      type: string
+    example:
+      en: 'Translation'
+      de: 'Übersetzung'
+      pt: 'Tradução'

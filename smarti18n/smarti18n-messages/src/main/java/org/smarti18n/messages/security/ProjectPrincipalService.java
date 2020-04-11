@@ -24,9 +24,9 @@ public class ProjectPrincipalService implements org.springframework.security.cor
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final Optional<ProjectEntity> byMail = this.projectRepository.findById(username);
-        if (byMail.isPresent()) {
-            final ProjectEntity project = byMail.get();
+        final Optional<ProjectEntity> byId = this.projectRepository.findById(username);
+        if (byId.isPresent()) {
+            final ProjectEntity project = byId.get();
             final User user = project.getOwners().stream().findFirst().orElseThrow(UserUnknownException::new);
 
             return new ProjectPrincipal(user, project);

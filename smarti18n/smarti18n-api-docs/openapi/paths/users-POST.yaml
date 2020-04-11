@@ -1,0 +1,27 @@
+tags:
+  - Users
+
+summary: create user
+description: |
+  create an user
+operationId: createUsers
+
+security:
+  - basic_auth_superuser: []
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: ../components/schemas/UserCreate.yaml
+  required: true
+
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/User.yaml
+  '403':
+    description: Forbidden
