@@ -78,8 +78,8 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
             final String encodedPassword = this.passwordEncoder.encode(password);
 
             final UserEntity userEntity = new UserEntity(DEFAULT_USER_MAIL, encodedPassword, UserRole.SUPERUSER);
-            userEntity.setVorname("Default");
-            userEntity.setNachname("Default");
+            userEntity.setFirstName("Default");
+            userEntity.setLastName("Default");
             userEntity.setCompany("Default");
             this.userRepository.insert(userEntity);
         }
@@ -128,8 +128,8 @@ public class ApplicationInitializer implements ApplicationListener<ApplicationRe
             final String encodedPassword = this.passwordEncoder.encode(password);
 
             final UserEntity userEntity = new UserEntity(username, encodedPassword, UserRole.SUPERUSER);
-            userEntity.setVorname("TEST");
-            userEntity.setNachname("TEST");
+            userEntity.setFirstName("TEST");
+            userEntity.setLastName("TEST");
             userEntity.setCompany("TEST");
             this.userRepository.insert(userEntity);
 

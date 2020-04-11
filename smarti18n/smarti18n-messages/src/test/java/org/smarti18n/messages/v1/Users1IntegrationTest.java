@@ -85,8 +85,8 @@ public class Users1IntegrationTest extends AbstractIntegrationTest {
     private void assertUpdateUser() throws UserUnknownException {
         final User user = this.userApi.findOne(NEW_USER_MAIL);
 
-        user.setVorname(NEW_USER_VORNAME);
-        user.setNachname(NEW_USER_NACHNAME);
+        user.setFirstName(NEW_USER_VORNAME);
+        user.setLastName(NEW_USER_NACHNAME);
         user.setCompany(NEW_USER_COMPANY);
 
         this.userApi.update(user);
@@ -123,7 +123,7 @@ public class Users1IntegrationTest extends AbstractIntegrationTest {
         return new TypeSafeMatcher<User>() {
             @Override
             protected boolean matchesSafely(final User item) {
-                return vorname.equals(item.getVorname()) && nachname.equals(item.getNachname())
+                return vorname.equals(item.getFirstName()) && nachname.equals(item.getLastName())
                         && company.equals(item.getCompany());
             }
 

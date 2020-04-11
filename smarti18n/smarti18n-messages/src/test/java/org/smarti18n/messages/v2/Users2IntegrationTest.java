@@ -123,7 +123,7 @@ public class Users2IntegrationTest extends AbstractIntegrationTest {
         return new TypeSafeMatcher<User>() {
             @Override
             protected boolean matchesSafely(final User item) {
-                return vorname.equals(item.getVorname()) && nachname.equals(item.getNachname())
+                return vorname.equals(item.getFirstName()) && nachname.equals(item.getLastName())
                         && company.equals(item.getCompany());
             }
 

@@ -67,7 +67,7 @@ public class UserEndpoint implements UserApi {
 
         return this.userService.update(
                 user.getMail(),
-                new UserUpdateDTO(user.getVorname(), user.getNachname(), user.getCompany())
+                new UserUpdateDTO(user.getFirstName(), user.getLastName(), user.getCompany())
         );
     }
 }

@@ -1,8 +1,8 @@
 package org.smarti18n.models;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.io.Serializable;
 
 @JsonDeserialize(as = UserImpl.class)
 public interface User extends Serializable {
@@ -19,21 +19,13 @@ public interface User extends Serializable {
 
     void setPassword(String password);
 
-    // TODO: rename
-    @Deprecated
-    String getVorname();
+    String getFirstName();
 
-    // TODO: rename
-    @Deprecated
-    void setVorname(String vorname);
+    void setFirstName(String firstName);
 
-    // TODO: rename
-    @Deprecated
-    String getNachname();
+    String getLastName();
 
-    // TODO: rename
-    @Deprecated
-    void setNachname(String nachname);
+    void setLastName(String lastName);
 
     String getCompany();
 

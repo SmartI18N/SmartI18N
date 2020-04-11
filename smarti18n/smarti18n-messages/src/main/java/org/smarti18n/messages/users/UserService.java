@@ -83,8 +83,8 @@ public class UserService {
 
         final UserEntity userEntity = optional.get();
 
-        userEntity.setVorname(user.getVorname());
-        userEntity.setNachname(user.getNachname());
+        userEntity.setFirstName(user.getVorname());
+        userEntity.setLastName(user.getNachname());
         userEntity.setCompany(user.getCompany());
 
         return this.userRepository.save(userEntity);

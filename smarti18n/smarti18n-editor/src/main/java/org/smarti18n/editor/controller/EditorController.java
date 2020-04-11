@@ -80,7 +80,7 @@ public class EditorController {
             try {
                 final User user = new UserImpl();
                 binder.writeBeanIfValid(user);
-                this.usersApi.update(user.getMail(), new UserUpdateDTO(user.getVorname(), user.getNachname(), user.getCompany()));
+                this.usersApi.update(user.getMail(), new UserUpdateDTO(user.getFirstName(), user.getLastName(), user.getCompany()));
 
                 clickSuccessListener.success();
             } catch (UserUnknownException e) {

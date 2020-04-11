@@ -34,8 +34,8 @@ public class UserEntity implements User {
         this.id = user.getId();
         this.mail = user.getMail();
         this.password = user.getPassword();
-        this.vorname = user.getVorname();
-        this.nachname = user.getNachname();
+        this.vorname = user.getFirstName();
+        this.nachname = user.getLastName();
         this.company = user.getCompany();
         this.role = user.getRole();
     }
@@ -71,23 +71,23 @@ public class UserEntity implements User {
     }
 
     @Override
-    public String getVorname() {
+    public String getFirstName() {
         return vorname;
     }
 
     @Override
-    public void setVorname(final String vorname) {
-        this.vorname = vorname;
+    public void setFirstName(final String firstName) {
+        this.vorname = firstName;
     }
 
     @Override
-    public String getNachname() {
+    public String getLastName() {
         return nachname;
     }
 
     @Override
-    public void setNachname(final String nachname) {
-        this.nachname = nachname;
+    public void setLastName(final String lastName) {
+        this.nachname = lastName;
     }
 
     @Override

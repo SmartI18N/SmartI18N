@@ -5,8 +5,8 @@ public class UserImpl implements User {
     private String id;
     private String mail;
     private String password;
-    private String vorname;
-    private String nachname;
+    private String firstName;
+    private String lastName;
     private String company;
     private UserRole role;
 
@@ -48,23 +48,23 @@ public class UserImpl implements User {
     }
 
     @Override
-    public String getVorname() {
-        return vorname;
+    public String getFirstName() {
+        return firstName;
     }
 
     @Override
-    public void setVorname(final String vorname) {
-        this.vorname = vorname;
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
     }
 
     @Override
-    public String getNachname() {
-        return nachname;
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
-    public void setNachname(final String nachname) {
-        this.nachname = nachname;
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
