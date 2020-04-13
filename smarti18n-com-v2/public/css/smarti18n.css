@@ -1,0 +1,40 @@
+
+body {
+    font-family: 'Questrial', sans-serif;
+}
+
+.section {
+    margin: 5vw 0;
+}
+
+#image1 {
+    background-image: url('/images/image1_online.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    height: 30vw;
+}
+
+#image2 {
+    background-image: url('/images/image3_online.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    height: 30vw;
+}
+
+#image3 {
+    background-image: url('/images/image2_online.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    height: 30vw;
+}
+
+#image4 {
+    background-image: url('/images/image4_online.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    height: 30vw;
+}
