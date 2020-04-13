@@ -1,0 +1,608 @@
+openapi: 3.0.2
+info:
+  version: 2.0.0-SNAPSHOT
+  title: SmartI18N API
+  contact:
+    email: mail@smarti18n.com
+    url: 'https://smarti18n.com'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://redocly.github.io/openapi-template/logo.png'
+tags:
+  - name: Users
+    description: users related endpoints
+  - name: Projects
+    description: projects related endpoints
+  - name: Messages
+    description: messages related endpoints
+servers:
+  - url: 'https://messages.smarti18n.com/api/2'
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: get all users
+      description: |
+        update an user
+      operationId: getUsers
+      security:
+        - basic_auth_superuser: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Users
+      summary: create user
+      description: |
+        create an user
+      operationId: createUsers
+      security:
+        - basic_auth_superuser: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: Forbidden
+  '/users/{mail}':
+    get:
+      tags:
+        - Users
+      summary: get user with details
+      description: |
+        get an user
+      operationId: getUser
+      parameters:
+        - name: mail
+          in: path
+          description: user mail address
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: Forbidden
+    put:
+      tags:
+        - Users
+      summary: update user
+      description: |
+        update an user
+      operationId: updateUser
+      parameters:
+        - name: mail
+          in: path
+          description: user mail address
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  '/simple-users/{mail}':
+    get:
+      tags:
+        - Users
+      summary: get user for authentication
+      description: |
+        get an simplified user
+        this resource should be used for authentication
+      operationId: getSimpleUser
+      parameters:
+        - name: mail
+          in: path
+          description: user mail address
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSimple'
+        '403':
+          description: Forbidden
+  /projects:
+    get:
+      tags:
+        - Projects
+      summary: get all projects
+      description: null
+      operationId: getProjects
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Projects
+      summary: create project
+      description: null
+      operationId: createProject
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '403':
+          description: Forbidden
+  '/projects/{projectId}':
+    get:
+      tags:
+        - Projects
+      summary: get project
+      description: null
+      operationId: getProject
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '403':
+          description: Forbidden
+    put:
+      tags:
+        - Projects
+      summary: update project
+      description: null
+      operationId: updateProject
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '403':
+          description: Forbidden
+    delete:
+      tags:
+        - Projects
+      summary: delete project
+      description: null
+      operationId: deleteProject
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: Forbidden
+  '/projects/{projectId}/messages':
+    get:
+      tags:
+        - Messages
+      summary: get all messages
+      description: null
+      operationId: getMessages
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Messages
+      summary: create message
+      description: null
+      operationId: createMessage
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageCreate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '403':
+          description: Forbidden
+  '/projects/{projectId}/messages/{messageKey}':
+    get:
+      tags:
+        - Messages
+      summary: get message
+      description: null
+      operationId: getMessage
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+        - name: messageKey
+          in: path
+          description: message key
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '403':
+          description: Forbidden
+    put:
+      tags:
+        - Messages
+      summary: update message
+      description: null
+      operationId: updateMessage
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+        - name: messageKey
+          in: path
+          description: message key
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageUpdate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageUpdate'
+        '403':
+          description: Forbidden
+    delete:
+      tags:
+        - Messages
+      summary: delete message
+      description: null
+      operationId: deleteMessage
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+        - name: messageKey
+          in: path
+          description: message key
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: Forbidden
+  '/projects/{projectId}/messages/{messageKey}/locale/{locale}':
+    put:
+      tags:
+        - Messages
+      summary: update a single translation
+      description: null
+      operationId: updateTranslation
+      parameters:
+        - name: projectId
+          in: path
+          description: project id
+          required: true
+          schema:
+            type: string
+        - name: messageKey
+          in: path
+          description: message key
+          required: true
+          schema:
+            type: string
+        - name: locale
+          in: path
+          description: ISO locale
+          required: true
+          schema:
+            type: string
+      security:
+        - basic_auth_user: []
+        - basic_auth_superuser: []
+        - basic_auth_project: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageSingleUpdate'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageSingleUpdate'
+        '403':
+          description: Forbidden
+components:
+  securitySchemes:
+    basic_auth_user:
+      type: http
+      scheme: basic
+      description: authentication with user mail and user password
+    basic_auth_superuser:
+      type: http
+      scheme: basic
+      description: >-
+        authentication with user mail and user password. User has to be a
+        superuser.
+    basic_auth_project:
+      type: http
+      scheme: basic
+      description: authentication with project id and project secret
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        mail:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        company:
+          type: string
+        role:
+          type: string
+    UserCreate:
+      type: object
+      properties:
+        mail:
+          type: string
+        password:
+          type: string
+    UserUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        company:
+          type: string
+    UserSimple:
+      type: object
+      properties:
+        mail:
+          type: string
+        role:
+          type: string
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        locales:
+          type: array
+          items:
+            type: string
+        secret:
+          type: string
+        displayName:
+          type: string
+    ProjectCreate:
+      type: object
+      properties:
+        projectId:
+          type: string
+        parentProjectId:
+          type: string
+    ProjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        locales:
+          type: array
+          items:
+            type: string
+    Message:
+      type: object
+      properties:
+        key:
+          type: string
+          example: message.key
+        translations:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            en: Translation
+            de: Übersetzung
+            pt: Tradução
+    MessageCreate:
+      type: object
+      properties:
+        key:
+          type: string
+    MessageUpdate:
+      type: object
+      properties:
+        translations:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            en: Translation
+            de: Übersetzung
+            pt: Tradução
+    MessageSingleUpdate:
+      type: object
+      properties:
+        translation:
+          type: string
