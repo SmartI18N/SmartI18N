@@ -1,3 +1,60 @@
-baseURL = "http://example.org/"
-languageCode = "en-us"
-title = "My New Hugo Site"
+baseURL = "https://www.smarti18n.com"
+DefaultContentLanguage = "en"
+title = "smarti18n"
+theme= "materializecss"
+
+[params]
+    description = "SmartI18N will die Internationalisierung von Webprojekten vereinfachen. Wir bieten einen Online Editor zum Anpassen von I18N Texten in Realtime. Das bedeutet, dass nach einer Anpassung der Texte, die Änderung direkt live verfügbar sind. "
+
+    basicColor = "teal"
+    basicColorText = "teal-text"
+    secondaryColor = "orange"
+    secondaryColorText = "orange-text text-lighten-3"
+
+[menu]
+
+  [[menu.main]]
+    name  = "About the Project"
+    url = "/"
+    weight = 10
+
+  [[menu.main]]
+    name  = "Spring Messages"
+    url = "/sdk/spring-messages"
+    weight = 10
+
+  [[menu.main]]
+    name  = "Angular 2"
+    url = "/sdk/angular2"
+    weight = 10
+
+  [[menu.main]]
+    name  = "Angular JS"
+    url = "/sdk/angularjs"
+    weight = 10
+
+  [[menu.main]]
+    name  = "Editor"
+    url = "https://editor.smarti18n.com"
+    weight = 100
+
+  [[menu.footer]]
+    name = "Impressum"
+    url = "https://www.planyourtrip.travel/impressum"
+    weight = 10
+
+  [[menu.footer]]
+    name = "Contact"
+    url = "https://www.planyourtrip.travel/contact"
+    weight = 20
+
+  [[menu.footer]]
+    name = "Privacy"
+    url = "https://www.planyourtrip.travel/privacy"
+    weight = 30
+
+  [[menu.footer]]
+    identifier = "planyourtrip"
+    name = "PlanYourTrip"
+    url = "https://www.planyourtrip.travel"
+    weight = 40

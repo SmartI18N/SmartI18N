@@ -1,0 +1,27 @@
+{{ define "main" }}
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <div class="card-title">
+                {{.Title}}
+            </div>
+
+            {{.Content}}
+        </div>
+    </div>
+
+    {{ range .Pages }}
+    <div class="card">
+        <div class="card-content">
+            <a class="card-title {{ (.Site.Params.basicColorText) }}" href="{{.Permalink}}">
+                {{.Title}}
+            </a>
+
+            <p>
+                {{ .Content }}
+            </p>
+        </div>
+    </div>
+    {{ end }}
+</div>
+{{ end }}
