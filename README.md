@@ -4,6 +4,12 @@ SmartI18N will die Internationalisierung von Webprojekten vereinfachen und die U
 
 Mehr Informationen zu SmartI18N findest du unter [www.smarti18n.com](https://www.smarti18n.com/)
 
+## 🚨 This project is now officially retired! 🧓🪦
+
+Development has ended, support has vanished, and the code is now living its best life in a quiet repo somewhere, sipping digital margaritas. 🍹
+
+Feel free to fork it, remix it, or just stare at it nostalgically — but don't expect it to do any new tricks. It’s not dead… it’s just resting. 😴
+
 ## First Steps
 
 Für den Start empfehlen wir dir, den SmartI18N Server von [www.smarti18n.com](https://www.smarti18n.com/) zu nutzen. Später kannst du mit Hilfe eines Docker Image SmartI18N selbst hosten. Dazu aber später mehr.
