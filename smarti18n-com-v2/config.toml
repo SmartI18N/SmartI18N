@@ -1,7 +1,7 @@
 baseURL = "https://www.smarti18n.com"
 DefaultContentLanguage = "en"
 title = "smarti18n"
-theme= "materializecss"
+#theme= "materializecss"
 
 [params]
     description = "SmartI18N will die Internationalisierung von Webprojekten vereinfachen. Wir bieten einen Online Editor zum Anpassen von I18N Texten in Realtime. Das bedeutet, dass nach einer Anpassung der Texte, die Änderung direkt live verfügbar sind. "
